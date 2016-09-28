@@ -18,7 +18,7 @@ urlpatterns = [
     # User management
     url(r'^users/', include('demoslogic.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^polls/', include('polls.urls')),
+    url(r'^premises/', include('polls.urls')),
     # Your stuff: custom urls includes go here
 
 
