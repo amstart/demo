@@ -36,8 +36,12 @@ class UserTest(unittest.TestCase):
         pass
         #self.browser.quit()
 
-    def test_can_view_polls(self):
+    def test_can_create_premises_and_view_and_delete_them(self):
         self.browser.get('http://localhost:8000/premises/')
+        listitem = self.browser.find_element_by_id('id_premise1')
+        listitem.click()
+        self.assertIn('premise_name', self.browser.title)
+        self.fail('Finish the test!')
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
