@@ -2,8 +2,23 @@ import datetime
 
 from django.utils import timezone
 from django.test import TestCase
+from django.core.urlresolvers import resolve
+from django.core.urlresolvers import reverse
+from django.http import HttpRequest
 
 from .models import Premise
+from .views import vote
+from .views import IndexView
+
+
+class HomePageTest(TestCase):
+
+
+    def test_premises_url_resolves_to_index_page_view(self):
+        #self.client.login(username='Jochen', password='b83cfg')  # defined in fixture or with factory in setUp()
+        response = self.client.get(reverse('polls:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'polls/index.html')
 
 
 class PremiseMethodTests(TestCase):

@@ -37,7 +37,7 @@ class UserTest(unittest.TestCase):
         #self.browser.quit()
 
     def test_can_view_polls(self):
-        self.browser.get('http://localhost:8000/polls/')
+        self.browser.get('http://localhost:8000/premises/')
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
