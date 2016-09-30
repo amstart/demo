@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 import pickle
@@ -34,8 +35,8 @@ class UserTest(unittest.TestCase):
                 self.browser.add_cookie(cookie)
 
     def tearDown(self):
-        #pass
-        self.browser.quit()
+        pass
+        #self.browser.quit()
 
     def test_can_create_premises_and_view_and_delete_them(self):
         self.browser.get('http://localhost:8000/premises/')
@@ -44,17 +45,20 @@ class UserTest(unittest.TestCase):
                 inputbox.get_attribute('placeholder'),
                 'Enter a premise'
         )
-        inputbox.send_keys('Buy peacock feathers')
+        premise_name = 'Peacocks are scary.'
+        inputbox.send_keys(premise_name)
         inputbox.send_keys(Keys.ENTER)
         listitem = self.browser.find_element_by_id('id_premise1')
         listitem.click()
         #detail page about new premise
-        self.assertIn('premise_name', self.browser.title)
-        listitem = self.browser.find_element_by_id('id_premise1')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peacock feathers' for row in rows)
-        )
+        self.assertIn(premise_name, self.browser.title)
+        delete_listitem = self.browser.find_element_by_id('id_delete_premise')
+        delete_listitem.click()
+        try:
+            self.browser.find_element_by_link_text(premise_name)
+            self.fail('Premise could not be deleted (or there is another premise with the same text)!')
+        except NoSuchElementException:
+            pass
         self.fail('Finish the test!')
 
 if __name__ == '__main__':
