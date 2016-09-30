@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.common.keys import Keys
 import pickle
 import unittest
 import datetime, os
@@ -33,14 +34,27 @@ class UserTest(unittest.TestCase):
                 self.browser.add_cookie(cookie)
 
     def tearDown(self):
-        pass
-        #self.browser.quit()
+        #pass
+        self.browser.quit()
 
     def test_can_create_premises_and_view_and_delete_them(self):
         self.browser.get('http://localhost:8000/premises/')
+        inputbox = self.browser.find_element_by_id('id_new_premise')
+        self.assertEqual(
+                inputbox.get_attribute('placeholder'),
+                'Enter a premise'
+        )
+        inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
         listitem = self.browser.find_element_by_id('id_premise1')
         listitem.click()
+        #detail page about new premise
         self.assertIn('premise_name', self.browser.title)
+        listitem = self.browser.find_element_by_id('id_premise1')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy peacock feathers' for row in rows)
+        )
         self.fail('Finish the test!')
 
 if __name__ == '__main__':
