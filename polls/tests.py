@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
+from django.test import RequestFactory
 
 from .models import Premise
 from .views import vote
@@ -20,6 +21,13 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'polls/index.html')
 
+
+    def test_home_page_can_save_a_new_premise(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['item_text'] = 'A new premise'
+
+        response.assertIn('A new premise', response.content.decode)
 
 class PremiseMethodTests(TestCase):
 

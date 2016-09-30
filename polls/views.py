@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
@@ -18,6 +18,12 @@ class IndexView(generic.ListView):
         return Premise.objects.filter(
             pub_date__lte=timezone.now()
         ).order_by('-pub_date')[:5]
+
+    def post(self, request, *args, **kwargs):
+        return add_item(request)
+
+def add_item(request):
+    return HttpResponse(request.POST['item_text'])
 
 
 class DetailView(generic.DetailView):
