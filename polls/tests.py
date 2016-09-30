@@ -9,7 +9,7 @@ from django.test import RequestFactory
 
 from .models import Premise
 from .views import vote
-from .views import IndexView
+from .views import IndexView, add_item
 
 
 class HomePageTest(TestCase):
@@ -26,8 +26,9 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         request.method = 'POST'
         request.POST['item_text'] = 'A new premise'
-
-        response.assertIn('A new premise', response.content.decode)
+        redirect = add_item(request)
+        response = self.client.get(redirect)
+        self.assertIn('A new premise', response.content.decode())
 
 class PremiseMethodTests(TestCase):
 

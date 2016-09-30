@@ -23,7 +23,9 @@ class IndexView(generic.ListView):
         return add_item(request)
 
 def add_item(request):
-    return HttpResponse(request.POST['item_text'])
+    new_premise = Premise(text=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
+    new_premise.save()
+    return HttpResponseRedirect(reverse('polls:index'))
 
 
 class DetailView(generic.DetailView):
