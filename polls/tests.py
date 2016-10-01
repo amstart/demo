@@ -40,12 +40,6 @@ class ViewTest(TestCase):
         view(request)
         premises = Premise.objects.all()
         self.assertEqual('A new premise', premises[0].text)
-        # request = HttpRequest()
-        # request.method = 'POST'
-        # request.POST['item_text'] = 'A new premise'
-        # redirect = add_item(request)
-        # response = self.client.get(redirect)
-        # self.assertIn('A new premise', response.content.decode())
 
     def test_new_premise_shows_up_in_index(self):
         new_premise = Premise(text='A new premise', pub_date=timezone.now())
