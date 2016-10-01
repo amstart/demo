@@ -31,6 +31,14 @@ def add_item(request):
 class DetailView(generic.DetailView):
     model = Premise
     template_name = 'polls/detail.html'
+    def post(self, request, *args, **kwargs):
+        return remove_item(request)
+
+def remove_item(request):
+    print(request.POST['delete_premise'])
+    premise = get_object_or_404(Premise, pk=request.POST['delete_premise'])
+    premise.delete()
+    return HttpResponseRedirect(reverse('polls:index'))
 
 
 class ResultsView(generic.DetailView):

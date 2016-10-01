@@ -7,12 +7,16 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test import RequestFactory
 
+from demoslogic.users.models import User
 from .models import Premise
 from .views import vote
-from .views import IndexView, add_item
+from .views import IndexView
 
 
-class HomePageTest(TestCase):
+homepage_url = 'http://localhost:8000'
+
+
+class TemplateTest(TestCase):
 
 
     def test_premises_url_resolves_to_index_page_view(self):
@@ -22,15 +26,36 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'polls/index.html')
 
 
+class ViewTest(TestCase):
+
+
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(username='Alfons', email='al@fons.com', password='top-secretary')
+
     def test_home_page_can_save_a_new_premise(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new premise'
-        redirect = add_item(request)
-        response = self.client.get(redirect)
+        post_data = {'item_text': 'A new premise'}
+        request = self.factory.post('fake/path', post_data)
+        view = IndexView.as_view()
+        view(request)
+        premises = Premise.objects.all()
+        self.assertEqual('A new premise', premises[0].text)
+        # request = HttpRequest()
+        # request.method = 'POST'
+        # request.POST['item_text'] = 'A new premise'
+        # redirect = add_item(request)
+        # response = self.client.get(redirect)
+        # self.assertIn('A new premise', response.content.decode())
+
+    def test_new_premise_shows_up_in_index(self):
+        new_premise = Premise(text='A new premise', pub_date=timezone.now())
+        new_premise.save()
+        response = self.client.get(reverse('polls:index'))
         self.assertIn('A new premise', response.content.decode())
 
+
 class PremiseMethodTests(TestCase):
+
 
     def test_was_published_recently_with_future_premise(self):
         """
