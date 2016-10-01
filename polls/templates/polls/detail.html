@@ -5,14 +5,14 @@
 
 <body>
 <h1>{{ premise.text }}</h1>
-<form action="{% url 'polls:detail' premise.id %}" method="post">
+<form action="{% url 'premises:detail' premise.id %}" method="post">
 {% csrf_token %}
 <button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
 {# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
 </form>
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="{% url 'polls:vote' premise.id %}" method="post">
+<form action="{% url 'premises:vote' premise.id %}" method="post">
 {% csrf_token %}
 {% for choice in premise.choice_set.all %}
     <label><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />

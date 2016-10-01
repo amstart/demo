@@ -21,7 +21,7 @@ class TemplateTest(TestCase):
 
     def test_premises_url_resolves_to_index_page_view(self):
         #self.client.login(username='Jochen', password='b83cfg')  # defined in fixture or with factory in setUp()
-        response = self.client.get(reverse('polls:index'))
+        response = self.client.get(reverse('premises:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'polls/index.html')
 
@@ -44,7 +44,7 @@ class ViewTest(TestCase):
     def test_new_premise_shows_up_in_index(self):
         new_premise = Premise(text='A new premise', pub_date=timezone.now())
         new_premise.save()
-        response = self.client.get(reverse('polls:index'))
+        response = self.client.get(reverse('premises:index'))
         self.assertIn('A new premise', response.content.decode())
 
 

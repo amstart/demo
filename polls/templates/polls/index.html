@@ -17,7 +17,7 @@
 {% if latest_premise_list %}
     <ul>
     {% for premise in latest_premise_list %}
-        <li><a id="id_premise{{ forloop.counter }}" href="{% url 'polls:detail' premise.id %}">{{ premise.text }}</a></li>
+        <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">{{ premise.text }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

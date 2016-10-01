@@ -25,7 +25,7 @@ class IndexView(generic.ListView):
 def add_item(request):
     new_premise = Premise(text=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
     new_premise.save()
-    return HttpResponseRedirect(reverse('polls:index'))
+    return HttpResponseRedirect(reverse('premises:index'))
 
 
 class DetailView(generic.DetailView):
@@ -38,7 +38,7 @@ def remove_item(request):
     print(request.POST['delete_premise'])
     premise = get_object_or_404(Premise, pk=request.POST['delete_premise'])
     premise.delete()
-    return HttpResponseRedirect(reverse('polls:index'))
+    return HttpResponseRedirect(reverse('premises:index'))
 
 
 class ResultsView(generic.DetailView):
@@ -61,4 +61,4 @@ def vote(request, premise_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(premise.id,)))
+        return HttpResponseRedirect(reverse('premises:results', args=(premise.id,)))

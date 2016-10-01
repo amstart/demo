@@ -18,9 +18,9 @@ urlpatterns = [
     # User management
     url(r'^users/', include('demoslogic.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^premises/', include('polls.urls')),
-    # Your stuff: custom urls includes go here
 
+    # Your stuff: custom urls includes go here
+    url(r'^premises/', include('polls.urls.premises')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
