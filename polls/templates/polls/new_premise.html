@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{% trans "New Premise" %}{% endblock %}
+
+{% block inner %}
+<h1>{% trans "New Premise" %}</h1>
+
+<form class="new_premise" id="new_premise_form" method="post" action="{% url 'premises:new' %}">
+  {% csrf_token %}
+  {{ form|crispy }}
+  {# {% if redirect_field_value %}
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}#}
+  <button class="btn btn-primary" type="submit">{% trans "Submit Premise" %} &raquo;</button>
+</form>
+
+{% endblock %}

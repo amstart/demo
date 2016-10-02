@@ -29,7 +29,7 @@ class ViewTests(TestCase):
 
 
     def test_new_premise_shows_up_in_index_and_unstaged_index(self):
-        new_premise = Premise(subject='peas', pub_date=timezone.now())
+        new_premise = Premise(subject='peas')
         new_premise.save()
         response = self.client.get(reverse('premises:index'))
         self.assertContains(response, 'peas')
@@ -56,22 +56,14 @@ class LoggedInTests(TestCase):
 class PremiseMethodTests(TestCase):
 
 
-    def test_was_published_recently_with_future_premise(self):
-        """
-        was_published_recently() should return False for premises whose
-        pub_date is in the future.
-        """
-        time = timezone.now() + datetime.timedelta(days=30)
-        future_premise = Premise(pub_date=time)
-        self.assertIs(future_premise.was_published_recently(), False)
-
     def test_was_published_recently_with_old_premise(self):
         """
         was_published_recently() should return False for premises whose
         pub_date is older than 1 day.
         """
         time = timezone.now() - datetime.timedelta(days=30)
-        old_premise = Premise(pub_date=time)
+        old_premise = Premise()
+        setattr(old_premise, 'pub_date', time)
         self.assertIs(old_premise.was_published_recently(), False)
 
     def test_was_published_recently_with_recent_premise(self):
@@ -80,7 +72,8 @@ class PremiseMethodTests(TestCase):
         pub_date is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours=1)
-        recent_premise = Premise(pub_date=time)
+        recent_premise = Premise()
+        setattr(recent_premise, 'pub_date', time)
         self.assertIs(recent_premise.was_published_recently(), True)
 
         # post_data = {'item_text': 'peas'}
