@@ -10,7 +10,6 @@ from django.test import RequestFactory
 from demoslogic.users.models import User
 from .models import Premise
 from .views import vote
-from .views import IndexView
 
 
 homepage_url = 'http://localhost:8000'
@@ -29,11 +28,14 @@ class TemplateTest(TestCase):
 class ViewTests(TestCase):
 
 
-    def test_new_premise_shows_up_in_index(self):
+    def test_new_premise_shows_up_in_index_and_unstaged_index(self):
         new_premise = Premise(subject='peas', pub_date=timezone.now())
         new_premise.save()
         response = self.client.get(reverse('premises:index'))
         self.assertContains(response, 'peas')
+        response = self.client.get(reverse('premises:unstaged'))
+        self.assertContains(response, 'peas')
+
 
 class LoggedInTests(TestCase):
 
@@ -44,7 +46,7 @@ class LoggedInTests(TestCase):
 
     def test_home_page_can_save_a_new_premise_which_has_an_URL(self):
         post_data = {'item_text': 'peas'}
-        response = self.client.post('/premises/', post_data)
+        response = self.client.post('/premises/new', post_data)
         premises = Premise.objects.all()
         self.assertIn('peas', premises[0].subject)
         self.assertEqual(response.status_code, 302)

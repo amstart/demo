@@ -1,12 +1,38 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.views import generic
+from django.views.generic import ListView, DetailView, CreateView
 from django.utils import timezone
+from django import forms
+
 from .models import Choice, Premise
 
+class PremiseInputForm(forms.ModelForm):
+    class Meta:
+        model = Premise
+        fields = ['subject']
 
-class IndexView(generic.ListView):
+
+def add_item(request):
+    new_premise = Premise(subject=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
+    new_premise.save()
+    return HttpResponse(reverse('premises:index') + '%d/' % (new_premise.pk,))
+    template_name = 'polls/new_premise.html'
+
+class PremiseCreateView(CreateView):
+    template_name = 'polls/new_premise.html'
+    success_url = '/'
+    form_class = PremiseInputForm
+    model = Premise
+
+class PremisesListView(ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_premise_list'
+    model = Premise
+    # def get_queryset(self):
+    #     return Premise.objects.all().order_by('-subject')
+
+class UnstagedPremisesListView(ListView):
     template_name = 'polls/index.html'
     context_object_name = 'latest_premise_list'
 
@@ -22,28 +48,30 @@ class IndexView(generic.ListView):
     def post(self, request, *args, **kwargs):
         return add_item(request)
 
+
+class PremiseDetailView(DetailView):
+    model = Premise
+    template_name = 'polls/detail.html'
+
+    def post(self, request, *args, **kwargs):
+        return remove_item(request)
+
+
+class PremiseVotesView(DetailView):
+    model = Premise
+    template_name = 'polls/results.html'
+
+
 def add_item(request):
     new_premise = Premise(subject=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
     new_premise.save()
     return HttpResponseRedirect(reverse('premises:index') + '%d/' % (new_premise.pk,))
-
-
-class DetailView(generic.DetailView):
-    model = Premise
-    template_name = 'polls/detail.html'
-    def post(self, request, *args, **kwargs):
-        return remove_item(request)
 
 def remove_item(request):
     print(request.POST['delete_premise'])
     premise = get_object_or_404(Premise, pk=request.POST['delete_premise'])
     premise.delete()
     return HttpResponseRedirect(reverse('premises:index'))
-
-
-class ResultsView(generic.DetailView):
-    model = Premise
-    template_name = 'polls/results.html'
 
 def vote(request, premise_id):
     premise = get_object_or_404(Premise, pk=premise_id)

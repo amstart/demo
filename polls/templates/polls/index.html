@@ -9,17 +9,12 @@
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 
-<form method="post">
-  {% csrf_token %}
-  <input name="item_text" id="id_new_premise" placeholder="Enter a premise" />
-</form>
-
 {% if latest_premise_list %}
-    <ul>
-    {% for premise in latest_premise_list %}
-        <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">{{ premise.subject }}</a></li>
-    {% endfor %}
-    </ul>
+  <ul>
+  {% for premise in latest_premise_list %}
+      <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">{{ premise.subject }}</a></li>
+  {% endfor %}
+  </ul>
 {% else %}
     <p>No premises are available.</p>
 {% endif %}
