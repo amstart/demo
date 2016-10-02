@@ -23,7 +23,7 @@ class IndexView(generic.ListView):
         return add_item(request)
 
 def add_item(request):
-    new_premise = Premise(text=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
+    new_premise = Premise(subject=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
     new_premise.save()
     return HttpResponseRedirect(reverse('premises:index'))
 

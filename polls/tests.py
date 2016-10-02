@@ -39,13 +39,13 @@ class ViewTest(TestCase):
         view = IndexView.as_view()
         view(request)
         premises = Premise.objects.all()
-        self.assertEqual('A new premise', premises[0].text)
+        self.assertEqual('A new premise', premises[0].subject)
 
     def test_new_premise_shows_up_in_index(self):
-        new_premise = Premise(text='A new premise', pub_date=timezone.now())
+        new_premise = Premise(subject='A new premise', pub_date=timezone.now())
         new_premise.save()
         response = self.client.get(reverse('premises:index'))
-        self.assertIn('A new premise', response.content.decode())
+        self.assertContains(response, 'A new premise')
 
 
 class PremiseMethodTests(TestCase):

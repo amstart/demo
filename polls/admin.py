@@ -8,13 +8,13 @@ class ChoiceInline(admin.TabularInline):
 
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['text']}),
+        (None,               {'fields': ['subject']}),
         ('Date information', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
-    list_display = ('text', 'pub_date', 'was_published_recently')
+    list_display = ('subject', 'pub_date', 'was_published_recently')
     list_filter = ['pub_date']
-    search_fields = ['text']
+    search_fields = ['subject']
     votes = ['votes']
 
 admin.site.register(Premise, PremiseAdmin)
