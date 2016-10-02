@@ -1,25 +1,26 @@
-<html>
-<head>
-<title>{{ premise.subject }}</title>
-</head>
+{% extends "polls/base.html" %}
 
-<body>
-<h1>{{ premise.subject }}</h1>
-<form action="{% url 'premises:detail' premise.id %}" method="post">
-{% csrf_token %}
-<button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
-{# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
-</form>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% load static %}
+{% load i18n %}
 
-<form action="{% url 'premises:vote' premise.id %}" method="post">
-{% csrf_token %}
-{% for choice in premise.choice_set.all %}
-    <label><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-    {{ choice.choice_text }}</label><br />
-{% endfor %}
-<input type="submit" value="Vote" />
-</form>
-</body>
+{% block head_title %}{% trans premise.subject %}{% endblock %}
 
-</html>
+{% block inner %}
+  <h1>{% trans premise.subject %}</h1>
+
+  <form action="{% url 'premises:detail' premise.id %}" method="post">
+    {% csrf_token %}
+    <button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
+    {# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
+  </form>
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+  <form action="{% url 'premises:vote' premise.id %}" method="post">
+    {% csrf_token %}
+    {% for choice in premise.choice_set.all %}
+        <label><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+        {{ choice.choice_text }}</label><br />
+    {% endfor %}
+    <input type="submit" value="Vote" />
+  </form>
+{% endblock %}

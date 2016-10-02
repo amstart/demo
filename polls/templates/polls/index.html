@@ -1,11 +1,12 @@
-<html>
-<head>
-<title>Recent Premises</title>
-</head>
-
-<body>
+{% extends "polls/base.html" %}
 
 {% load static %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Premises" %}{% endblock %}
+
+{% block inner %}
+<h1>{% trans "Premises" %}</h1>
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 
@@ -19,6 +20,4 @@
     <p>No premises are available.</p>
 {% endif %}
 
-</body>
-
-</html>
+{% endblock %}

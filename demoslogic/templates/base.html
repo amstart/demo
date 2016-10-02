@@ -18,10 +18,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css" integrity="sha384-MIwDKRSSImVFAZCVLtU0LMDdON6KVCrZHyVQQj6e8wIEJkW4tvwqXrbMIya1vriY" crossorigin="anonymous">
 
     <!-- Your stuff: Third-party CSS libraries go here -->
-    
+
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    
+
     {% endblock %}
 
   </head>
@@ -40,7 +40,19 @@
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                <a class="nav-link" href="{% url 'premises:index' %}">Tree</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'premises:index' %}">Premises</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'premises:index' %}">Arguments</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:list' %}">Users</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'about' %}">About</a>
@@ -78,7 +90,7 @@
       {% endif %}
 
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
+
       {% endblock content %}
 
     </div> <!-- /container -->
@@ -97,11 +109,10 @@
       <!-- Your stuff: Third-party javascript libraries go here -->
 
       <!-- place project specific Javascript in this file -->
-      
+
       <script src="{% static 'js/project.js' %}"></script>
-      
+
 
     {% endblock javascript %}
   </body>
 </html>
- 
