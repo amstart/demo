@@ -45,11 +45,10 @@ class LoggedInTests(TestCase):
         self.user = User.objects.create_user(username='Alfons', email='al@fons.com', password='top-secretary')
 
     def test_home_page_can_save_a_new_premise_which_has_an_URL(self):
-        post_data = {'item_text': 'peas'}
+        post_data = {'subject': 'peas'}
         response = self.client.post('/premises/new', post_data)
         premises = Premise.objects.all()
         self.assertIn('peas', premises[0].subject)
-        self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/premises/%d/' % (premises[0].pk,))
 
 

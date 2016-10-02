@@ -13,17 +13,16 @@ class PremiseInputForm(forms.ModelForm):
         fields = ['subject']
 
 
-def add_item(request):
-    new_premise = Premise(subject=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
-    new_premise.save()
-    return HttpResponse(reverse('premises:index') + '%d/' % (new_premise.pk,))
-    template_name = 'polls/new_premise.html'
-
 class PremiseCreateView(CreateView):
     template_name = 'polls/new_premise.html'
     success_url = '/'
     form_class = PremiseInputForm
     model = Premise
+
+    def form_valid(self, form):
+        self.object = form.save()
+        super(PremiseCreateView, self).form_valid(form)
+        return HttpResponseRedirect(reverse('premises:index') + '%d/' % (self.object.pk,))
 
 class PremisesListView(ListView):
     template_name = 'polls/index.html'
