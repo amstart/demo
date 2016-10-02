@@ -39,24 +39,27 @@ class UserTest(LiveServerTestCase):
         #self.browser.quit()
 
     def test_can_create_premises_and_view_and_delete_them(self):
-        self.browser.get(self.live_server_url +'/premises/')
-        inputbox = self.browser.find_element_by_id('id_new_premise')
+        self.browser.get(self.live_server_url +'/premises/new')
+        inputbox = self.browser.find_element_by_id('new_subject')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
-                'Enter a premise'
+                'subject'
         )
-        premise_name = 'Peacocks are scary.'
-        inputbox.send_keys(premise_name)
-        inputbox.send_keys(Keys.ENTER)
-        listitem = self.browser.find_element_by_link_text('Peacocks are scary.')
-        listitem.click()
+        premise_subject = 'Peacocks'
+        inputbox.send_keys(premise_subject)
+        self.browser.find_element_by_id('new_predicate').send_keys('are')
+        self.browser.find_element_by_id('new_object').send_keys('scary')
+        self.browser.find_element_by_link_text('submit').click
         #detail page about new premise
-        self.assertIn(premise_name, self.browser.title)
+        self.assertIn(premise_subject, self.browser.title)
         delete_listitem = self.browser.find_element_by_id('id_delete_premise')
         delete_listitem.click()
         try:
-            self.browser.find_element_by_link_text(premise_name)
+            self.browser.find_element_by_link_text(premise_subject)
             self.fail('Premise could not be deleted (or there is another premise with the same text)!')
         except NoSuchElementException:
             pass
         self.fail('Finish the test!')
+
+    #     page_text = self.browser.find_element_by_tag_name('body').text
+    # self.assertNotIn('Buy peacock feathers', page_text)

@@ -26,26 +26,29 @@ class TemplateTest(TestCase):
         self.assertTemplateUsed(response, 'polls/index.html')
 
 
-class ViewTest(TestCase):
+class ViewTests(TestCase):
+
+
+    def test_new_premise_shows_up_in_index(self):
+        new_premise = Premise(subject='peas', pub_date=timezone.now())
+        new_premise.save()
+        response = self.client.get(reverse('premises:index'))
+        self.assertContains(response, 'peas')
+
+class LoggedInTests(TestCase):
 
 
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username='Alfons', email='al@fons.com', password='top-secretary')
 
-    def test_home_page_can_save_a_new_premise(self):
-        post_data = {'item_text': 'A new premise'}
-        request = self.factory.post('fake/path', post_data)
-        view = IndexView.as_view()
-        view(request)
+    def test_home_page_can_save_a_new_premise_which_has_an_URL(self):
+        post_data = {'item_text': 'peas'}
+        response = self.client.post('/premises/', post_data)
         premises = Premise.objects.all()
-        self.assertEqual('A new premise', premises[0].subject)
-
-    def test_new_premise_shows_up_in_index(self):
-        new_premise = Premise(subject='A new premise', pub_date=timezone.now())
-        new_premise.save()
-        response = self.client.get(reverse('premises:index'))
-        self.assertContains(response, 'A new premise')
+        self.assertIn('peas', premises[0].subject)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/premises/%d/' % (premises[0].pk,))
 
 
 class PremiseMethodTests(TestCase):
@@ -77,3 +80,8 @@ class PremiseMethodTests(TestCase):
         time = timezone.now() - datetime.timedelta(hours=1)
         recent_premise = Premise(pub_date=time)
         self.assertIs(recent_premise.was_published_recently(), True)
+
+        # post_data = {'item_text': 'peas'}
+        # request = self.factory.post('premises/new', post_data)
+        # view = IndexView.as_view()
+        # view(request)
