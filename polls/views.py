@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.utils import timezone
@@ -23,6 +23,7 @@ class PremiseMinimumInputForm(forms.ModelForm):
         model = Premise
         fields = ['subject', 'predicate', 'complement']
 
+
 class PremiseCreateView(CreateView):
     template_name = 'polls/new_premise.html'
     success_url = '/'
@@ -36,6 +37,13 @@ class PremiseCreateView(CreateView):
                 return PremiseWithObjectInputForm
             if case('min'):
                 return PremiseMinimumInputForm
+
+    def get(self, request, *args, **kwargs):
+        try:
+            response = super(PremiseCreateView, self).get(request, *args, **kwargs)
+        except:
+            raise Http404('Page does not exist.')
+        return response
 
     def form_valid(self, form):
         self.object = form.save()
