@@ -1,31 +1,18 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.utils import timezone
-from django import forms
 from switch import Switch
 
 from .models import Choice, Premise
+from .forms import PremiseFullInputForm, PremiseWithObjectInputForm, PremiseMinimumInputForm
 
-class PremiseFullInputForm(forms.ModelForm):
-    class Meta:
-        model = Premise
-        fields = ['subject', 'predicate', 'object', 'complement']
-
-class PremiseWithObjectInputForm(forms.ModelForm):
-    class Meta:
-        model = Premise
-        fields = ['subject', 'predicate', 'object']
-
-class PremiseMinimumInputForm(forms.ModelForm):
-    class Meta:
-        model = Premise
-        fields = ['subject', 'predicate', 'complement']
-
+class NewPremiseView(TemplateView):
+    template_name = 'polls/new_premise.html'
 
 class PremiseCreateView(CreateView):
-    template_name = 'polls/new_premise.html'
+    template_name = 'polls/create_premise.html'
     success_url = '/'
     model = Premise
 
