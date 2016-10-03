@@ -59,7 +59,7 @@ class UnstagedPremisesListView(ListView):
         published in the future).
         """
         return Premise.objects.filter(
-            pub_date__lte=timezone.now()
+            pub_date__lte = timezone.now()
         ).order_by('-pub_date')[:5]
 
     def post(self, request, *args, **kwargs):
@@ -80,20 +80,20 @@ class PremiseVotesView(DetailView):
 
 
 def add_item(request):
-    new_premise = Premise(subject=request.POST.get('item_text', 'unnamed'), pub_date=timezone.now())
+    new_premise = Premise(subject = request.POST.get('item_text', 'unnamed'), pub_date = timezone.now())
     new_premise.save()
     return HttpResponseRedirect(reverse('premises:index') + '%d/' % (new_premise.pk,))
 
 def remove_item(request):
     print(request.POST['delete_premise'])
-    premise = get_object_or_404(Premise, pk=request.POST['delete_premise'])
+    premise = get_object_or_404(Premise, pk = request.POST['delete_premise'])
     premise.delete()
     return HttpResponseRedirect(reverse('premises:index'))
 
 def vote(request, premise_id):
-    premise = get_object_or_404(Premise, pk=premise_id)
+    premise = get_object_or_404(Premise, pk = premise_id)
     try:
-        selected_choice = premise.choice_set.get(pk=request.POST['choice'])
+        selected_choice = premise.choice_set.get(pk = request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the premise voting form.
         return render(request, 'polls/detail.html', {

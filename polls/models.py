@@ -7,8 +7,8 @@ from vote.managers import VotableManager
 class Premise(models.Model):
     subject = models.CharField(default='no_subject', max_length=200)
     predicate = models.CharField(default='no_predicate', max_length=200)
-    object = models.CharField(blank=True, max_length=100)
-    complement = models.CharField(blank=True, max_length=200)
+    object = models.CharField(blank = True, max_length=100)
+    complement = models.CharField(blank = True, max_length=200)
     pub_date = models.DateTimeField('date published')
 
     def __init__(self, *args, **kwargs):
@@ -28,7 +28,7 @@ class Premise(models.Model):
     votes = VotableManager()
 
 class Choice(models.Model):
-    question = models.ForeignKey(Premise, on_delete=models.CASCADE)
+    question = models.ForeignKey(Premise, on_delete = models.CASCADE)
     choice_text = models.CharField(max_length=200)
     votes = models.IntegerField(default=0)
     def __str__(self):
