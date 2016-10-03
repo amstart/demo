@@ -29,10 +29,11 @@ class NewPremiseTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
+        self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
         # Create the different premises by POST and one by hand
-        self.responseFull = self.client.post(reverse('premises:new') + 'full', premise_core)
-        self.client.post(reverse('premises:new') + 'obj', premise_core)
-        self.client.post(reverse('premises:new') + 'min', premise_core)
+        self.responseFull = self.client.post(reverse('premises:new') + 'WithComplementedObject', premise_core)
+        self.client.post(reverse('premises:new') + 'WithObject', premise_core)
+        self.client.post(reverse('premises:new') + 'WithComplement', premise_core)
         new_premise = Premise(**premise_core)
         new_premise.save()
 

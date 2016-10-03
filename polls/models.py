@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.db import models
 from django.utils import timezone
 from vote.managers import VotableManager
@@ -11,6 +12,7 @@ class Premise(models.Model):
     complement = models.CharField(default='', max_length=200)
     pub_date = models.DateTimeField('date published')
 
+    # @login_required
     def __init__(self, *args, **kwargs):
         super(Premise,self).__init__(*args, **kwargs)
         self.pub_date = timezone.now()

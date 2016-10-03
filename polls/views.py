@@ -18,11 +18,11 @@ class PremiseCreateView(CreateView):
 
     def get_form_class(self):
         with Switch(self.kwargs['mode']) as case:
-            if case('full'):
+            if case('WithComplementedObject'):
                 return PremiseFullInputForm
-            if case('obj'):
+            if case('WithObject'):
                 return PremiseWithObjectInputForm
-            if case('min'):
+            if case('WithComplement'):
                 return PremiseMinimumInputForm
 
     def get(self, request, *args, **kwargs):

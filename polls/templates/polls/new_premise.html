@@ -1,10 +1,14 @@
 {% extends "polls/base.html" %}
 {% block inner %}
 <h1>Create a new premise!</h1>
-Start off with creating a premise:
+{% if request.user.is_anonymous %}
+Only signed-in users can create premises!
+{% else %}
+Create a new premise:
+{% endif %}
 <ul>
-  <li><a href="{% url 'premises:new' %}full">Full</a></li>
-  <li><a href="{% url 'premises:new' %}obj">Obj</a></li>
-  <li><a href="{% url 'premises:new' %}min">Min</a></li>
+  <li><a href="{% url 'premises:new' %}WithComplementedObject">With complemented object</a></li>
+  <li><a href="{% url 'premises:new' %}WithObject">With object</a></li>
+  <li><a href="{% url 'premises:new' %}WithComplement">With complement</a></li>
 </ul>
 {% endblock inner %}
