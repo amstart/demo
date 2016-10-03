@@ -8,8 +8,8 @@ class ChoiceInline(admin.TabularInline):
 
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None,               {'fields': ['subject']}),
-        ('Date information', {'fields': ['pub_date']}),
+        ('Core',               {'fields': ['subject', 'predicate', 'object', 'complement']}),
+        ('Meta', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
     list_display = ('subject', 'pub_date', 'was_published_recently')

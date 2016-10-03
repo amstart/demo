@@ -4,20 +4,38 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, CreateView
 from django.utils import timezone
 from django import forms
+from switch import Switch
 
 from .models import Choice, Premise
 
-class PremiseInputForm(forms.ModelForm):
+class PremiseFullInputForm(forms.ModelForm):
     class Meta:
         model = Premise
-        fields = ['subject']
+        fields = ['subject', 'predicate', 'object', 'complement']
 
+class PremiseWithObjectInputForm(forms.ModelForm):
+    class Meta:
+        model = Premise
+        fields = ['subject', 'predicate', 'object']
+
+class PremiseMinimumInputForm(forms.ModelForm):
+    class Meta:
+        model = Premise
+        fields = ['subject', 'predicate', 'complement']
 
 class PremiseCreateView(CreateView):
     template_name = 'polls/new_premise.html'
     success_url = '/'
-    form_class = PremiseInputForm
     model = Premise
+
+    def get_form_class(self):
+        with Switch(self.kwargs['mode']) as case:
+            if case('full'):
+                return PremiseFullInputForm
+            if case('obj'):
+                return PremiseWithObjectInputForm
+            if case('min'):
+                return PremiseMinimumInputForm
 
     def form_valid(self, form):
         self.object = form.save()
@@ -26,14 +44,14 @@ class PremiseCreateView(CreateView):
 
 class PremisesListView(ListView):
     template_name = 'polls/index.html'
-    context_object_name = 'latest_premise_list'
+    context_object_name = 'premise_list'
     model = Premise
     # def get_queryset(self):
     #     return Premise.objects.all().order_by('-subject')
 
 class UnstagedPremisesListView(ListView):
     template_name = 'polls/index.html'
-    context_object_name = 'latest_premise_list'
+    context_object_name = 'premise_list'
 
     def get_queryset(self):
         """

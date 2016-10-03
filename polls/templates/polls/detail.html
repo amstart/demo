@@ -6,7 +6,7 @@
 {% block head_title %}{% trans premise.subject %}{% endblock %}
 
 {% block inner %}
-  <h1>{% trans premise.subject %}</h1>
+  <h1>{{ premise.subject }} {{ premise.predicate }} {{ premise.object }} {{ premise.complement }}</h1>
 
   <form action="{% url 'premises:detail' premise.id %}" method="post">
     {% csrf_token %}

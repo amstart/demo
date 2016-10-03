@@ -6,14 +6,16 @@
 {% block head_title %}{% trans "Premises" %}{% endblock %}
 
 {% block inner %}
-<h1>{% trans "Premises" %}</h1>
+<h2>{% trans "Premises" %}</h1>
 
 <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 
-{% if latest_premise_list %}
+{% if premise_list %}
   <ul>
-  {% for premise in latest_premise_list %}
-      <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">{{ premise.subject }}</a></li>
+  {% for premise in premise_list %}
+      <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">
+        {{ premise.subject }} {{ premise.predicate }} {{ premise.object }} {{ premise.complement }}
+      </a></li>
   {% endfor %}
   </ul>
 {% else %}

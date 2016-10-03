@@ -40,15 +40,15 @@ class UserTest(LiveServerTestCase):
 
     def test_can_create_premises_and_view_and_delete_them(self):
         self.browser.get(self.live_server_url +'/premises/new')
-        inputbox = self.browser.find_element_by_id('new_subject')
+        inputbox = self.browser.find_element_by_id('id_subject')
         self.assertEqual(
                 inputbox.get_attribute('placeholder'),
                 'subject'
         )
         premise_subject = 'Peacocks'
         inputbox.send_keys(premise_subject)
-        self.browser.find_element_by_id('new_predicate').send_keys('are')
-        self.browser.find_element_by_id('new_object').send_keys('scary')
+        self.browser.find_element_by_id('id_predicate').send_keys('are')
+        self.browser.find_element_by_id('id_object').send_keys('scary')
         self.browser.find_element_by_link_text('submit').click
         #detail page about new premise
         self.assertIn(premise_subject, self.browser.title)

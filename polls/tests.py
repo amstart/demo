@@ -12,56 +12,53 @@ from .models import Premise
 from .views import vote
 
 
-homepage_url = 'http://localhost:8000'
+premise_core = {'subject':'peas', 'predicate':'make', 'object':'peacocks', 'complement':'cry'}
 
 
 class TemplateTest(TestCase):
 
-
     def test_premises_url_resolves_to_index_page_view(self):
-        #self.client.login(username='Jochen', password='b83cfg')  # defined in fixture or with factory in setUp()
+        #self.client.login(username = 'Jochen', password = 'b83cfg')  # defined in fixture or with factory in setUp()
         response = self.client.get(reverse('premises:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'polls/index.html')
 
 
-class ViewTests(TestCase):
-
-
-    def test_new_premise_shows_up_in_index_and_unstaged_index(self):
-        new_premise = Premise(subject='peas')
-        new_premise.save()
-        response = self.client.get(reverse('premises:index'))
-        self.assertContains(response, 'peas')
-        response = self.client.get(reverse('premises:unstaged'))
-        self.assertContains(response, 'peas')
-
-
-class LoggedInTests(TestCase):
-
+class NewPremiseTests(TestCase):
 
     def setUp(self):
         self.factory = RequestFactory()
-        self.user = User.objects.create_user(username='Alfons', email='al@fons.com', password='top-secretary')
+        self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
+        # Create the different premises by POST and one by hand
+        self.responseFull = self.client.post(reverse('premises:new') + 'full', premise_core)
+        self.client.post(reverse('premises:new') + 'obj', premise_core)
+        self.client.post(reverse('premises:new') + 'min', premise_core)
+        new_premise = Premise(**premise_core)
+        new_premise.save()
 
-    def test_home_page_can_save_a_new_premise_which_has_an_URL(self):
-        post_data = {'subject': 'peas'}
-        response = self.client.post('/premises/new', post_data)
+    def test_premises_show_up_for_everyone_in_relevant_pages(self):
         premises = Premise.objects.all()
-        self.assertIn('peas', premises[0].subject)
-        self.assertEqual(response['location'], '/premises/%d/' % (premises[0].pk,))
+        detail_url = reverse('premises:detail', args = [str(premises[0].pk)])
+        self.assertRedirects(self.responseFull, detail_url)
+        responseIndex = self.client.get(reverse('premises:index'))
+        responseUnstaged = self.client.get(reverse('premises:unstaged'))
+        responseDetail = self.client.get(detail_url)
+        expected_count = {'subject':4, 'predicate':4, 'object':3, 'complement':3}
+        for key, value in premise_core.items():
+            self.assertContains(responseIndex, value, count = expected_count[key])
+            self.assertContains(responseUnstaged, value, count = expected_count[key])
+            self.assertContains(responseDetail, value)
 
 
 class PremiseMethodTests(TestCase):
-
 
     def test_was_published_recently_with_old_premise(self):
         """
         was_published_recently() should return False for premises whose
         pub_date is older than 1 day.
         """
-        time = timezone.now() - datetime.timedelta(days=30)
-        old_premise = Premise()
+        time = timezone.now() - datetime.timedelta(days = 30)
+        old_premise  =  Premise()
         setattr(old_premise, 'pub_date', time)
         self.assertIs(old_premise.was_published_recently(), False)
 
@@ -70,7 +67,7 @@ class PremiseMethodTests(TestCase):
         was_published_recently() should return True for premises whose
         pub_date is within the last day.
         """
-        time = timezone.now() - datetime.timedelta(hours=1)
+        time = timezone.now() - datetime.timedelta(hours = 1)
         recent_premise = Premise()
         setattr(recent_premise, 'pub_date', time)
         self.assertIs(recent_premise.was_published_recently(), True)

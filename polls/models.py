@@ -5,7 +5,10 @@ from django.utils import timezone
 from vote.managers import VotableManager
 
 class Premise(models.Model):
-    subject = models.CharField(max_length=200)
+    subject = models.CharField(default='no_subject', max_length=200)
+    predicate = models.CharField(default='no_predicate', max_length=200)
+    object = models.CharField(blank=True, max_length=100)
+    complement = models.CharField(blank=True, max_length=200)
     pub_date = models.DateTimeField('date published')
 
     def __init__(self, *args, **kwargs):
