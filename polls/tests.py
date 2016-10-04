@@ -27,15 +27,13 @@ class TemplateTest(TestCase):
 class NewPremiseTests(TestCase):
 
     def setUp(self):
-        self.factory = RequestFactory()
+        # self.factory = RequestFactory()
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
         self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
         # Create the different premises by POST and one by hand
         self.responseFull = self.client.post(reverse('premises:new') + 'WithComplementedObject', premise_core)
         self.client.post(reverse('premises:new') + 'WithObject', premise_core)
         self.client.post(reverse('premises:new') + 'WithComplement', premise_core)
-        new_premise = Premise(**premise_core)
-        new_premise.save()
 
     def test_premises_show_up_for_everyone_in_relevant_pages(self):
         premises = Premise.objects.all()
@@ -44,14 +42,18 @@ class NewPremiseTests(TestCase):
         responseIndex = self.client.get(reverse('premises:index'))
         responseUnstaged = self.client.get(reverse('premises:unstaged'))
         responseDetail = self.client.get(detail_url)
-        expected_count = {'subject':4, 'predicate':4, 'object':3, 'complement':3}
+        expected_count = {'subject':3, 'predicate':3, 'object':2, 'complement':2}
         for key, value in premise_core.items():
             self.assertContains(responseIndex, value, count = expected_count[key])
             self.assertContains(responseUnstaged, value, count = expected_count[key])
             self.assertContains(responseDetail, value)
 
+    # def test_premises_belong_to_creating_user(self):
 
 class PremiseMethodTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
 
     def test_was_published_recently_with_old_premise(self):
         """
@@ -59,7 +61,7 @@ class PremiseMethodTests(TestCase):
         pub_date is older than 1 day.
         """
         time = timezone.now() - datetime.timedelta(days = 30)
-        old_premise  =  Premise()
+        old_premise  =  Premise(user=self.user)
         setattr(old_premise, 'pub_date', time)
         self.assertIs(old_premise.was_published_recently(), False)
 
@@ -69,7 +71,7 @@ class PremiseMethodTests(TestCase):
         pub_date is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours = 1)
-        recent_premise = Premise()
+        recent_premise = Premise(user=self.user)
         setattr(recent_premise, 'pub_date', time)
         self.assertIs(recent_premise.was_published_recently(), True)
 

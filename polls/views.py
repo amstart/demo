@@ -5,8 +5,10 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.utils import timezone
 from switch import Switch
 
+from demoslogic.users.models import User
 from .models import Choice, Premise
 from .forms import PremiseFullInputForm, PremiseWithObjectInputForm, PremiseMinimumInputForm
+
 
 class NewPremiseView(TemplateView):
     template_name = 'polls/new_premise.html'
@@ -33,6 +35,7 @@ class PremiseCreateView(CreateView):
         return response
 
     def form_valid(self, form):
+        form.instance.user = self.request.user
         self.object = form.save()
         super(PremiseCreateView, self).form_valid(form)
         return HttpResponseRedirect(reverse('premises:index') + '%d/' % (self.object.pk,))

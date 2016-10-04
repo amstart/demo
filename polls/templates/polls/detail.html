@@ -7,7 +7,7 @@
 
 {% block inner %}
   <h1>{{ premise.subject }} {{ premise.predicate }} {{ premise.object }} {{ premise.complement }}</h1>
-
+  <h2>Creator: {{ premise.user }}</h2>
   <form action="{% url 'premises:detail' premise.id %}" method="post">
     {% csrf_token %}
     <button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />

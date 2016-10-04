@@ -9,7 +9,7 @@ class ChoiceInline(admin.TabularInline):
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Core',               {'fields': ['subject', 'predicate', 'object', 'complement']}),
-        ('Meta', {'fields': ['pub_date']}),
+        ('Meta', {'fields': ['user', 'pub_date']}),
     ]
     inlines = [ChoiceInline]
     list_display = ('subject', 'pub_date', 'was_published_recently')
