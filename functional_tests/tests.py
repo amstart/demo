@@ -33,7 +33,6 @@ class UserTest(LiveServerTestCase):
         loginbutton = self.browser.find_element_by_id("loginbutton")
         loginbutton.click()
         self.assertIn('User: Alfons', self.browser.title)
-        pickle.dump( self.browser.get_cookies() , open("test_cookies.pkl","wb"))
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_class_name('link-new-premise').click()
         self.browser.find_element_by_link_text('With complement').click()
