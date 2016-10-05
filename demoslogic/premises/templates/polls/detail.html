@@ -7,7 +7,7 @@
 {% block head_title %}{% trans premise.print_raw %}{% endblock %}
 
 {% block inner %}
-  <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
 
   <h1> {% premise_print_with_class premise %} </h1>
   <a href="{% url 'users:detail' premise.user.username %}">
