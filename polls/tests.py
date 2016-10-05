@@ -39,14 +39,17 @@ class NewPremiseTests(TestCase):
         premises = Premise.objects.all()
         detail_url = reverse('premises:detail', args = [str(premises[0].pk)])
         self.assertRedirects(self.responseFull, detail_url)
-        responseIndex = self.client.get(reverse('premises:index'))
-        responseUnstaged = self.client.get(reverse('premises:unstaged'))
-        responseDetail = self.client.get(detail_url)
+        response_index = self.client.get(reverse('premises:index'))
+        response_unstaged = self.client.get(reverse('premises:unstaged'))
+        response_detail = self.client.get(detail_url)
         expected_count = {'subject':3, 'predicate':3, 'object':2, 'complement':2}
         for key, value in premise_core.items():
-            self.assertContains(responseIndex, value, count = expected_count[key])
-            self.assertContains(responseUnstaged, value, count = expected_count[key])
-            self.assertContains(responseDetail, value)
+            self.assertContains(response_index, value, count = expected_count[key])
+            self.assertContains(response_unstaged, value, count = expected_count[key])
+            self.assertContains(response_detail, value)
+            self.assertContains(response_index, "class=\"" + key + "\"")
+            self.assertContains(response_unstaged, "class=\"" + key + "\"")
+            self.assertContains(response_detail, "class=\"" + key + "\"")
 
     # def test_premises_belong_to_creating_user(self):
 
