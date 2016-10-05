@@ -28,7 +28,7 @@ class TemplateTest(TestCase):
         #self.client.login(username = 'Jochen', password = 'b83cfg')  # defined in fixture or with factory in setUp()
         response = self.client.get(reverse('premises:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'polls/index.html')
+        self.assertTemplateUsed(response, 'premises/index.html')
 
     def test_delete_button_only_there_for_correct_user(self):
         premises = Premise.objects.all()

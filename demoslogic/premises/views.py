@@ -11,10 +11,10 @@ from .forms import PremiseFullInputForm, PremiseWithObjectInputForm, PremiseMini
 
 
 class NewPremiseView(TemplateView):
-    template_name = 'polls/new_premise.html'
+    template_name = 'premises/new_premise.html'
 
 class PremiseCreateView(CreateView):
-    template_name = 'polls/create_premise.html'
+    template_name = 'premises/create_premise.html'
     success_url = '/'
     model = Premise
 
@@ -41,14 +41,14 @@ class PremiseCreateView(CreateView):
         return HttpResponseRedirect(reverse('premises:index') + '%d/' % (self.object.pk,))
 
 class PremisesListView(ListView):
-    template_name = 'polls/index.html'
+    template_name = 'premises/index.html'
     context_object_name = 'premise_list'
     model = Premise
     # def get_queryset(self):
     #     return Premise.objects.all().order_by('-subject')
 
 class UnstagedPremisesListView(ListView):
-    template_name = 'polls/index.html'
+    template_name = 'premises/index.html'
     context_object_name = 'premise_list'
 
     def get_queryset(self):
@@ -66,7 +66,7 @@ class UnstagedPremisesListView(ListView):
 
 class PremiseDetailView(DetailView):
     model = Premise
-    template_name = 'polls/detail.html'
+    template_name = 'premises/detail.html'
 
     def post(self, request, *args, **kwargs):
         return remove_item(request)
@@ -74,7 +74,7 @@ class PremiseDetailView(DetailView):
 
 class PremiseVotesView(DetailView):
     model = Premise
-    template_name = 'polls/results.html'
+    template_name = 'premises/results.html'
 
 
 def add_item(request):
@@ -94,7 +94,7 @@ def vote(request, premise_id):
         selected_choice = premise.choice_set.get(pk = request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the premise voting form.
-        return render(request, 'polls/detail.html', {
+        return render(request, 'premises/detail.html', {
             'premise': premise,
             'error_message': "You didn't select a choice.",
         })
