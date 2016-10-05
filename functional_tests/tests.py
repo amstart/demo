@@ -45,18 +45,10 @@ class UserTest(LiveServerTestCase):
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_class_name('link-new-premise').click()
         self.browser.find_element_by_link_text('With complement').click()
-        # self.browser.get(self.live_server_url +'/premises/new/min')
-        inputbox = self.browser.find_element_by_id('id_subject')
-        # self.assertEqual(
-        #         inputbox.get_attribute('placeholder'),
-        #         'subject'
-        # )
-        premise_subject = 'Peacocks'
-        inputbox.send_keys(premise_subject)
+        self.browser.find_element_by_id('id_subject').send_keys('Peacocks')
         self.browser.find_element_by_id('id_predicate').send_keys('are')
         self.browser.find_element_by_id('id_complement').send_keys('scary')
         self.browser.find_element_by_id('new_premise_form').submit()
-        #detail page about new premise
         self.assertIn(premise_subject, self.browser.title)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Alfons', page_text)
@@ -68,3 +60,11 @@ class UserTest(LiveServerTestCase):
         except NoSuchElementException:
             pass
         self.fail('Finish the test!')
+
+    def test_can_view_created_stuff_in_user_profile
+        self.browser.get(self.live_server_url +'/premises/new/WithComplementedObject')
+        self.browser.find_element_by_id('id_subject').send_keys('Peacocks')
+        self.browser.find_element_by_id('id_predicate').send_keys('make')
+        self.browser.find_element_by_id('id_object').send_keys('people')
+        self.browser.find_element_by_id('id_complement').send_keys('scared')
+        self.browser.find_element_by_id('new_premise_form').submit()

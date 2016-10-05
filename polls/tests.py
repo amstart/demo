@@ -17,11 +17,30 @@ premise_core = {'subject':'peas', 'predicate':'make', 'object':'peacocks', 'comp
 
 class TemplateTest(TestCase):
 
+    def setUp(self):
+        self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
+        new_premise = Premise(user=self.user)
+        new_premise.save()
+        self.otheruser = User.objects.create_user(username = 'Fred', email = 'f@red.com', password = 'top-secretary')
+
+
     def test_premises_url_resolves_to_index_page_view(self):
         #self.client.login(username = 'Jochen', password = 'b83cfg')  # defined in fixture or with factory in setUp()
         response = self.client.get(reverse('premises:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'polls/index.html')
+
+    def test_delete_button_only_there_for_correct_user(self):
+        premises = Premise.objects.all()
+        detail_url = reverse('premises:detail', args = [str(premises[0].pk)])
+        response_anonymous = self.client.get(detail_url)
+        self.assertNotContains(response_anonymous, "id=id_delete_premise")
+        self.logged_in = self.client.login(username=self.otheruser.username, password='top-secretary')
+        response_otheruser = self.client.get(detail_url)
+        self.assertNotContains(response_otheruser, "id=id_delete_premise")
+        self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
+        response_user = self.client.get(detail_url)
+        self.assertContains(response_user, "id='id_delete_premise'")
 
 
 class NewPremiseTests(TestCase):

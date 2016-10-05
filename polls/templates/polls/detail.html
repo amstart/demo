@@ -10,14 +10,17 @@
   <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}" />
 
   <h1> {% premise_print_with_class premise %} </h1>
-  <h2>Creator: {{ premise.user }}</h2>
-  {% premise_print_with_class premise %}
-  <form action="{% url 'premises:detail' premise.id %}" method="post">
-    {% csrf_token %}
-    <button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
-    {# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
-  </form>
-  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+  <a href="{% url 'users:detail' premise.user.username %}">
+    created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>
+  </a>
+  {% if request.user == premise.user %}
+    <form action="{% url 'premises:detail' premise.id %}" method="post">
+      {% csrf_token %}
+      <button name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
+      {# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
+    </form>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+  {% endif %}
 
   <form action="{% url 'premises:vote' premise.id %}" method="post">
     {% csrf_token %}
