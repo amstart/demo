@@ -50,9 +50,9 @@ class NewPremiseTests(TestCase):
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
         self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
         # Create the different premises by POST and one by hand
-        self.responseFull = self.client.post(reverse('premises:new') + 'WithComplementedObject', premise_core)
-        self.client.post(reverse('premises:new') + 'WithObject', premise_core)
-        self.client.post(reverse('premises:new') + 'WithComplement', premise_core)
+        self.responseFull = self.client.post(reverse('premises:create', args = ['WithComplementedObject']), premise_core)
+        self.client.post(reverse('premises:create', args = ['WithObject']), premise_core)
+        self.client.post(reverse('premises:create', args = ['WithComplement']), premise_core)
 
     def test_premises_show_up_for_everyone_in_relevant_pages(self):
         premises = Premise.objects.all()
