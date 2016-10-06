@@ -1,27 +1,16 @@
 {% extends "premises/base.html" %}
 
-{% load static %}
-{% load i18n %}
-{% load premises %}
-
-{% block head_title %}{% trans "Premises" %}{% endblock %}
+{% block head_title %}Premises{% endblock %}
 
 {% block inner %}
-<h2>{% trans "Premises" %}</h1>
 
-<link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
+<h2>Premises</h2>
 
 {% if premise_list %}
-  <a class="link-new-premise" href="{% url 'premises:new' %}">Create another premise!</a>
-  <ul>
-    {% for premise in premise_list %}
-      <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">
-        {% premise_print_with_class premise %}
-      </a></li>
-  {% endfor %}
-  </ul>
-{% else %}
-    <p>No premises are available. <a class="link-new-premise" href="{% url 'premises:new' %}">Create the first premise!</a></p>
+  <a class="link_new_premise" href="{% url 'premises:new' %}">Create another premise!</a>
+  {% include 'premises/premise_list.html' with sidebar=True sidebar_width=4 %}
+  {% else %}
+    <p> <a class="link_new_premise" href="{% url 'premises:new' %}">Create the first premise!</a></p>
 {% endif %}
 
 {% endblock %}

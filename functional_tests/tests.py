@@ -34,7 +34,7 @@ class UserTest(LiveServerTestCase):
         loginbutton.click()
         self.assertIn('User: Alfons', self.browser.title)
         self.browser.find_element_by_link_text('Premises').click()
-        self.browser.find_element_by_class_name('link-new-premise').click()
+        self.browser.find_element_by_class_name('link_new_premise').click()
         self.browser.find_element_by_link_text('With complement').click()
         self.browser.find_element_by_id('id_subject').send_keys('Peacocks')
         self.browser.find_element_by_id('id_predicate').send_keys('are')
@@ -43,6 +43,10 @@ class UserTest(LiveServerTestCase):
         self.assertIn('Peacocks', self.browser.title)
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Alfons', page_text)
+        self.browser.find_element_by_class_name('link_created_by').click()
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Peacocks', page_text)
+        self.browser.find_element_by_id('id_premise1').click()
         delete_listitem = self.browser.find_element_by_id('id_delete_premise')
         delete_listitem.click()
         try:
@@ -50,6 +54,3 @@ class UserTest(LiveServerTestCase):
             self.fail('Premise could not be deleted (or there is another premise with the same text)!')
         except NoSuchElementException:
             pass
-        self.browser.get(self.live_server_url + reverse('users:detail', args = ["Alfons"]))
-        page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('Peacocks', page_text)

@@ -1,0 +1,17 @@
+{% load premises %}
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
+
+
+{% if premise_list %}
+  <ul>
+    {% for premise in premise_list %}
+    <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">
+      {% premise_print_with_class premise %}
+    </a></li>
+  {% endfor %}
+  </ul>
+{% else %}
+  No premises to show.
+{% endif %}
