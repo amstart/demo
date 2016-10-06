@@ -7,7 +7,7 @@ from switch import Switch
 
 from demoslogic.users.models import User
 from .models import Choice, Premise
-from .forms import PremiseFullInputForm, PremiseWithObjectInputForm, PremiseMinimumInputForm
+from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 
 
 class NewPremiseView(TemplateView):
@@ -20,12 +20,14 @@ class PremiseCreateView(CreateView):
 
     def get_form_class(self):
         with Switch(self.kwargs['mode']) as case:
+            if case('SubjectPredicate'):
+                return SubjectPredicateInputForm
             if case('WithComplementedObject'):
-                return PremiseFullInputForm
+                return WithComplementedObjectInputForm
             if case('WithObject'):
-                return PremiseWithObjectInputForm
+                return WithObjectInputForm
             if case('WithComplement'):
-                return PremiseMinimumInputForm
+                return WithComplementInputForm
 
     def get(self, request, *args, **kwargs):
         try:

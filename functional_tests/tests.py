@@ -18,8 +18,8 @@ class UserTest(LiveServerTestCase):
         self.browser.implicitly_wait(1)
 
     def tearDown(self):
-        pass
-        # self.browser.quit()
+        self.browser.quit()
+        # pass
 
     def test_can_login_and_create_premises_and_view_and_delete_them(self):
         User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')

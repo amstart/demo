@@ -7,8 +7,9 @@ Only signed-in users can create premises!
 Create a new premise:
 {% endif %}
 <ul>
-  <li><a href="{% url 'premises:create' "WithComplementedObject"%}">With complemented object</a></li>
-  <li><a href="{% url 'premises:create' "WithObject"%}">With object</a></li>
+  <li><a href="{% url 'premises:create' "SubjectPredicate"%}">Subject and predicate</a></li>
   <li><a href="{% url 'premises:create' "WithComplement"%}">With complement</a></li>
+  <li><a href="{% url 'premises:create' "WithObject"%}">With object</a></li>
+  <li><a href="{% url 'premises:create' "WithComplementedObject"%}">With complemented object</a></li>
 </ul>
 {% endblock inner %}

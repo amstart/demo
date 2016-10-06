@@ -9,17 +9,22 @@ class AbstractForm(forms.ModelForm):
     class Meta:
         abstract = True
 
-class PremiseFullInputForm(AbstractForm):
+class WithComplementedObjectInputForm(AbstractForm):
     class Meta:
         model = Premise
         fields = ['subject', 'predicate', 'object', 'complement']
 
-class PremiseWithObjectInputForm(AbstractForm):
+class WithObjectInputForm(AbstractForm):
     class Meta:
         model = Premise
         fields = ['subject', 'predicate', 'object']
 
-class PremiseMinimumInputForm(AbstractForm):
+class WithComplementInputForm(AbstractForm):
     class Meta:
         model = Premise
         fields = ['subject', 'predicate', 'complement']
+
+class SubjectPredicateInputForm(AbstractForm):
+        class Meta:
+            model = Premise
+            fields = ['subject', 'predicate']

@@ -53,6 +53,7 @@ class NewPremiseTests(TestCase):
         self.responseFull = self.client.post(reverse('premises:create', args = ['WithComplementedObject']), premise_core)
         self.client.post(reverse('premises:create', args = ['WithObject']), premise_core)
         self.client.post(reverse('premises:create', args = ['WithComplement']), premise_core)
+        self.client.post(reverse('premises:create', args = ['SubjectPredicate']), premise_core)
 
     def test_premises_show_up_for_everyone_in_relevant_pages(self):
         premises = Premise.objects.all()
@@ -61,7 +62,7 @@ class NewPremiseTests(TestCase):
         response_index = self.client.get(reverse('premises:index'))
         response_unstaged = self.client.get(reverse('premises:unstaged'))
         response_detail = self.client.get(detail_url)
-        expected_count = {'subject':3, 'predicate':3, 'object':2, 'complement':2}
+        expected_count = {'subject':4, 'predicate':4, 'object':2, 'complement':2}
         for key, value in premise_core.items():
             self.assertContains(response_index, value, count = expected_count[key])
             self.assertContains(response_unstaged, value, count = expected_count[key])
