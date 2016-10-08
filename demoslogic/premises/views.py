@@ -54,13 +54,7 @@ class UnstagedPremisesListView(ListView):
     context_object_name = 'premise_list'
 
     def get_queryset(self):
-        """
-        Return the last five published premises (not including those set to be
-        published in the future).
-        """
-        return Premise.objects.filter(
-            pub_date__lte = timezone.now()
-        ).order_by('-pub_date')[:5]
+        return Premise.objects.exclude(staged__isnull=False).order_by('-pub_date')[:]
 
     def post(self, request, *args, **kwargs):
         return add_item(request)

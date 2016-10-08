@@ -8,8 +8,8 @@ from vote.managers import VotableManager
 class Premise(models.Model):
     subject = models.CharField(default = '', max_length = 200)
     predicate = models.CharField(default = '', max_length = 200)
-    object = models.CharField(default = '', max_length = 200)
-    complement = models.CharField(default = '', max_length = 200)
+    object = models.CharField(default = '', max_length = 200, blank = True)
+    complement = models.CharField(default = '', max_length = 200, blank = True)
 
     pub_date = models.DateTimeField('date published', default = timezone.now, blank = True)
     staged = models.DateTimeField(null = True, blank = True)
@@ -25,8 +25,9 @@ class Premise(models.Model):
         if len(self.complement ) > 0:
             self.core_list.append({"textclass":"complement", "value":self.complement})
             self.print_raw = self.print_raw + " " + self.complement
-        # if self.staged is None and not self.was_published_recently:
-        #     self.staged = timezone.now()
+        if self.staged is None and not self.was_published_recently():
+            self.staged = timezone.now()
+            self.save()
 
     def __str__(self):
         return self.subject
