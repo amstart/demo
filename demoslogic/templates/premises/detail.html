@@ -13,7 +13,7 @@
   <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
     created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>
   </a>
-  {% if request.user == premise.user and premise.staged__isnull %}
+  {% if request.user == premise.user and not premise.staged %}
     <form action="{% url 'premises:detail' premise.id %}" method="post">
       {% csrf_token %}
       <button class="btn btn-secondary" name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
