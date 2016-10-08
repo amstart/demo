@@ -20,9 +20,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         # pass
 
     def create_pre_authenticated_session(self, name):
-        user = User.objects.create_user(username = name, email = 'al@fons.com', password = 'top-secretary')
+        self.user = User.objects.create_user(username = name, email = 'al@fons.com', password = 'top-secretary')
         session = SessionStore()
-        session[SESSION_KEY] = user.pk
+        session[SESSION_KEY] = self.user.pk
         session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
         session.save()
         ## to set a cookie we need to first visit the domain.
