@@ -42,14 +42,23 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'premises:index' %}">Tree</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'premises:index' %}">Premises</a>
+              <li class="nav-item dropdown">
+                  <a href="{% url 'premises:index' %}" class="nav-link">Premises</a>
+                  <ul class="dropdown-menu">
+                      <li><a class="nav-link" href="{% url 'premises:unstaged' %}">Unstaged</a></li>
+                  </ul>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'premises:index' %}">Arguments</a>
+              <li class="nav-item dropdown">
+                  <a href="{% url 'premises:index' %}" class="nav-link">Arguments</a>
+                  <ul class="dropdown-menu">
+                      <li><a class="nav-link" href="{% url 'premises:unstaged' %}">Unstaged</a></li>
+                  </ul>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'users:list' %}">Users</a>
+              <li class="nav-item dropdown">
+                  <a href="{% url 'premises:index' %}" class="nav-link">Users</a>
+                  <ul class="dropdown-menu">
+                      <li><a class="nav-link" href="{% url 'users:list' %}">Unstaged</a></li>
+                  </ul>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>

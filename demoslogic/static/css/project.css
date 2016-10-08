@@ -36,3 +36,14 @@
 [hidden][style="display: block;"] {
   display: block !important;
 }
+
+@media (min-width: 979px) {
+  ul.nav li.dropdown:hover > ul.dropdown-menu {
+    display: block;
+  }
+}
+
+.navbar .dropdown-menu {
+ margin-top: 0px;
+ background-color: #222222;
+}
