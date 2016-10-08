@@ -2,37 +2,13 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
-import pickle
-import datetime, os
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.core.urlresolvers import reverse
+from .base import FunctionalTest
 
-from demoslogic.users.models import User
+class UserTest(FunctionalTest):
 
-class UserTest(StaticLiveServerTestCase):
-    def setUp(self):
-        self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
-            firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
-        self.browser.get(self.live_server_url)
-        self.browser.implicitly_wait(1)
-
-    def tearDown(self):
-        self.browser.quit()
-        # pass
-
-    def test_can_login_and_create_premises_and_view_and_delete_them(self):
-        User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
-        self.browser.get(self.live_server_url + '/accounts/login/')
-        userfield = self.browser.find_element_by_id("id_login")
-        userfield.send_keys("Alfons")
-        pwfield = self.browser.find_element_by_id("id_password")
-        pwfield.send_keys("top-secretary")
-        rememberfield = self.browser.find_element_by_id("id_remember")
-        rememberfield.click()
-        loginbutton = self.browser.find_element_by_id("loginbutton")
-        loginbutton.click()
-        self.assertIn('User: Alfons', self.browser.title)
+    def test_create_premises_and_view_and_delete_them(self):
+        self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_class_name('link_new_premise').click()
         self.browser.find_element_by_link_text('With complement').click()
