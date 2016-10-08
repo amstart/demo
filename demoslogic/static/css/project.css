@@ -37,7 +37,7 @@
   display: block !important;
 }
 
-@media (min-width: 979px) {
+@media (min-width: 650px) {
   ul.nav li.dropdown:hover > ul.dropdown-menu {
     display: block;
   }
@@ -46,4 +46,8 @@
 .navbar .dropdown-menu {
  margin-top: 0px;
  background-color: #222222;
+}
+
+.nav-link {
+ margin-left: 1ex;
 }

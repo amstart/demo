@@ -5,12 +5,12 @@ from selenium.webdriver.common.keys import Keys
 import pickle
 import datetime, os
 
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.urlresolvers import reverse
 
 from demoslogic.users.models import User
 
-class UserTest(LiveServerTestCase):
+class UserTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
             firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
