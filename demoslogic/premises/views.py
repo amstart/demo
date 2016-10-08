@@ -50,7 +50,7 @@ class PremisesListView(ListView):
     #     return Premise.objects.all().order_by('-subject')
 
 class UnstagedPremisesListView(ListView):
-    template_name = 'premises/index.html'
+    template_name = 'premises/index_unstaged.html'
     context_object_name = 'premise_list'
 
     def get_queryset(self):
