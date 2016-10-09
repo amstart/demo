@@ -15,7 +15,7 @@
     created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>
   </a>
   {% if request.user == premise.user and not premise.staged %}
-    <a href="{% url 'premises:delete' premise.id %}" class="btn btn-secondary" id="id_delete">
+    <a href="{% url 'premises:delete' premise.id %}" class="btn btn-secondary" id='id_delete'>
       delete
     </a>
   {% endif %}

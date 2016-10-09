@@ -19,8 +19,12 @@ class TemplateTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
-        new_premise = Premise(user=self.user)
-        new_premise.save()
+        self.new_premise = Premise(user=self.user)
+        self.new_premise.save()
+        time = timezone.now() - datetime.timedelta(days = 30)
+        self.old_premise  =  Premise(user=self.user)
+        setattr(self.old_premise, 'pub_date', time)
+        self.old_premise.save()
         self.otheruser = User.objects.create_user(username = 'Fred', email = 'f@red.com', password = 'top-secretary')
 
 
@@ -32,15 +36,17 @@ class TemplateTest(TestCase):
 
     def test_delete_button_only_there_for_correct_user(self):
         premises = Premise.objects.all()
-        detail_url = reverse('premises:detail', args = [str(premises[0].pk)])
+        detail_url = reverse('premises:detail', args = [str(self.new_premise.pk)])
         response_anonymous = self.client.get(detail_url)
-        self.assertNotContains(response_anonymous, "id=id_delete_premise")
+        self.assertNotContains(response_anonymous, "id='id_delete'")
         self.logged_in = self.client.login(username=self.otheruser.username, password='top-secretary')
         response_otheruser = self.client.get(detail_url)
-        self.assertNotContains(response_otheruser, "id=id_delete_premise")
+        self.assertNotContains(response_otheruser, "id='id_delete'")
         self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
         response_user = self.client.get(detail_url)
-        self.assertContains(response_user, "id='id_delete_premise'")
+        self.assertContains(response_user, "id='id_delete'")
+        response_user = self.client.get(reverse('premises:detail', args = [str(self.old_premise.pk)]))
+        self.assertNotContains(response_user, "id='id_delete'")
 
 
 class NewPremiseTests(TestCase):
