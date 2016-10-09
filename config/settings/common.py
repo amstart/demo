@@ -45,6 +45,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     # custom users app
     'demoslogic.users.apps.UsersConfig',
+    'demoslogic',
     'vote',
     'demoslogic.premises',
     # Your stuff: custom apps go here
