@@ -23,8 +23,8 @@ class UserTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Peacocks', page_text)
         self.browser.find_element_by_id('id_premise1').click()
-        delete_listitem = self.browser.find_element_by_id('id_delete_premise')
-        delete_listitem.click()
+        self.browser.find_element_by_id('id_delete').click()
+        self.browser.find_element_by_tag_name('form').submit()
         try:
             self.browser.find_element_by_link_text('Peacocks')
             self.fail('Premise could not be deleted (or there is another premise with the same text)!')

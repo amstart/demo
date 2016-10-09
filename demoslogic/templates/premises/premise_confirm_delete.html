@@ -1,0 +1,16 @@
+{% extends "premises/base.html" %}
+
+{% load crispy_forms_tags %}
+{% block head_title %}Delete Premise{% endblock %}
+
+{% block inner %}
+
+{% if request.user == premise.user and not premise.staged %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+      <input type="submit" class="btn btn-primary" value="Confirm" />
+  </form>
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endif %}
+{% endblock %}

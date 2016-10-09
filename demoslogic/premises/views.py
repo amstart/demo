@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.core.urlresolvers import reverse
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.utils import timezone
 from switch import Switch
 
@@ -64,9 +64,9 @@ class PremiseDetailView(DetailView):
     model = Premise
     template_name = 'premises/detail.html'
 
-    def post(self, request, *args, **kwargs):
-        return remove_item(request)
-
+class DeletePremiseView(DeleteView):
+    model = Premise
+    success_url = reverse_lazy('premises:index')
 
 class PremiseVotesView(DetailView):
     model = Premise
@@ -76,7 +76,7 @@ class PremiseVotesView(DetailView):
 def add_item(request):
     new_premise = Premise(subject = request.POST.get('item_text', 'unnamed'), pub_date = timezone.now())
     new_premise.save()
-    return HttpResponseRedirect(reverse('premises:index') + '%d/' % (new_premise.pk,))
+    return HttpResponseRedirect(reverse('premises:detail', args = new_premise.pk))
 
 def remove_item(request):
     print(request.POST['delete_premise'])

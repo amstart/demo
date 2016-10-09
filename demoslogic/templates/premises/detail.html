@@ -1,5 +1,6 @@
 {% extends "premises/base.html" %}
 
+{% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
 {% load premises %}
@@ -14,12 +15,9 @@
     created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>
   </a>
   {% if request.user == premise.user and not premise.staged %}
-    <form action="{% url 'premises:detail' premise.id %}" method="post">
-      {% csrf_token %}
-      <button class="btn btn-secondary" name="delete_premise" value={{premise.id}} id='id_delete_premise'>delete</button> <br />
-      {# <input type="submit" name="delete_premise" id="id_delete_premise" value="delete"/> <br />#}
-    </form>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <a href="{% url 'premises:delete' premise.id %}" class="btn btn-secondary" id="id_delete">
+      delete
+    </a>
   {% endif %}
 
   <form action="{% url 'premises:vote' premise.id %}" method="post">
