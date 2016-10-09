@@ -5,7 +5,7 @@
 {% load i18n %}
 {% load premises %}
 
-{% block head_title %}{% trans premise.print_raw %}{% endblock %}
+{% block head_title %}{{ premise }}{% endblock %}
 
 {% block inner %}
   <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />

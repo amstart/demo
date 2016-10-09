@@ -10,17 +10,20 @@ class Premise(BlockObject):
 
     def __init__(self, *args, **kwargs):
         super(Premise,self).__init__(*args, **kwargs)
-        self.core_list = [{"textclass":"subject", "value":self.subject}, {"textclass":"predicate", "value":self.predicate}]
-        self.print_raw = self.subject + " " + self.predicate
+        self.core_list = [{"textclass":"subject", "value":self.subject},
+                         {"textclass":"predicate", "value":self.predicate}]
         if len(self.object) > 0:
             self.core_list.append({"textclass":"object", "value":self.object})
-            self.print_raw = self.print_raw + " " + self.object
         if len(self.complement ) > 0:
             self.core_list.append({"textclass":"complement", "value":self.complement})
-            self.print_raw = self.print_raw + " " + self.complement
 
     def __str__(self):
-        return self.print_raw
+        print_raw = self.subject + " " + self.predicate
+        if len(self.object) > 0:
+            print_raw = print_raw + " " + self.object
+        if len(self.complement ) > 0:
+            print_raw = print_raw + " " + self.complement
+        return print_raw
 
 
 class Choice(models.Model):
