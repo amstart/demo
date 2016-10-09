@@ -1,0 +1,9 @@
+python manage.py makemigrations
+python manage.py migrate
+python manage.py test
+python manage.py test functional_tests
+python manage.py test premises
+python manage.py runserver
+condactivate demoslogic
+set DATABASE_URL=postgres://Jochen:6104@localhost:5432/[project_slug]
+cd C:\Users\Jochen\Documents\demoslogic
