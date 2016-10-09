@@ -234,7 +234,7 @@ man_pages = [
 texinfo_documents = [
     ('index', 'demoslogic', 'demoslogic Documentation',
      """Jochen Krattenmacher""", 'demoslogic',
-     """An online discussion platform.""", 'Miscellaneous'),
+     """democracy - logical!""", 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.

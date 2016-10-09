@@ -1,7 +1,7 @@
 demoslogic
 ==========
 
-An online discussion platform.
+democracy - logical!
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -64,14 +64,5 @@ Deployment
 
 The following details how to deploy this application.
 
-
-
-
-Elastic Beanstalk
-~~~~~~~~~~~~~~~~~~
-
-See detailed `cookiecutter-django Elastic Beanstalk documentation`_.
-
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-elastic-beanstalk.html
 
 

@@ -23,7 +23,7 @@ TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 # Note: This key only used for development and testing.
-SECRET_KEY = env('DJANGO_SECRET_KEY', default='i076(1ghhdn_n=r67vp9-qscro0mi!pbox!3ge(q1ixspm!oz3')
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='jexb@woycpp2rb4wzl5b#nnofs^pca5ju02opy)m%ul-)gui8^')
 
 # Mail settings
 # ------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ CACHES = {
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
-MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
+MIDDLEWARE += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
 INSTALLED_APPS += ('debug_toolbar', )
 
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2', ]
