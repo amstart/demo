@@ -56,9 +56,6 @@ class UnstagedPremisesListView(ListView):
     def get_queryset(self):
         return Premise.objects.exclude(staged__isnull=False).order_by('-pub_date')[:]
 
-    def post(self, request, *args, **kwargs):
-        return add_item(request)
-
 
 class PremiseDetailView(DetailView):
     model = Premise
@@ -72,17 +69,6 @@ class PremiseVotesView(DetailView):
     model = Premise
     template_name = 'premises/results.html'
 
-
-def add_item(request):
-    new_premise = Premise(subject = request.POST.get('item_text', 'unnamed'), pub_date = timezone.now())
-    new_premise.save()
-    return HttpResponseRedirect(reverse('premises:detail', args = new_premise.pk))
-
-def remove_item(request):
-    print(request.POST['delete_premise'])
-    premise = get_object_or_404(Premise, pk = request.POST['delete_premise'])
-    premise.delete()
-    return HttpResponseRedirect(reverse('premises:index'))
 
 def vote(request, premise_id):
     premise = get_object_or_404(Premise, pk = premise_id)

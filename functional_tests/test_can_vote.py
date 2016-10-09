@@ -13,4 +13,4 @@ class UserCanVoteTest(FunctionalTest):
         new_premise.save()
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_link_text('Things exist').click()
-        
+        self.browser.find_element_by_tag_name('form').click()
