@@ -1,6 +1,16 @@
+powershell:
+cd C:\Tools\Anaconda\envs\demoslogic\Scripts
+& cmd /k condactivate demoslogic
+cd C:\Users\Jochen\Documents\demoslogic
+set DATABASE_URL=postgres://Jochen:6104@localhost:5432/[project_slug]
+python manage.py shell_plus --notebook
+
+
 python manage.py makemigrations
 python manage.py migrate
 python manage.py test
+python manage.py test functional_tests
+python manage.py test functional_tests.test_create_premises_and_view_and_delete_them
 python manage.py test functional_tests
 python manage.py test premises
 python manage.py runserver

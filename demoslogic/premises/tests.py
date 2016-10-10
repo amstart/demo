@@ -19,10 +19,13 @@ class TemplateTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
-        self.new_premise = Premise.objects.create(user= self.user)
+        self.new_premise = Premise(user = self.user)
+        self.new_premise.save()
         time = timezone.now() - datetime.timedelta(days = 30)
-        self.old_premise  =  Premise.objects.create(user = self.user, pub_date = time)
-        self.otheruser = User.objects.create_user(username = 'Fred', email = 'f@red.com', password = 'top-secretary'
+        self.old_premise  =  Premise(user = self.user, pub_date = time)
+        setattr(self.old_premise, 'pub_date', time)
+        self.old_premise.save()
+        self.otheruser = User.objects.create_user(username = 'Fred', email = 'f@red.com', password = 'top-secretary')
 
 
     def test_premises_url_resolves_to_index_page_view(self):

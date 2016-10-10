@@ -17,19 +17,20 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
-        # pass
+        pass
 
     def create_pre_authenticated_session(self, name):
-        self.user = User.objects.create_user(username = name, email = 'al@fons.com', password = 'top-secretary')
+        self.user = User.objects.create_user(username = name, email = 'al@fons.com', password = 'top-secretary5456')
         session = SessionStore()
         session[SESSION_KEY] = self.user.pk
         session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
         session.save()
         ## to set a cookie we need to first visit the domain.
         ## 404 pages load the quickest!
-        self.browser.get(self.live_server_url + "/404_no_such_url/")
+        self.browser.get(self.live_server_url)
         self.browser.add_cookie(dict(
             name=settings.SESSION_COOKIE_NAME,
             value=session.session_key,
             path='/',
         ))
+        self.browser.get(self.live_server_url + "/selenium/")

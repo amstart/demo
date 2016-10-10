@@ -3,10 +3,12 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.keys import Keys
 
+from django.test.utils import override_settings
+
 from .base import FunctionalTest
 
 class UserTest(FunctionalTest):
-
+    # @override_settings(DEBUG=True)
     def test_create_premises_and_view_and_delete_them(self):
         self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Premises').click()

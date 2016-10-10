@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from demoslogic.views import LoginSeleniumView
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
@@ -20,10 +21,22 @@ urlpatterns = [
     url(r'^users/', include('demoslogic.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
 
+    #DEBUG
+    url(
+        regex=r'^selenium/$',
+        view=LoginSeleniumView,
+        name='selenium'
+    ),
     # Your stuff: custom urls includes go here
     url(r'^premises/', include('demoslogic.premises.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.TESTING_MODE:
+    # enable this handler only for testing,
+    # so that if DEBUG=False and we're not testing,
+    # the default handler is used
+    handler500 = 'demoslogic.views.show_server_error'
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

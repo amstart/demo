@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 from __future__ import absolute_import, unicode_literals
 
 import environ
+import sys
+TESTING_MODE = 'test' in sys.argv
 
 ROOT_DIR = environ.Path(__file__) - 3  # (demoslogic/config/settings/common.py - 3 = demoslogic/)
 APPS_DIR = ROOT_DIR.path('demoslogic')
@@ -228,7 +230,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    # 'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 # Some really nice defaults
