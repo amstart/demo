@@ -8,8 +8,7 @@ from django.http import HttpRequest
 from django.test import RequestFactory
 
 from demoslogic.users.models import User
-from .models import Premise
-from .views import vote
+from .models import Premise, Argument
 
 
 premise_core = {'subject':'peas', 'predicate':'make', 'object':'peacocks', 'complement':'cry'}
@@ -19,12 +18,10 @@ class TemplateTest(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
-        self.new_premise = Premise(user = self.user)
-        self.new_premise.save()
+        self.new_premise = Premise.objects.create(user = self.user)
         time = timezone.now() - datetime.timedelta(days = 30)
-        self.old_premise  =  Premise(user = self.user, pub_date = time)
+        self.old_premise  =  Premise.objects.create(user = self.user)
         setattr(self.old_premise, 'pub_date', time)
-        self.old_premise.save()
         self.otheruser = User.objects.create_user(username = 'Fred', email = 'f@red.com', password = 'top-secretary')
 
 
@@ -45,6 +42,7 @@ class TemplateTest(TestCase):
         self.logged_in = self.client.login(username=self.user.username, password='top-secretary')
         response_user = self.client.get(detail_url)
         self.assertContains(response_user, "id='id_delete'")
+        self.logged_in = self.client.login(username=self.otheruser.username, password='top-secretary')
         response_user = self.client.get(reverse('premises:detail', args = [str(self.old_premise.pk)]))
         self.assertNotContains(response_user, "id='id_delete'")
 

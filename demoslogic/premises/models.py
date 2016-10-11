@@ -2,6 +2,9 @@ from django.db import models
 
 from .. models import BlockObject
 
+class Argument(models.Model):
+    pass
+
 class Premise(BlockObject):
     subject = models.CharField(default = '', max_length = 200)
     predicate = models.CharField(default = '', max_length = 200)

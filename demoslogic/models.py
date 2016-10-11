@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from vote.managers import VotableManager
 
+
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now, blank = True)
     staged = models.DateTimeField(null = True, blank = True)
@@ -13,7 +14,7 @@ class BlockObject(models.Model):
 
     class Meta:
         abstract = True
-        
+
     def __init__(self, *args, **kwargs):
         super(BlockObject,self).__init__(*args, **kwargs)
         if self.staged is None and not self.was_published_recently():
