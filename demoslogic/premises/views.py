@@ -6,7 +6,7 @@ from django.utils import timezone
 from switch import Switch
 
 from demoslogic.users.models import User
-from .models import Choice, Premise
+from .models import Premise
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 
 
@@ -68,22 +68,3 @@ class DeletePremiseView(DeleteView):
 class PremiseVotesView(DetailView):
     model = Premise
     template_name = 'premises/results.html'
-
-
-def vote(request, premise_id):
-    premise = get_object_or_404(Premise, pk = premise_id)
-    try:
-        selected_choice = premise.choice_set.get(pk = request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the premise voting form.
-        return render(request, 'premises/detail.html', {
-            'premise': premise,
-            'error_message': "You didn't select a choice.",
-        })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('premises:results', args=(premise.id,)))

@@ -19,13 +19,4 @@
       delete
     </a>
   {% endif %}
-
-  <form action="{% url 'premises:vote' premise.id %}" method="post">
-    {% csrf_token %}
-    {% for choice in premise.choice_set.all %}
-        <label><input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
-        {{ choice.choice_text }}</label><br />
-    {% endfor %}
-    <input type="submit" value="Vote" />
-  </form>
 {% endblock %}

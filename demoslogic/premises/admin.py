@@ -1,17 +1,17 @@
 from django.contrib import admin
 
-from .models import Premise, Choice
-
-class ChoiceInline(admin.TabularInline):
-    model = Choice
-    extra = 3
+from .models import Premise
+#
+# class ChoiceInline(admin.TabularInline):
+#     model = Choice
+#     extra = 3
 
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Core',               {'fields': ['subject', 'predicate', 'object', 'complement']}),
         ('Meta', {'fields': ['staged', 'user', 'pub_date']}),
     ]
-    inlines = [ChoiceInline]
+    # inlines = [ChoiceInline]
     list_display = ('subject', 'pub_date', 'was_published_recently')
     list_filter = ['pub_date']
     search_fields = ['subject']

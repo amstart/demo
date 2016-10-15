@@ -8,7 +8,7 @@ from vote.managers import VotableManager
 
 
 class BlockObject(models.Model):
-    pub_date = models.DateTimeField('date published', default = timezone.now, blank = True)
+    pub_date = models.DateTimeField('date published', default = timezone.now)
     staged = models.DateTimeField(null = True, blank = True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
@@ -29,3 +29,7 @@ class BlockObject(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
     votes = VotableManager()
+
+# class Source(BlockObject):
+#     source = Charfield(max_length = 200)
+    #can be voted on

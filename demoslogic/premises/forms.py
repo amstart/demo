@@ -1,4 +1,4 @@
-from .models import Choice, Premise
+from .models import Premise
 from django import forms
 
 class AbstractForm(forms.ModelForm):
