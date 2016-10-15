@@ -32,7 +32,7 @@ class Premise(BlockObject):
 
 class Vote(BlockObject):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
-    vote_date = models.DateTimeField('last voted', default = timezone.now, blank = True)
+    vote_date = models.DateTimeField('last voted', default = timezone.now)
 
     class Meta:
         abstract = True

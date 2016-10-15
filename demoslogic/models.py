@@ -28,7 +28,6 @@ class BlockObject(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
-    votes = VotableManager()
 
 # class Source(BlockObject):
 #     source = Charfield(max_length = 200)

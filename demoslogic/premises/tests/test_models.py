@@ -4,13 +4,22 @@ from django.utils import timezone
 from django.test import TestCase
 
 from demoslogic.users.models import User
-from ..models import Premise
+from ..models import Premise, CategorizationVote
 
+class VoteMethodTests(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username = 'Alfons')
+        self.premise = Premise(user=self.user)
+
+    def test_vote_is_saved(self):
+        new_vote = CategorizationVote.objects.castvote(user = self.user, object = self.premise, vote_accuracy = 2)
+        self.assertEqual(new_vote.getvote, 2)
 
 class PremiseMethodTests(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username = 'Alfons', email = 'al@fons.com', password = 'top-secretary')
+        self.user = User.objects.create_user(username = 'Alfons')
 
     def test_was_published_recently_with_old_premise(self):
         """
