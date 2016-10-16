@@ -9,7 +9,6 @@
 
 {% block inner %}
   <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
-
   <h1> {% premise_print_with_class premise %} </h1>
   <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
     created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>

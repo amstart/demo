@@ -10,11 +10,11 @@ class VoteMethodTests(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username = 'Alfons')
-        self.premise = Premise(user=self.user)
+        self.premise = Premise.objects.create(user=self.user)
 
     def test_vote_is_saved(self):
-        new_vote = CategorizationVote.objects.castvote(user = self.user, object = self.premise, vote_accuracy = 2)
-        self.assertEqual(new_vote.getvote, 2)
+        new_vote = CategorizationVote.objects.create(user = self.user, object = self.premise, value = 2)
+        self.assertEqual(new_vote.readvote(), 2)
 
 class PremiseMethodTests(TestCase):
 

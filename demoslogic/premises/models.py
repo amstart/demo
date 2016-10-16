@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from .. models import BlockObject
+from .. models import BlockObject, VoteBase
 
 class Argument(models.Model):
     pass
@@ -30,16 +30,14 @@ class Premise(BlockObject):
         return print_raw
 
 
-class Vote(BlockObject):
+class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
-    vote_date = models.DateTimeField('last voted', default = timezone.now)
 
     class Meta:
         abstract = True
 
-
 class CategorizationVote(Vote):
-    vote_accuracy = models.IntegerField()
+    value = models.IntegerField()
 
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
