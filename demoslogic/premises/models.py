@@ -32,13 +32,13 @@ class Premise(BlockObject):
 
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
+    value = models.IntegerField()
 
     class Meta:
         abstract = True
 
 class CategorizationVote(Vote):
-    value = models.IntegerField()
-
+    maximum_value = 4
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
 #premises and arguments also might share a meta class

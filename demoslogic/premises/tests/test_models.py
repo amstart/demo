@@ -12,9 +12,15 @@ class VoteMethodTests(TestCase):
         self.user = User.objects.create_user(username = 'Alfons')
         self.premise = Premise.objects.create(user=self.user)
 
-    def test_vote_is_saved(self):
+    def test_read_returns_correct_vote_value(self):
         new_vote = CategorizationVote.objects.create(user = self.user, object = self.premise, value = 2)
-        self.assertEqual(new_vote.readvote(), 2)
+        self.assertEqual(new_vote.get_last(), 2)
+        new_vote.cast(5)
+        self.assertEqual(new_vote.value, 2)
+        self.assertEqual(new_vote.get_last(), 2)
+        new_vote.cast(1)
+        self.assertEqual(new_vote.get_last(), 1)
+        self.assertEqual(new_vote.value, 21)
 
 class PremiseMethodTests(TestCase):
 

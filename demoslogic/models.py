@@ -38,6 +38,14 @@ class VoteBase(BlockObject):
     class Meta:
         abstract = True
 
+    def cast(self, score):
+        if score < self.maximum_value:
+            print(self.maximum_value)
+            self.value = self.value * 10 + score
+
+    def get_last(self):
+        return self.value % 10
+
 # class Source(BlockObject):
 #     source = Charfield(max_length = 200)
     #can be voted on
