@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
+from django.core.validators import validate_comma_separated_integer_list
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
@@ -27,6 +27,7 @@ class BlockObject(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
 
+
 class VoteManager(models.Manager):
     pass
 
@@ -38,14 +39,15 @@ class VoteBase(BlockObject):
     class Meta:
         abstract = True
 
-    def cast(self, score):
-        if score < self.maximum_value:
-            print(self.maximum_value)
-            self.value = self.value * 10 + score
-
-    def get_last(self):
-        return self.value % 10
-
+    def update(self, new_value):
+        old_value = self.value
+        try:
+            self.value = new_value
+            self.full_clean()
+            return self.save()
+        except Exception as e:
+            print('%s' % (type(e)))
+            self.value = old_value
 # class Source(BlockObject):
 #     source = Charfield(max_length = 200)
     #can be voted on

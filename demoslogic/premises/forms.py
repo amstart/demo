@@ -1,6 +1,7 @@
 from .models import Premise
 from django import forms
 
+
 class AbstractForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(AbstractForm, self).__init__(*args, **kwargs)

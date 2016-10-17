@@ -2,6 +2,7 @@ import datetime
 
 from django.utils import timezone
 from django.test import TestCase
+from django.core import exceptions
 
 from demoslogic.users.models import User
 from ..models import Premise, CategorizationVote
@@ -12,15 +13,12 @@ class VoteMethodTests(TestCase):
         self.user = User.objects.create_user(username = 'Alfons')
         self.premise = Premise.objects.create(user=self.user)
 
-    def test_read_returns_correct_vote_value(self):
+    def test_updates_to_correct_vote_value(self):
         new_vote = CategorizationVote.objects.create(user = self.user, object = self.premise, value = 2)
-        self.assertEqual(new_vote.get_last(), 2)
-        new_vote.cast(5)
+        new_vote.update(10)
         self.assertEqual(new_vote.value, 2)
-        self.assertEqual(new_vote.get_last(), 2)
-        new_vote.cast(1)
-        self.assertEqual(new_vote.get_last(), 1)
-        self.assertEqual(new_vote.value, 21)
+        new_vote.update(1)
+        self.assertEqual(new_vote.value, 1)
 
 class PremiseMethodTests(TestCase):
 
