@@ -41,13 +41,16 @@ class VoteBase(BlockObject):
 
     def update(self, new_value):
         old_value = self.value
+        old_last_voted = self.last_voted
         try:
             self.value = new_value
+            self.last_voted = timezone.now()
             self.full_clean()
             return self.save()
         except Exception as e:
             print('%s' % (type(e)))
             self.value = old_value
+            self.last_voted = old_last_voted
 # class Source(BlockObject):
 #     source = Charfield(max_length = 200)
     #can be voted on
