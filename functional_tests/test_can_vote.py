@@ -6,9 +6,9 @@ from .base import FunctionalTest
 from demoslogic.premises.models import Premise
 
 class UserCanVoteTest(FunctionalTest):
+    fixtures = ['fixtures\\testset.yaml']
 
     def test_can_vote(self):
-        self.create_pre_authenticated_session("Alfons")
         new_premise = Premise(user=self.user, subject="Things", predicate="exist")
         new_premise.save()
         self.browser.find_element_by_link_text('Premises').click()

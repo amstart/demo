@@ -9,18 +9,23 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from demoslogic.users.models import User
 
 class FunctionalTest(StaticLiveServerTestCase):
+
     def setUp(self):
+        super(FunctionalTest, self).setUp()
+        users = User.objects.all()
+        if users:
+            self.user = users[0]
         self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
             firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
         self.browser.get(self.live_server_url)
         self.browser.implicitly_wait(1)
 
     def tearDown(self):
+        super(FunctionalTest, self).tearDown()
         self.browser.quit()
         pass
 
     def create_pre_authenticated_session(self, name):
-        self.user = User.objects.create_user(username = name, email = 'al@fons.com', password = 'top-secretary5456')
         session = SessionStore()
         session[SESSION_KEY] = self.user.pk
         session[BACKEND_SESSION_KEY] = settings.AUTHENTICATION_BACKENDS[0]
