@@ -5,7 +5,7 @@ from demoslogic.users.models import User
 from ..models import Premise
 
 
-class ViewPremiseTest(TestCase):
+class CanDeletePremiseTest(TestCase):
     fixtures = ['fixtures\\testset.yaml']
 
     def setUp(self):
@@ -42,3 +42,13 @@ class ViewPremiseTest(TestCase):
 
     def test_delete_button_not_there_for_anonymous(self):
         self.assertCannotDelete()
+
+class CanVotePremiseTest(TestCase):
+    fixtures = ['fixtures\\testset.yaml']
+
+    def setUp(self):
+        self.detail_url = reverse('premises:detail', args = [1])
+
+    def test_right_number_of_radiobuttons(self):
+        response = self.client.get(self.detail_url)
+        self.assertContains(response, "class=\"radio\"", count = 4)

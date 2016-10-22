@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils import timezone
-from django.core.validators import MaxValueValidator
 
 from .. models import BlockObject, VoteBase
 
@@ -38,7 +37,7 @@ class Vote(VoteBase):
         abstract = True
 
 class CategorizationVote(Vote):
-    value = models.IntegerField(validators = [MaxValueValidator(4, message='Vote value above maximum')])
+    max_value = 4
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
 #premises and arguments also might share a meta class

@@ -8,7 +8,13 @@ from switch import Switch
 from demoslogic.users.models import User
 from .models import Premise
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
+from .forms import CategorizationVoteForm
+from ..views import DetailWithVoteView
 
+class PremiseDetailView(DetailWithVoteView):
+    model = Premise
+    template_name = 'premises/detail.html'
+    voteform = CategorizationVoteForm
 
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
@@ -56,10 +62,6 @@ class UnstagedPremisesListView(ListView):
     def get_queryset(self):
         return Premise.objects.exclude(staged__isnull=False).order_by('-pub_date')[:]
 
-
-class PremiseDetailView(DetailView):
-    model = Premise
-    template_name = 'premises/detail.html'
 
 class DeletePremiseView(DeleteView):
     model = Premise
