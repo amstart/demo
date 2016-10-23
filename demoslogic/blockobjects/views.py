@@ -8,7 +8,7 @@ from django.contrib.auth import login
 from django.views.debug import ExceptionReporter
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 
-from .users.models import User
+from demoslogic.users.models import User
 
 class DetailWithVoteView(DetailView):
     def get_context_data(self, **kwargs):

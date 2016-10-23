@@ -6,10 +6,11 @@ from django.utils import timezone
 from switch import Switch
 
 from demoslogic.users.models import User
+from demoslogic.blockobjects.views import DetailWithVoteView
+
 from .models import Premise, CategorizationVote
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 from .forms import CategorizationVoteForm
-from ..views import DetailWithVoteView
 
 class PremiseDetailView(DetailWithVoteView):
     model = Premise

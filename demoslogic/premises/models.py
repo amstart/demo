@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MaxValueValidator
 
-from .. models import BlockObject, VoteBase
+from demoslogic.blockobjects.models import BlockObject, VoteBase
 
 class Argument(models.Model):
     pass

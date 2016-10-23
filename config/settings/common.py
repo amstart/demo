@@ -50,6 +50,7 @@ LOCAL_APPS = (
     'demoslogic',
     'vote',
     'demoslogic.premises',
+    'demoslogic.blockobjects',
     # Your stuff: custom apps go here
 )
 
