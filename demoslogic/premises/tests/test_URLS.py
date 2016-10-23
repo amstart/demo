@@ -12,10 +12,11 @@ class URLTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'premises/index.html')
 
-    def test_premises_with_number_resolves_to_detail_page(self):
+    def test_premises_with_number_resolves_to_detail_page_with_extra_radio_button_hidden(self):
         response = self.client.get(reverse('premises:detail', args = [1]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'premises/detail.html')
+        self.assertNotContains(response, '---')
 
 # class AnonymousTest(TestCase):
 #     fixtures = ['fixtures\\testset.yaml']

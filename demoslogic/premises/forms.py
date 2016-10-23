@@ -3,28 +3,28 @@ from crispy_forms.layout import Submit
 
 from django import forms
 
-from .models import Premise
+from .models import Premise, CategorizationVote
 
-class CategorizationVoteForm(forms.Form):
-    like_website = forms.TypedChoiceField(label = "How accurate do you think this categorization is?",
-                                          choices = ((1, "Not accurate at all or very little"),
-                                                     (2, "Barely useful"),
-                                                     (3, "Useful"),
-                                                     (4, "Completely accurate")),
-                                          coerce = lambda x: bool(int(x)),
-                                          widget = forms.RadioSelect,
-                                          initial = '1',
-                                          required = True,)
-
+class CategorizationVoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CategorizationVoteForm, self).__init__(*args, **kwargs)
+        if self.fields['value'].choices[0][0] == '':
+            choices = self.fields['value'].choices
+            del choices[0] #get rid of the first empty radio button
+            #http://stackoverflow.com/questions/8928565/django-cant-remove-empty-label-from-typedchoicefield#8995937
+            self.fields['value'].choices = choices
         self.helper = FormHelper()
         self.helper.form_id = 'id-CategorizationVoteForm'
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
-        self.helper.form_action = 'submit_vote'
         self.helper.add_input(Submit('submit', 'Submit'))
 
+    class Meta:
+        model = CategorizationVote
+        fields = ['value']
+        widgets = {'value': forms.RadioSelect}
+        labels = {'value': "How accurate do you think this categorization is?"}
+        # empty_labels = {'value': None}
 
 class AbstractForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

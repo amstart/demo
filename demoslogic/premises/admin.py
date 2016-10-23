@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Premise
+from .models import Premise, CategorizationVote
 #
 # class ChoiceInline(admin.TabularInline):
 #     model = Choice
@@ -18,3 +18,4 @@ class PremiseAdmin(admin.ModelAdmin):
     votes = ['votes']
 
 admin.site.register(Premise, PremiseAdmin)
+admin.site.register(CategorizationVote)

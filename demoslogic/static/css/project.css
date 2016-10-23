@@ -1,4 +1,9 @@
 /* These styles are generated from project.scss. */
+/*.radio:first-child {display:none}*/
+
+.asteriskField {
+  display: none;
+}
 
 .alert-debug {
   color: black;

@@ -6,7 +6,7 @@ from django.utils import timezone
 from switch import Switch
 
 from demoslogic.users.models import User
-from .models import Premise
+from .models import Premise, CategorizationVote
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 from .forms import CategorizationVoteForm
 from ..views import DetailWithVoteView
@@ -15,6 +15,15 @@ class PremiseDetailView(DetailWithVoteView):
     model = Premise
     template_name = 'premises/detail.html'
     voteform = CategorizationVoteForm
+
+    def post(self, request, **post_data):
+        form = CategorizationVoteForm(request.POST)
+        if form.is_valid():
+            CategorizationVote.objects.create(object_id = post_data['pk'],
+                                              value = form.cleaned_data['value'],
+                                              user = self.request.user)
+            return HttpResponseRedirect(request.get_full_path())
+
 
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'

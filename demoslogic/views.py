@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import sys
+
 from django import http
 from django.views.debug import ExceptionReporter
-
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login
 from django.views.debug import ExceptionReporter
@@ -13,7 +13,7 @@ from .users.models import User
 class DetailWithVoteView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailWithVoteView, self).get_context_data(**kwargs)
-        context['vote_maxvalue'] = 4 #self.viewobject.max_value
+        context['vote_maxvalue'] = 3 #self.viewobject.max_value
         context['voteform'] = self.voteform
         return context
 

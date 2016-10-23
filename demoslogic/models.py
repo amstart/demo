@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.core.validators import validate_comma_separated_integer_list
-from django.core.validators import MaxValueValidator
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
@@ -37,7 +36,6 @@ class VoteBase(BlockObject):
     max_value = 1
     objects = VoteManager
     last_voted = models.DateTimeField('last voted', default = timezone.now)
-    value = models.IntegerField(validators = [MaxValueValidator(max_value, message='Vote value above maximum')])
 
     class Meta:
         abstract = True
