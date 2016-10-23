@@ -57,7 +57,8 @@ class PremiseCreateView(CreateView):
         form.instance.user = self.request.user
         self.object = form.save()
         super(PremiseCreateView, self).form_valid(form)
-        return HttpResponseRedirect(reverse('premises:index') + '%d/' % (self.object.pk,))
+        print(self.object.pk)
+        return HttpResponseRedirect(reverse('premises:detail', args = [self.object.pk]))
 
 class PremisesListView(ListView):
     template_name = 'premises/index.html'
