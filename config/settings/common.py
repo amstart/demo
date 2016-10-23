@@ -48,7 +48,6 @@ LOCAL_APPS = (
     # custom users app
     'demoslogic.users.apps.UsersConfig',
     'demoslogic',
-    'vote',
     'demoslogic.premises',
     'demoslogic.blockobjects',
     # Your stuff: custom apps go here
