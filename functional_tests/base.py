@@ -18,11 +18,11 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
             firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
         self.browser.get(self.live_server_url)
-        self.browser.implicitly_wait(1)
+        self.browser.implicitly_wait(0.5)
 
     def tearDown(self):
-        super(FunctionalTest, self).tearDown()
         self.browser.quit()
+        super(FunctionalTest, self).tearDown()
         pass
 
     def create_pre_authenticated_session(self, name):

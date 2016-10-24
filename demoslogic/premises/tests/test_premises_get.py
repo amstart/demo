@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from demoslogic.users.models import User
-from ..models import Premise
+from ..models import Premise, CategorizationVote
 
 
 class CanDeletePremiseTest(TestCase):
@@ -17,7 +17,6 @@ class CanDeletePremiseTest(TestCase):
         response = self.client.get(self.detail_url)
         self.assertContains(response, "id='id_delete'")
         response = self.client.get(self.delete_url)
-        print(self.delete_url)
         self.assertContains(response, "<form")
 
     def assertCannotDelete(self):
@@ -47,8 +46,16 @@ class CanVotePremiseTest(TestCase):
     fixtures = ['fixtures\\testset.yaml']
 
     def setUp(self):
+        super(CanVotePremiseTest, self).setUp()
         self.detail_url = reverse('premises:detail', args = [1])
 
-    def test_right_number_of_radiobuttons(self):
+    def test_redirects_if_anonymous(self):
         response = self.client.get(self.detail_url)
-        self.assertContains(response, "class=\"radio\"", count = 4)
+        self.assertContains(response, "class=\"radio\"", count = CategorizationVote.max_value)
+        redirect = self.client.post(self.detail_url)
+        self.assertRedirects(redirect, reverse('account_login') + '?next=' + reverse('premises:detail', args = [1]))
+
+    def test_right_number_of_radiobuttons(self):
+        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        response = self.client.get(self.detail_url)
+        self.assertContains(response, "class=\"radio\"", count = CategorizationVote.max_value)

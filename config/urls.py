@@ -36,7 +36,7 @@ if settings.TESTING_MODE:
     # enable this handler only for testing,
     # so that if DEBUG=False and we're not testing,
     # the default handler is used
-    handler500 = 'demoslogic.views.show_server_error'
+    handler500 = 'demoslogic.blockobjects.views.show_server_error'
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit

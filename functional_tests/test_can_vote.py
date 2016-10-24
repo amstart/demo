@@ -13,5 +13,9 @@ class UserCanVoteTest(FunctionalTest):
         new_premise.save()
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_link_text('Things exist').click()
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('You have already voted!', page_text)
         self.browser.find_element_by_class_name('radio').click()
-        self.browser.find_element_by_tag_name('form').submit()
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Things', page_text)
+        self.assertIn('You have already voted!', page_text)

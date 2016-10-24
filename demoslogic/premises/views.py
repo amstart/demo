@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.utils import timezone
+from allauth.account.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from demoslogic.users.models import User
 from demoslogic.blockobjects.views import DetailWithVoteView
@@ -16,16 +18,39 @@ from .forms import CategorizationVoteForm
 class PremiseDetailView(DetailWithVoteView):
     model = Premise
     template_name = 'premises/detail.html'
-    voteform = CategorizationVoteForm
+    voteform = CategorizationVoteForm()
 
+    def render_to_response(self, context, **kwargs):
+        if self.request.user.is_authenticated:
+            voteobjects = self.voteform.Meta.model.objects.filter(user = self.request.user).filter(object = self.object)
+            if voteobjects.count():
+                self.voteform.fields['value'].initial = voteobjects[0].value
+                context['already_voted'] = True
+                if voteobjects.count() > 1:
+                    raise Exception('More than one vote object found!')
+            else:
+                self.voteform.fields['value'].initial = None #this seems to be required for an unkown reason
+        return super(PremiseDetailView, self).render_to_response(context, **kwargs)
+
+    @method_decorator(login_required)
     def post(self, request, **post_data):
         form = CategorizationVoteForm(request.POST)
         if form.is_valid():
-            CategorizationVote.objects.create(object_id = post_data['pk'],
-                                              value = form.cleaned_data['value'],
-                                              user = self.request.user)
+            # if self.request.user.is_authenticated:
+            voteobjects = self.voteform.Meta.model.objects.filter(
+                user = self.request.user).filter(object_id = post_data['pk'])
+            if voteobjects.count():
+                vote = voteobjects[0]
+                if voteobjects.count() > 1:
+                    raise Exception('More than one vote object found!')
+            else:
+                vote = CategorizationVote(object_id = post_data['pk'],
+                                          value = 1,
+                                          user = request.user)
+            vote.update(form.cleaned_data['value'])
             return HttpResponseRedirect(request.get_full_path())
-
+            # else:
+            #     return HttpResponseRedirect(reverse('account_login'))
 
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
@@ -53,7 +78,7 @@ class PremiseCreateView(CreateView):
             raise Http404('Page does not exist.')
         return response
 
-    def form_valid(self, form):
+    def form_valid(self, form): #login_required somwhere?
         form.instance.user = self.request.user
         self.object = form.save()
         super(PremiseCreateView, self).form_valid(form)

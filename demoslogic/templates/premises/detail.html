@@ -18,5 +18,8 @@
       delete
     </a>
   {% endif %}
+  {% if already_voted %}
+    <div> You have already voted! You can edit your vote though in case you changed your mind: </div>
+  {% endif %}
   {% crispy voteform voteform.helper %}
 {% endblock %}
