@@ -9,13 +9,13 @@ class UserCanVoteTest(FunctionalTest):
     fixtures = ['fixtures\\testset.yaml']
 
     def test_can_vote(self):
-        new_premise = Premise(user=self.user, subject="Things", predicate="exist")
-        new_premise.save()
+        self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Premises').click()
-        self.browser.find_element_by_link_text('Things exist').click()
+        self.browser.find_element_by_link_text('This premise is from Gertrud').click()
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('You have already voted!', page_text)
-        self.browser.find_element_by_class_name('radio').click()
+        self.browser.find_element_by_id('id_value_1').click()
+        self.browser.find_element_by_tag_name('form').submit()
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('Things', page_text)
+        self.assertIn('This premise', page_text)
         self.assertIn('You have already voted!', page_text)

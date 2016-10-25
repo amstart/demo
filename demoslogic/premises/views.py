@@ -34,23 +34,25 @@ class PremiseDetailView(DetailWithVoteView):
 
     @method_decorator(login_required)
     def post(self, request, **post_data):
-        form = CategorizationVoteForm(request.POST)
-        if form.is_valid():
+        voteform = CategorizationVoteForm(request.POST)
+        pk = post_data['pk']
+        if voteform.is_valid():
             # if self.request.user.is_authenticated:
             voteobjects = self.voteform.Meta.model.objects.filter(
-                user = self.request.user).filter(object_id = post_data['pk'])
+                user = self.request.user).filter(object_id = pk)
             if voteobjects.count():
                 vote = voteobjects[0]
                 if voteobjects.count() > 1:
                     raise Exception('More than one vote object found!')
             else:
-                vote = CategorizationVote(object_id = post_data['pk'],
+                vote = CategorizationVote(object_id = pk,
                                           value = 1,
                                           user = request.user)
-            vote.update(form.cleaned_data['value'])
+            vote.update(voteform.cleaned_data['value'])
             return HttpResponseRedirect(request.get_full_path())
-            # else:
-            #     return HttpResponseRedirect(reverse('account_login'))
+        else:
+            return render(request, self.template_name,
+                          {'premise': Premise.objects.get(pk = pk), 'voteform': voteform})
 
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
