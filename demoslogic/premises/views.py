@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.utils import timezone
 
 from demoslogic.users.models import User
-from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView
+from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView
 
 from .models import Premise, CategorizationVote
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
@@ -26,11 +26,10 @@ class PremiseUpdateView(UpdateVoteView):
     template_name = 'premises/update.html'
     voteform = CategorizationVoteForm()
 
-
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
 
-class PremiseCreateView(CreateView):
+class PremiseCreateView(CreateObjectView):
     template_name = 'premises/create_premise.html'
     success_url = '/'
     model = Premise
@@ -46,18 +45,8 @@ class PremiseCreateView(CreateView):
             if case('WithComplement'):
                 return WithComplementInputForm
 
-    def get(self, request, *args, **kwargs):
-        try:
-            response = super(PremiseCreateView, self).get(request, *args, **kwargs)
-        except:
-            raise Http404('Page does not exist.')
-        return response
-
-    def form_valid(self, form): #login_required somwhere?
-        form.instance.user = self.request.user
-        self.object = form.save()
+    def form_valid(self, form):
         super(PremiseCreateView, self).form_valid(form)
-        print(self.object.pk)
         return HttpResponseRedirect(reverse('premises:detail', args = [self.object.pk]))
 
 class PremisesListView(ListView):

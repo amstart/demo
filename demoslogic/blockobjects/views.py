@@ -6,12 +6,18 @@ from django import http
 from django.views.debug import ExceptionReporter
 from django.contrib.auth import login
 from django.views.debug import ExceptionReporter
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
+
+class CreateObjectView(LoginRequiredMixin, CreateView):
+    def form_valid(self, form): #login_required somwhere?
+        form.instance.user = self.request.user
+        self.object = form.save()
 
 class DetailWithVoteView(DetailView):
     def get_context_data(self, **kwargs):
@@ -50,7 +56,7 @@ class DetailWithVoteView(DetailView):
                           {'premise': Premise.objects.get(pk = pk), 'voteform': voteform})
 
 
-class UpdateVoteView(DetailView):
+class UpdateVoteView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UpdateVoteView, self).get_context_data(**kwargs)
         context['voteform'] = self.voteform
