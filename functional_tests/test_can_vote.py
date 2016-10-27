@@ -13,9 +13,10 @@ class UserCanVoteTest(FunctionalTest):
         self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_link_text('This premise is from Gertrud').click()
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('You have already voted!', page_text)
+        self.assertIn('Gertrud', page_text)
+        self.assertNotIn('edit', page_text)
         self.browser.find_element_by_id('id_value_1').click()
         self.browser.find_element_by_tag_name('form').submit()
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('This premise', page_text)
-        self.assertIn('You have already voted!', page_text)
+        self.assertIn('edit', page_text)

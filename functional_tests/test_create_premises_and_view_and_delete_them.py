@@ -21,7 +21,6 @@ class UserTest(FunctionalTest):
         self.browser.find_element_by_id('new_premise_form').submit()
         self.assertIn('Peacocks', self.browser.title)
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('Alfons', page_text)
         self.browser.find_element_by_class_name('link_created_by').click()
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Peacocks', page_text)

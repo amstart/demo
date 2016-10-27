@@ -9,17 +9,32 @@
 
 {% block inner %}
   <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
-  <h1> {% premise_print_with_class premise %} </h1>
-  <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
-    created by: <h4 class="list-group-item-heading">{{ premise.user.username }}</h4>
-  </a>
-  {% if request.user == premise.user and not premise.staged %}
-    <a href="{% url 'premises:delete' premise.id %}" class="btn btn-secondary" id='id_delete'>
-      delete
-    </a>
-  {% endif %}
+  <div class="row">
+    <h1> {% premise_print_with_class premise %} </h1>
+  </div>
   {% if already_voted %}
-    <div> You have already voted! You can edit your vote though in case you changed your mind: </div>
+    <div class="row">
+      <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
+        <small>created by</small> {{ premise.user.username }}
+      </a>
+    </div>
+  {% else %}
+    {% crispy voteform voteform.helper %}
   {% endif %}
-  {% crispy voteform voteform.helper %}
+  <div class="row">
+    {% if already_voted %}
+        <div class="col-md-2">
+          <a href="{% url 'premises:update_vote' premise.id %}" class="btn btn-secondary">
+            edit vote
+          </a>
+      </div>
+    {% endif %}
+    {% if request.user == premise.user and not premise.staged %}
+      <div class="col-md-2">
+        <a href="{% url 'premises:delete' premise.id %}" class="btn btn-secondary" id='id_delete'>
+          delete premise
+        </a>
+      </div>
+    {% endif %}
+  </div>
 {% endblock %}

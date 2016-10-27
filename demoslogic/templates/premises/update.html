@@ -1,0 +1,15 @@
+{% extends "premises/base.html" %}
+
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+{% load premises %}
+
+{% block head_title %}{{ premise }}{% endblock %}
+
+{% block inner %}
+  <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
+  <h1> {% premise_print_with_class premise %} </h1>
+  <div> Update your vote here: </div>
+  {% crispy voteform voteform.helper %}
+{% endblock %}
