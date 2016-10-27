@@ -16,6 +16,7 @@ class DetailWithVoteView(DetailView):
         context['voteform'] = self.voteform
         context['already_voted'] = False
         return context
+        
 
 def show_server_error(request):
     """

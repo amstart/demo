@@ -39,7 +39,8 @@ class Vote(VoteBase):
 
 class CategorizationVote(Vote):
     max_value = 4
-    value = models.IntegerField(validators = [MaxValueValidator(max_value, message='Vote value above maximum')],
+    value = models.IntegerField(default = 1,
+                                validators = [MaxValueValidator(max_value, message='Vote value above maximum')],
                                 choices = ((1, "Not accurate at all or very little"),
                                            (2, "Barely useful"),
                                            (3, "Useful"),

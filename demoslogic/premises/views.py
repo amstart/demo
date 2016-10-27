@@ -1,4 +1,7 @@
 from switch import Switch
+from bokeh.plotting import figure
+from bokeh.resources import CDN
+from bokeh.embed import components
 
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -38,16 +41,12 @@ class PremiseDetailView(DetailWithVoteView):
         pk = post_data['pk']
         if voteform.is_valid():
             # if self.request.user.is_authenticated:
-            voteobjects = self.voteform.Meta.model.objects.filter(
-                user = self.request.user).filter(object_id = pk)
+            votemodel = self.voteform.Meta.model
+            voteobjects = votemodel.objects.filter(user = self.request.user).filter(object_id = pk)
             if voteobjects.count():
-                vote = voteobjects[0]
-                if voteobjects.count() > 1:
-                    raise Exception('More than one vote object found!')
-            else:
-                vote = CategorizationVote(object_id = pk,
-                                          value = 1,
-                                          user = request.user)
+                raise Exception('There is already a vote!!')
+            vote = votemodel(object_id = pk,
+                                      user = request.user)
             vote.update(voteform.cleaned_data['value'])
             return HttpResponseRedirect(request.get_full_path())
         else:
@@ -61,18 +60,13 @@ class PremiseUpdateView(DetailWithVoteView):
     voteform = CategorizationVoteForm()
 
     def render_to_response(self, context, **kwargs):
-        if self.request.user.is_authenticated:
-            voteobjects = self.voteform.Meta.model.objects.filter(user = self.request.user).filter(object = self.object)
-            if voteobjects.count():
-                self.voteform.fields['value'].initial = voteobjects[0].value
-                context['already_voted'] = True
-                if voteobjects.count() > 1:
-                    raise Exception('More than one vote object found!')
-            else:
-                self.voteform.fields['value'].initial = None #this seems to be required for an unkown reason
+        votemodel = self.voteform.Meta.model
+        voteobjects = votemodel.objects.filter(user = self.request.user).filter(object = self.object)
+        self.voteform.fields['value'].initial = voteobjects[0].value
+        if voteobjects.count() > 1:
+            raise Exception('More than one vote object found!')
         return super(PremiseUpdateView, self).render_to_response(context, **kwargs)
 
-    @method_decorator(login_required)
     def post(self, request, **post_data):
         voteform = CategorizationVoteForm(request.POST)
         pk = post_data['pk']
@@ -80,16 +74,11 @@ class PremiseUpdateView(DetailWithVoteView):
             # if self.request.user.is_authenticated:
             voteobjects = self.voteform.Meta.model.objects.filter(
                 user = self.request.user).filter(object_id = pk)
-            if voteobjects.count():
-                vote = voteobjects[0]
-                if voteobjects.count() > 1:
-                    raise Exception('More than one vote object found!')
-            else:
-                vote = CategorizationVote(object_id = pk,
-                                          value = 1,
-                                          user = request.user)
+            vote = voteobjects[0]
+            if voteobjects.count() > 1:
+                raise Exception('More than one vote object found!')
             vote.update(voteform.cleaned_data['value'])
-            return HttpResponseRedirect(request.get_full_path())
+            return HttpResponseRedirect(reverse('premises:detail', args = [pk]))
         else:
             return render(request, self.template_name,
                           {'premise': Premise.objects.get(pk = pk), 'voteform': voteform})

@@ -33,7 +33,6 @@ class VoteManager(models.Manager):
 
 
 class VoteBase(BlockObject):
-    max_value = 1
     objects = VoteManager
     last_voted = models.DateTimeField('last voted', default = timezone.now)
 
