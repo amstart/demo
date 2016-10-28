@@ -1,7 +1,4 @@
 from switch import Switch
-from bokeh.plotting import figure
-from bokeh.resources import CDN
-from bokeh.embed import components
 
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404

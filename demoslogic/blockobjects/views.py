@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
+import json
 from allauth.account.decorators import login_required
 
+from django.shortcuts import get_object_or_404, render
 from django import http
 from django.views.debug import ExceptionReporter
 from django.contrib.auth import login
@@ -13,6 +15,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
+
 
 class CreateObjectView(LoginRequiredMixin, CreateView):
     def form_valid(self, form): #login_required somwhere?
@@ -26,14 +29,27 @@ class DetailWithVoteView(DetailView):
         context['already_voted'] = 0
         return context
 
+    def plot(self, context, voteobject_user, voteobjects_all):
+        choices = voteobject_user._meta.get_field('value').choices
+        x_labels = [x[1] for x in choices]
+        sum_list = []
+        for counter, value in enumerate(range(1, voteobject_user.max_value+1)):
+            sum_list.append(sum(vote.value == value for vote in voteobjects_all))
+        context['x_labels'] = x_labels
+        context['sum_list'] = json.dumps(sum_list) #[4, 8, 15, 16, 23, 42]
+        return context
+
     def render_to_response(self, context, **kwargs):
         if self.request.user.is_authenticated:
-            voteobjects = self.voteform.Meta.model.objects.filter(user = self.request.user).filter(object = self.object)
-            if voteobjects.count():
+            votemodel = self.voteform.Meta.model
+            voteobjects_all = votemodel.objects.filter(object = self.object)
+            voteobjects_user = voteobjects_all.filter(user = self.request.user)
+            if voteobjects_user.count():
                 del context['voteform']
-                context['already_voted'] = voteobjects[0].value
-                if voteobjects.count() > 1:
+                context['already_voted'] = voteobjects_user[0].value
+                if voteobjects_user.count() > 1:
                     raise Exception('More than one vote object found!')
+                context = self.plot(context, voteobjects_user[0], voteobjects_all)
             else:
                 self.voteform.fields['value'].initial = None #this seems to be required for an unkown reason
         return super(DetailWithVoteView, self).render_to_response(context, **kwargs)

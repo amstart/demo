@@ -6,18 +6,18 @@
 {% load premises %}
 
 {% block head_title %}{{ premise }}{% endblock %}
-
 {% block inner %}
   <link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
   <div class="row">
     <h1> {% premise_print_with_class premise %} </h1>
   </div>
   {% if already_voted or request.user == premise.user %}
-    <div class="row">
-      <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
-        <small>created by</small> {{ premise.user.username }}
-      </a>
-    </div>
+    <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
+      <small>created by</small> {{ premise.user.username }}
+    </a>
+    <h4> Votes </h4>
+    <div class="barchart"></div>
+    <br>
   {% endif %}
   {% if not already_voted %}
     {% crispy voteform voteform.helper %}
@@ -38,4 +38,8 @@
       </div>
     {% endif %}
   </div>
+  <script>
+    data = {{ sum_list }};
+    barplot(data);
+  </script>
 {% endblock %}
