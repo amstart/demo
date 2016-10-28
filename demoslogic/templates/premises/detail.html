@@ -38,6 +38,10 @@
       </div>
     {% endif %}
   </div>
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
   <script>
     data = {{ sum_list }};
     barplot(data);
