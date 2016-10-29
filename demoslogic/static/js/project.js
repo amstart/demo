@@ -1,27 +1,4 @@
 /* Project specific Javascript goes here. */
-function barplot(data, labels, choice)
-{
-function set_bar_text(d, index) {
-    if (index+1 == choice)
-        return d + " (you)";
-    else {
-        return d;}
-}
-var x = d3.scaleLinear()
-    .domain([0, d3.max(data)])
-    .range([10, 300]);
-var bar_labels = d3.select(".chart").selectAll("div")
-    .data(labels)
-    .enter().append("div")
-    .attr("class", "row")
-    .text(function(d) { return d + ":"; });
-var bar_bars = bar_labels.append("div")
-    .data(data)
-    .style("width", function(d) { return x(d) + "px"; })
-    .attr("class", "bar")
-    .text(set_bar_text);
-}
-
 /*
 Formatting hack to get around crispy-forms unfortunate hardcoding
 in helpers.FormHelper:

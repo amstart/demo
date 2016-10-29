@@ -26,16 +26,18 @@ class DetailWithVoteView(DetailView):
         context = super(DetailWithVoteView, self).get_context_data(**kwargs)
         context['voteform'] = self.voteform
         context['user_choice'] = 0
+        context['already_voted'] = 0
         return context
 
     def plot(self, context, voteobject_user, voteobjects_all):
         choices = voteobject_user._meta.get_field('value').choices
         bar_labels = [x[1] for x in choices]
-        bar_data = []
-        for value in range(1, voteobject_user.max_value+1):
-            bar_data.append(sum(vote.value == value for vote in voteobjects_all))
-        context['plot_labels'] = bar_labels
-        context['plot_data'] = bar_data
+        plot_data = []
+        for index, value in enumerate(range(1, voteobject_user.max_value+1)):
+            item = {'value': sum(vote.value == value for vote in voteobjects_all),
+                    'label': bar_labels[index]}
+            plot_data.append(item)
+        context['plot_data'] = plot_data
         return context
 
     def render_to_response(self, context, **kwargs):
@@ -46,6 +48,7 @@ class DetailWithVoteView(DetailView):
             if voteobjects_user.count():
                 del context['voteform']
                 context['user_choice'] = voteobjects_user[0].value
+                context['already_voted'] = 1
                 if voteobjects_user.count() > 1:
                     raise Exception('More than one vote object found!')
                 context = self.plot(context, voteobjects_user[0], voteobjects_all)

@@ -12,19 +12,19 @@
   <div class="row">
     <h1> {% premise_print_with_class premise %} </h1>
   </div>
-  {% if user_choice or request.user == premise.user %}
+  {% if already_voted or request.user == premise.user %}
     <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
       <small>created by</small> {{ premise.user.username }}
     </a>
     <h4> Votes </h4>
-    <div class="chart"></div>
+    {% include "blockobjects/barchart.html" %}
     <br>
   {% endif %}
-  {% if not user_choice %}
+  {% if not already_voted %}
     {% crispy voteform voteform.helper %}
   {% endif %}
   <div class="row">
-    {% if user_choice %}
+    {% if already_voted %}
       <div class="col-md-2">
           <a href="{% url 'premises:update_vote' premise.id %}" class="btn btn-secondary">
             edit vote
@@ -39,11 +39,4 @@
       </div>
     {% endif %}
   </div>
-{% endblock %}
-
-{% block javascript %}
-  {{ block.super }}
-  <script>
-    barplot({{ plot_data }}, {{ plot_labels|jsonify }}, {{ user_choice }});
-  </script>
 {% endblock %}

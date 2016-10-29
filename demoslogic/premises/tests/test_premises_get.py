@@ -59,3 +59,24 @@ class CanVotePremiseTest(TestCase):
         self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
         response = self.client.get(self.detail_url)
         self.assertContains(response, "class=\"radio\"", count = CategorizationVote.max_value)
+
+class SeeVotePremiseTest(TestCase):
+    fixtures = ['fixtures\\testset.yaml']
+
+    def setUp(self):
+        super(SeeVotePremiseTest, self).setUp()
+        self.detail_url = reverse('premises:detail', args = [3])
+
+    def test_see_options(self):
+        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        choices = CategorizationVote._meta.get_field('value').choices
+        response = self.client.get(self.detail_url)
+        bar_labels = [x[1] for x in choices]
+        for label in bar_labels:
+            self.assertContains(response, label + ":", count = 1)
+
+    def test_see_vote(self):
+        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        response = self.client.get(self.detail_url)
+        print(response)
+        self.assertContains(response, "1 (you)", count = 1)
