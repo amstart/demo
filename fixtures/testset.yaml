@@ -53,6 +53,25 @@
     predicate: is
     object: from Gertrud
     complement: ''
+- model: premises.premise
+  pk: 3
+  fields:
+    pub_date: '2016-09-20T19:07:44.618Z'
+    staged:
+    user: 1
+    subject: This premise
+    predicate: has been
+    object: ''
+    complement: 'voted on'
+- model: premises.categorizationvote
+  pk: 1
+  fields:
+    pub_date: '2016-10-27T20:07:08.092Z'
+    staged: '2016-10-29T19:38:30.210Z'
+    user: 1
+    last_voted: '2016-10-27T20:07:13.400Z'
+    object: 3
+    value: 1
 - model: account.emailaddress
   pk: 1
   fields:

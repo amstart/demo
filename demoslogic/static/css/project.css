@@ -1,6 +1,6 @@
 /* These styles are generated from project.scss. */
 /*.radio:first-child {display:none}*/
-.barchart div {
+.chart .bar {
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;

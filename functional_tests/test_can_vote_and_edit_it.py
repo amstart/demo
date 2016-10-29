@@ -19,6 +19,9 @@ class UserCanVoteTest(FunctionalTest):
         self.browser.find_element_by_tag_name('form').submit()
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('This premise', page_text)
+        self.assertIn('(you)', page_text)
+        self.assertIn(':', page_text)
+        self.assertIn('1', page_text)
         self.browser.find_element_by_link_text('edit vote').click()
         self.browser.find_element_by_id('id_value_2').click()
         self.browser.find_element_by_tag_name('form').submit()

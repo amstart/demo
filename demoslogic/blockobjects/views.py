@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import sys
-import json
 from allauth.account.decorators import login_required
 
 from django.shortcuts import get_object_or_404, render
@@ -26,17 +25,17 @@ class DetailWithVoteView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailWithVoteView, self).get_context_data(**kwargs)
         context['voteform'] = self.voteform
-        context['already_voted'] = 0
+        context['user_choice'] = 0
         return context
 
     def plot(self, context, voteobject_user, voteobjects_all):
         choices = voteobject_user._meta.get_field('value').choices
-        x_labels = [x[1] for x in choices]
-        sum_list = []
-        for counter, value in enumerate(range(1, voteobject_user.max_value+1)):
-            sum_list.append(sum(vote.value == value for vote in voteobjects_all))
-        context['x_labels'] = x_labels
-        context['sum_list'] = json.dumps(sum_list) #[4, 8, 15, 16, 23, 42]
+        bar_labels = [x[1] for x in choices]
+        bar_data = []
+        for value in range(1, voteobject_user.max_value+1):
+            bar_data.append(sum(vote.value == value for vote in voteobjects_all))
+        context['plot_labels'] = bar_labels
+        context['plot_data'] = bar_data
         return context
 
     def render_to_response(self, context, **kwargs):
@@ -46,7 +45,7 @@ class DetailWithVoteView(DetailView):
             voteobjects_user = voteobjects_all.filter(user = self.request.user)
             if voteobjects_user.count():
                 del context['voteform']
-                context['already_voted'] = voteobjects_user[0].value
+                context['user_choice'] = voteobjects_user[0].value
                 if voteobjects_user.count() > 1:
                     raise Exception('More than one vote object found!')
                 context = self.plot(context, voteobjects_user[0], voteobjects_all)

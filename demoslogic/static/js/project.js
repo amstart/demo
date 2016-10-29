@@ -1,15 +1,25 @@
 /* Project specific Javascript goes here. */
-function barplot(data)
+function barplot(data, labels, choice)
 {
+function set_bar_text(d, index) {
+    if (index+1 == choice)
+        return d + " (you)";
+    else {
+        return d;}
+}
 var x = d3.scaleLinear()
     .domain([0, d3.max(data)])
     .range([10, 300]);
-d3.select(".barchart")
-    .selectAll("div")
-        .data(data)
+var bar_labels = d3.select(".chart").selectAll("div")
+    .data(labels)
     .enter().append("div")
-        .style("width", function(d) { return x(d) + "px"; })
-        .text(function(d) { return d; });
+    .attr("class", "row")
+    .text(function(d) { return d + ":"; });
+var bar_bars = bar_labels.append("div")
+    .data(data)
+    .style("width", function(d) { return x(d) + "px"; })
+    .attr("class", "bar")
+    .text(set_bar_text);
 }
 
 /*
