@@ -10,12 +10,12 @@ class URLTest(TestCase):
     def test_premises_url_resolves_to_index_page_view(self):
         response = self.client.get(reverse('premises:index'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'premises/index.html')
+        self.assertTemplateUsed(response, 'blockobjects/index.html')
 
     def test_premises_with_number_resolves_to_detail_page_with_extra_radio_button_hidden(self):
         response = self.client.get(reverse('premises:detail', args = [1]))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'premises/detail.html')
+        self.assertTemplateUsed(response, 'blockobjects/detail.html')
         self.assertNotContains(response, '---')
 
 # class AnonymousTest(TestCase):

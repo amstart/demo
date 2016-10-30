@@ -31,9 +31,9 @@ class Premise(BlockObject):
         return print_raw
 
     def name(self):
-        return 'premise'
+        return 'premise'   #this is used for URL namespaces!
 
-        
+
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
 

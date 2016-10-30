@@ -40,10 +40,6 @@ class PremiseCreateView(CreateObjectView):
             if case('WithComplement'):
                 return WithComplementInputForm
 
-    def form_valid(self, form):
-        super(PremiseCreateView, self).form_valid(form)
-        return HttpResponseRedirect(reverse('premises:detail', args = [self.object.pk]))
-
 class PremisesListView(ObjectListView):
     model = Premise
 
