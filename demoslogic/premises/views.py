@@ -20,7 +20,7 @@ class PremiseDetailView(DetailWithVoteView):
 
 class PremiseUpdateView(UpdateVoteView):
     model = Premise
-    template_name = 'premises/update.html'
+    template_name = 'blockobjects/update_vote.html'
     voteform = CategorizationVoteForm()
 
 class NewPremiseView(TemplateView):
