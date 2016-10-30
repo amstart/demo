@@ -16,6 +16,26 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from demoslogic.users.models import User
 
 
+class ObjectListView(ListView):
+    template_name = 'blockobjects/index.html'
+    context_object_name = 'object_list'
+
+    def get_context_data(self, **kwargs):
+        context = super(ObjectListView, self).get_context_data(**kwargs)
+        context['model_name'] = self.model.__name__.lower()
+        if self.request.path.find("unstaged")  == -1:
+            context['heading'] = self.model.__name__ + "s"
+        else:
+            context['heading'] = "Unstaged " + self.model.__name__ + "s"
+        return context
+
+    def get_queryset(self):
+        if self.request.path.find("unstaged")  == -1:
+            return self.model.objects.all().order_by('-subject')
+        else:
+            return self.model.objects.exclude(staged__isnull=False).order_by('-subject')[:]
+
+
 class CreateObjectView(LoginRequiredMixin, CreateView):
     def form_valid(self, form): #login_required somwhere?
         form.instance.user = self.request.user

@@ -7,7 +7,7 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from django.utils import timezone
 
 from demoslogic.users.models import User
-from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView
+from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView, ObjectListView
 
 from .models import Premise, CategorizationVote
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
@@ -46,20 +46,8 @@ class PremiseCreateView(CreateObjectView):
         super(PremiseCreateView, self).form_valid(form)
         return HttpResponseRedirect(reverse('premises:detail', args = [self.object.pk]))
 
-class PremisesListView(ListView):
-    template_name = 'premises/index.html'
-    context_object_name = 'object_list'
+class PremisesListView(ObjectListView):
     model = Premise
-    # def get_queryset(self):
-    #     return Premise.objects.all().order_by('-subject')
-
-class UnstagedPremisesListView(ListView):
-    template_name = 'premises/index_unstaged.html'
-    context_object_name = 'premise_list'
-
-    def get_queryset(self):
-        return Premise.objects.exclude(staged__isnull=False).order_by('-pub_date')[:]
-
 
 class DeletePremiseView(DeleteView):
     model = Premise
