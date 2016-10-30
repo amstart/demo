@@ -15,12 +15,10 @@ from .forms import CategorizationVoteForm
 
 class PremiseDetailView(DetailWithVoteView):
     model = Premise
-    template_name = 'premises/detail.html'
     voteform = CategorizationVoteForm()
 
 class PremiseUpdateView(UpdateVoteView):
     model = Premise
-    template_name = 'blockobjects/update_vote.html'
     voteform = CategorizationVoteForm()
 
 class NewPremiseView(TemplateView):

@@ -42,6 +42,8 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
         self.object = form.save()
 
 class DetailWithVoteView(DetailView):
+    template_name = 'blockobjects/detail.html'
+
     def get_context_data(self, **kwargs):
         context = super(DetailWithVoteView, self).get_context_data(**kwargs)
         context['voteform'] = self.voteform
@@ -92,6 +94,8 @@ class DetailWithVoteView(DetailView):
 
 
 class UpdateVoteView(LoginRequiredMixin, DetailView):
+    template_name = 'blockobjects/update_vote.html'
+
     def get_context_data(self, **kwargs):
         context = super(UpdateVoteView, self).get_context_data(**kwargs)
         context['voteform'] = self.voteform
