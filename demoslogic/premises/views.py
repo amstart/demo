@@ -50,5 +50,6 @@ class PremisesListView(ObjectListView):
     model = Premise
 
 class DeletePremiseView(DeleteView):
+    template_name = 'blockobjects/delete_object.html'
     model = Premise
     success_url = reverse_lazy('premises:index')
