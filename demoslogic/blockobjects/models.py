@@ -12,6 +12,7 @@ class BlockObject(models.Model):
 
     class Meta:
         abstract = True
+        get_latest_by = 'pub_date'
 
     def __init__(self, *args, **kwargs):
         super(BlockObject,self).__init__(*args, **kwargs)

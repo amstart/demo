@@ -48,7 +48,7 @@ class PremiseCreateView(CreateObjectView):
 
 class PremisesListView(ListView):
     template_name = 'premises/index.html'
-    context_object_name = 'premise_list'
+    context_object_name = 'object_list'
     model = Premise
     # def get_queryset(self):
     #     return Premise.objects.all().order_by('-subject')
@@ -64,7 +64,3 @@ class UnstagedPremisesListView(ListView):
 class DeletePremiseView(DeleteView):
     model = Premise
     success_url = reverse_lazy('premises:index')
-
-class PremiseVotesView(DetailView):
-    model = Premise
-    template_name = 'premises/results.html'

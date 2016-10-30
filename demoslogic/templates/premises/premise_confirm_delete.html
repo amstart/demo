@@ -1,17 +1,17 @@
-{% extends "premises/base.html" %}
+{% extends object.name|add:"s/base.html" %}
 
-{% load premises %}
+{% load blockobjects %}
 {% load static %}
 
-{% block head_title %}Delete Premise{% endblock %}
+{% block head_title %}Delete {{ object.name|capitalize }}{% endblock %}
 
 {% block inner %}
-<link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static object.name|add:'s/style.css' %}" />
 
-{% if request.user == premise.user and not premise.staged %}
+{% if request.user == object.user and not object.staged %}
   <form action="" method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete "{% premise_print_with_class premise %}"?</p>
+    <p>Are you sure you want to delete "{% print_with_class object %}"?</p>
       <input type="submit" class="btn btn-primary" value="Confirm" />
   </form>
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}

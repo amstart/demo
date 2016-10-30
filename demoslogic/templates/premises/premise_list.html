@@ -1,17 +1,17 @@
-{% load premises %}
+{% load blockobjects %}
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'premises/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static object_list.latest.name|add:'s/style.css' %}" />
 
 
-{% if premise_list %}
+{% if object_list %}
   <ul>
-    {% for premise in premise_list %}
-    <li><a id="id_premise{{ forloop.counter }}" href="{% url 'premises:detail' premise.id %}">
-      {% premise_print_with_class premise %}
+    {% for object in object_list %}
+    <li><a id="id_{{ object.name }}{{ forloop.counter }}" href="{% url object.name|add:'s:detail' object.id %}">
+      {% print_with_class object %}
     </a></li>
   {% endfor %}
   </ul>
 {% else %}
-  No premises to show.
+  Nothing to show.
 {% endif %}

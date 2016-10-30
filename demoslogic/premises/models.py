@@ -30,7 +30,10 @@ class Premise(BlockObject):
             print_raw = print_raw + " " + self.complement
         return print_raw
 
+    def name(self):
+        return 'premise'
 
+        
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
 
