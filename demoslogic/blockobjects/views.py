@@ -30,13 +30,10 @@ class DetailWithVoteView(DetailView):
         return context
 
     def plot(self, context, voteobject_user, voteobjects_all):
-        choices = voteobject_user._meta.get_field('value').choices
-        bar_labels = [x[1] for x in choices]
-        plot_data = []
-        for index, value in enumerate(range(1, voteobject_user.max_value+1)):
-            item = {'value': sum(vote.value == value for vote in voteobjects_all),
-                    'label': bar_labels[index]}
-            plot_data.append(item)
+        vote_number = []
+        for value in range(1, voteobject_user.max_value+1):
+            vote_number.append(sum(vote.value == value for vote in voteobjects_all))
+        plot_data = voteobject_user.get_plot_data(vote_number)
         context['plot_data'] = plot_data
         return context
 

@@ -39,6 +39,19 @@ class VoteBase(BlockObject):
     class Meta:
         abstract = True
 
+    def get_plot_data(self, vote_number):
+        max_vote_number = max(vote_number)
+        choices = self._meta.get_field('value').choices
+        labels = [x[1] for x in choices]
+        plot_data = []
+        for index, value in enumerate(range(1, self.max_value+1)):
+            item = {'label': labels[index],
+                    'bar_width': max([15, vote_number[index]/max_vote_number*350]),
+                    'bar_text': str(vote_number[index])}
+            plot_data.append(item)
+        plot_data[self.value-1]['bar_text'] += " (you)"
+        return plot_data
+
     def update(self, new_value):
         old_value = self.value
         old_last_voted = self.last_voted

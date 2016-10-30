@@ -78,5 +78,4 @@ class SeeVotePremiseTest(TestCase):
     def test_see_vote(self):
         self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
         response = self.client.get(self.detail_url)
-        print(response)
         self.assertContains(response, "1 (you)", count = 1)

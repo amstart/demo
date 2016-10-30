@@ -16,9 +16,12 @@
     <a class="link_created_by" href="{% url 'users:detail' premise.user.username %}">
       <small>created by</small> {{ premise.user.username }}
     </a>
-    <h4> Votes </h4>
-    {% include "blockobjects/barchart.html" %}
-    <br>
+    <div class="row">
+      <br>
+      <h4> Votes </h4>
+      {% include "blockobjects/barchart.html" %}
+      <br>
+    </div>
   {% endif %}
   {% if not already_voted %}
     {% crispy voteform voteform.helper %}

@@ -1,10 +1,7 @@
 <div class="chart">
   {% for data in plot_data %}
     <div class="row">{{ data.label }}:</div>
-    {% if forloop.counter == user_choice %}
-      <div class="row bar" style="width:200px">{{ data.value }} (you)</div>
-    {% else %}
-      <div id="id_choice{{ forloop.counter }}" class="row bar" style="width:200px">{{ data.value }}</div>
-    {% endif %}
+      <div id="id_choice{{ forloop.counter }}" class="row bar" style="width:{{data.bar_width}}px">
+        {{ data.bar_text }}</div>
   {% endfor %}
 </div>
