@@ -3,7 +3,6 @@ import datetime
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.core.validators import validate_comma_separated_integer_list
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
@@ -40,12 +39,16 @@ class VoteBase(BlockObject):
     class Meta:
         abstract = True
 
-    def get_plot_data(self, vote_number):
-        max_vote_number = max(vote_number)
+    def get_plot_data(self, voteobjects_all):
+        vote_number = []
         choices = self._meta.get_field('value').choices
+        values = [x[0] for x in choices]
+        for value in values:
+            vote_number.append(sum(vote.value == value for vote in voteobjects_all))
+            max_vote_number = max(vote_number)
         labels = [x[1] for x in choices]
         plot_data = []
-        for index, value in enumerate(range(1, self.max_value+1)):
+        for index, value in enumerate(values):
             item = {'label': labels[index],
                     'bar_width': max([15, vote_number[index]/max_vote_number*350]),
                     'bar_text': str(vote_number[index])}
@@ -63,6 +66,7 @@ class VoteBase(BlockObject):
             return self.save()
         except Exception as e:
             print('%s' % (type(e)))
+            print(e)
             self.value = old_value
             self.last_voted = old_last_voted
 # class Source(BlockObject):

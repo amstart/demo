@@ -1,11 +1,7 @@
 from django.db import models
-from django.utils import timezone
-from django.core.validators import MaxValueValidator
 
 from demoslogic.blockobjects.models import BlockObject, VoteBase
 
-class Argument(models.Model):
-    pass
 
 class Premise(BlockObject):
     subject = models.CharField(default = '', max_length = 200)
@@ -41,9 +37,7 @@ class Vote(VoteBase):
         abstract = True
 
 class CategorizationVote(Vote):
-    max_value = 4
     value = models.IntegerField(default = 1,
-                                validators = [MaxValueValidator(max_value, message='Vote value above maximum')],
                                 choices = ((1, "Not accurate at all or very little"),
                                            (2, "Barely useful"),
                                            (3, "Useful"),

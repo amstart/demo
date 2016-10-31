@@ -53,10 +53,7 @@ class DetailWithVoteView(DetailView):
         return context
 
     def plot(self, context, voteobject_user, voteobjects_all):
-        vote_number = []
-        for value in range(1, voteobject_user.max_value+1):
-            vote_number.append(sum(vote.value == value for vote in voteobjects_all))
-        plot_data = voteobject_user.get_plot_data(vote_number)
+        plot_data = voteobject_user.get_plot_data(voteobjects_all)
         context['plot_data'] = plot_data
         return context
 

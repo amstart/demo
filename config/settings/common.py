@@ -50,7 +50,7 @@ LOCAL_APPS = (
     'demoslogic',
     'demoslogic.premises',
     'demoslogic.blockobjects',
-    # Your stuff: custom apps go here
+    'demoslogic.arguments',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
