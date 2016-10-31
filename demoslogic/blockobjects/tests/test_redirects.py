@@ -1,13 +1,15 @@
-from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-class RedirectsIfAnonymous(TestCase):
+from .base import BlockObjectsTests
+
+
+class RedirectsIfAnonymous(BlockObjectsTests):
     fixtures = ['fixtures\\testset.yaml']
 
     def test_redirects_for_vote(self):
-        redirect = self.client.post(reverse('premises:detail', args = [1]))
-        self.assertRedirects(redirect, reverse('account_login') + '?next=' + reverse('premises:detail', args = [1]))
+        redirect = self.client.post(self.URL_detail)
+        self.assertRedirects(redirect, self.URL_login_redirect + self.URL_detail)
 
     def test_redirects_for_premise_creation(self):
-        redirect = self.client.post(reverse('premises:create', args = ['SubjectPredicate']))
-        self.assertRedirects(redirect, reverse('account_login') + '?next=' + reverse('premises:create', args = ['SubjectPredicate']))
+        redirect = self.client.post(self.URL_create)
+        self.assertRedirects(redirect, self.URL_login_redirect + self.URL_create)
