@@ -8,7 +8,6 @@
 {% block head_title %}Update Vote{% endblock %}
 
 {% block inner %}
-  <link rel="stylesheet" type="text/css" href="{% static object.name|add:'s/style.css' %}" />
   <h1> {% print_with_class object %} </h1>
   <div> Update your vote here: </div>
   {% crispy voteform voteform.helper %}

@@ -1,5 +1,34 @@
 /* These styles are generated from project.scss. */
 /*.radio:first-child {display:none}*/
+span[class|="aim"] {  color: white;}
+
+li.object_link:hover {
+    color: black;
+}
+
+a.object_link:hover {
+    text-decoration: none;
+}
+
+.aim-1 {  background-color: darkgreen;}
+.aim-2 {  background-color: darkred;}
+.aim-3 {  background-color: darkorange;}
+.aim-4 {  background-color: black;}
+
+.subject {
+    color: blue;
+}
+.predicate {
+    color: red;
+}
+.object {
+    color: orange;
+}
+.complement {
+    color: green;
+}
+
+
 .chart .bar {
   font: 14px sans-serif;
   background-color: steelblue;

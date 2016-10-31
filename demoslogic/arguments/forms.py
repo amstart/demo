@@ -23,4 +23,4 @@ class AbstractForm(forms.ModelForm):
 class ArgumentInputForm(AbstractForm):
     class Meta:
         model = Argument
-        fields = ['aim']
+        fields = ['premise1', 'premise2', 'conclusion', 'aim']

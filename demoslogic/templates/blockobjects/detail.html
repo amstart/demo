@@ -7,7 +7,6 @@
 
 {% block head_title %}{{ object }}{% endblock %}
 {% block inner %}
-  <link rel="stylesheet" type="text/css" href="{% static object.name|add:'s/style.css' %}" />
   <div class="row">
     <h1> {% print_with_class object %} </h1>
   </div>

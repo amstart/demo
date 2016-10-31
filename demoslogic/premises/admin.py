@@ -8,14 +8,13 @@ from .models import Premise, CategorizationVote
 
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Core',               {'fields': ['subject', 'predicate', 'object', 'complement']}),
+        ('Core', {'fields': ['subject', 'predicate', 'object', 'complement']}),
         ('Meta', {'fields': ['staged', 'user', 'pub_date']}),
     ]
     # inlines = [ChoiceInline]
-    list_display = ('subject', 'pub_date', 'was_published_recently')
+    list_display = ('subject', 'predicate', 'object', 'complement', 'pub_date')
     list_filter = ['pub_date']
     search_fields = ['subject']
-    votes = ['votes']
 
 admin.site.register(Premise, PremiseAdmin)
 admin.site.register(CategorizationVote)

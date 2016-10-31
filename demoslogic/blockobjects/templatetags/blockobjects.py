@@ -18,13 +18,25 @@ def jsonify(object):
 register.filter('jsonify', jsonify)
 jsonify.is_safe = True
 
+def print_premise(object):
+    string_with_class = ""
+    for element in object.core_list:
+        string_with_class = string_with_class + \
+                            "<span class=\"" + \
+                            element["textclass"] + "\">" + \
+                            conditional_escape(element["value"]) + "</span> "
+    return mark_safe(string_with_class)
+
 @register.simple_tag
 def print_with_class(object):
     if type(object) == Premise:
-        string_with_class = ""
-        for element in object.core_list:
-            string_with_class = string_with_class + "<span class=\"" + element["textclass"] + "\">" + \
-            conditional_escape(element["value"]) + "</span> "
+        return print_premise(object)
+    else:
+        text = conditional_escape(object.choice_headings[object.aim-1])
+        string_with_class = "<span class=\"aim-" + \
+                            str(object.aim) + "\">" + \
+                            text + ":</span> "  + \
+                            print_premise(object.conclusion)
         return mark_safe(string_with_class)
 
 @register.filter

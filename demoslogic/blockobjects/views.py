@@ -31,9 +31,9 @@ class ObjectListView(ListView):
 
     def get_queryset(self):
         if self.request.path.find("unstaged")  == -1:
-            return self.model.objects.all().order_by('-subject')
+            return self.model.objects.all()
         else:
-            return self.model.objects.exclude(staged__isnull=False).order_by('-subject')[:]
+            return self.model.objects.exclude(staged__isnull=False)
 
 
 class CreateObjectView(LoginRequiredMixin, CreateView):
