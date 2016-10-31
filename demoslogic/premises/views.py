@@ -21,9 +21,15 @@ class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
 
 class PremiseCreateView(CreateObjectView):
-    template_name = 'premises/create_premise.html'
+    template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Premise
+
+    def get_context_data(self, **kwargs):
+        context = super(PremiseCreateView, self).get_context_data(**kwargs)
+        context['object_name_upper'] = self.model.__name__
+        context['object_name_lower'] = self.model.__name__.lower()
+        return context
 
     def get_form_class(self):
         with Switch(self.kwargs['mode']) as case:

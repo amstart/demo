@@ -6,35 +6,32 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView, ObjectListView
 
 from .models import Argument
-from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
-from .forms import CategorizationVoteForm
+from .forms import ArgumentInputForm, ArgumentVoteForm
 
 class ArgumentDetailView(DetailWithVoteView):
     model = Argument
-    voteform = CategorizationVoteForm()
+    voteform = ArgumentVoteForm()
 
 class ArgumentUpdateView(UpdateVoteView):
     model = Argument
-    voteform = CategorizationVoteForm()
+    voteform = ArgumentVoteForm()
 
 class NewArgumentView(TemplateView):
-    template_name = 'premises/new_premise.html'
+    template_name = 'arguments/new_argument.html'
 
 class ArgumentCreateView(CreateObjectView):
-    template_name = 'premises/create_premise.html'
+    template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Argument
 
+    def get_context_data(self, **kwargs):
+        context = super(ArgumentCreateView, self).get_context_data(**kwargs)
+        context['object_name_upper'] = self.model.__name__
+        context['object_name_lower'] = self.model.__name__.lower()
+        return context
+
     def get_form_class(self):
-        with Switch(self.kwargs['mode']) as case:
-            if case('SubjectPredicate'):
-                return SubjectPredicateInputForm
-            if case('WithComplementedObject'):
-                return WithComplementedObjectInputForm
-            if case('WithObject'):
-                return WithObjectInputForm
-            if case('WithComplement'):
-                return WithComplementInputForm
+        return ArgumentInputForm
 
 class ArgumentsListView(ObjectListView):
     model = Argument
@@ -42,4 +39,4 @@ class ArgumentsListView(ObjectListView):
 class DeleteArgumentView(DeleteView):
     template_name = 'blockobjects/delete_object.html'
     model = Argument
-    success_url = reverse_lazy('premises:index')
+    success_url = reverse_lazy('arguments:index')

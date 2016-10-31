@@ -6,7 +6,11 @@ from demoslogic.users.models import User
 
 MODEL = Argument
 VOTEMODEL = CategorizationVote
-CREATEARGS = ['SubjectPredicate']
+if MODEL == Premise:
+    CREATEARGS = ['SubjectPredicate']
+else:
+    CREATEARGS = []
+
 
 class BlockObjectsTests(TestCase):
     model = MODEL

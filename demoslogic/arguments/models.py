@@ -15,3 +15,10 @@ class Vote(VoteBase):
 
     class Meta:
         abstract = True
+
+class ArgumentVote(Vote):
+    value = models.IntegerField(default = 1,
+                                choices = ((1, "completely invalid"),
+                                           (2, "weak"),
+                                           (3, "strong"),
+                                           (4, "completely valid")))

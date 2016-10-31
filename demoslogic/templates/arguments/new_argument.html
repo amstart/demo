@@ -1,0 +1,12 @@
+{% extends "arguments/base.html" %}
+{% block inner %}
+<h1>Create a new argument!</h1>
+{% if request.user.is_anonymous %}
+Only signed-in users can create arguments!
+{% else %}
+Create a new argument:
+{% endif %}
+<ul>
+  <li><a href="{% url 'argument:create' %}">Create one!</a></li>
+</ul>
+{% endblock inner %}
