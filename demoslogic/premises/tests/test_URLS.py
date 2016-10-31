@@ -18,6 +18,10 @@ class URLTest(TestCase):
         self.assertTemplateUsed(response, 'blockobjects/detail.html')
         self.assertNotContains(response, '---')
 
+    def test_new_premise_view(self):
+        response = self.client.get(reverse('premises:new'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'premises/new_premise.html')
 # class AnonymousTest(TestCase):
 #     fixtures = ['fixtures\\testset.yaml']
 #

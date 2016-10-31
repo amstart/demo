@@ -49,14 +49,12 @@ class CanVotePremiseTest(TestCase):
         super(CanVotePremiseTest, self).setUp()
         self.detail_url = reverse('premises:detail', args = [1])
 
-    def test_redirects_if_anonymous(self):
+    def test_right_number_of_radiobuttons_for_anonymous(self):
         response = self.client.get(self.detail_url)
         choices = CategorizationVote._meta.get_field('value').choices
         self.assertContains(response, "class=\"radio\"", count = len(choices))
-        redirect = self.client.post(self.detail_url)
-        self.assertRedirects(redirect, reverse('account_login') + '?next=' + reverse('premises:detail', args = [1]))
 
-    def test_right_number_of_radiobuttons(self):
+    def test_right_number_of_radiobuttons_for_user(self):
         self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
         response = self.client.get(self.detail_url)
         choices = CategorizationVote._meta.get_field('value').choices
