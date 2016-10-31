@@ -1,16 +1,12 @@
-from django.test import TestCase
-
 from demoslogic.users.models import User
-from ..models import Premise, CategorizationVote
 
-class VoteMethodTests(TestCase):
+from .base import BlockObjectsTests
 
-    def setUp(self):
-        self.user = User.objects.create_user(username = 'Alfons')
-        self.premise = Premise.objects.create(user=self.user)
+class VoteMethodTests(BlockObjectsTests):
+    fixtures = ['fixtures\\testset.yaml']
 
     def test_updates_to_correct_vote_value(self):
-        new_vote = CategorizationVote.objects.create(user = self.user, object = self.premise, value = 2)
+        new_vote = self.create_vote_object(value = 2)
         last_voted = new_vote.last_voted
         new_vote.update(10)
         self.assertEqual(new_vote.value, 2)

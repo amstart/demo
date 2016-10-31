@@ -40,7 +40,7 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
     def form_valid(self, form): #login_required somwhere?
         form.instance.user = self.request.user
         self.object = form.save()
-        return HttpResponseRedirect(reverse(self.object.name() + 's:detail', args = [self.object.pk]))
+        return HttpResponseRedirect(reverse(self.object.name + 's:detail', args = [self.object.pk]))
 
 class DetailWithVoteView(DetailView):
     template_name = 'blockobjects/detail.html'

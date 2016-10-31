@@ -1,12 +1,12 @@
-from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from demoslogic.users.models import User
-from ..models import Premise
+
+from .base import BlockObjectsTests
 
 premise_core = {'subject':'peas', 'predicate':'make', 'object':'peacocks', 'complement':'cry'}
 
-class CreatePremiseTest(TestCase):
+class CreatePremiseTest(BlockObjectsTests):
     fixtures = ['fixtures\\testusers.yaml']
 
     def setUp(self):
@@ -14,7 +14,7 @@ class CreatePremiseTest(TestCase):
 
     def test_redirecting_works(self):
         self.response = self.client.post(reverse('premises:create', args = ['WithComplementedObject']), premise_core)
-        premises = Premise.objects.all()
+        premises = self.model.objects.all()
         detail_url = reverse('premises:detail', args = [premises[0].pk])
         self.assertRedirects(self.response, detail_url)
 
@@ -23,7 +23,7 @@ class CreatePremiseTest(TestCase):
         self.client.post(reverse('premises:create', args = ['WithObject']), premise_core)
         self.client.post(reverse('premises:create', args = ['WithComplement']), premise_core)
         self.client.post(reverse('premises:create', args = ['SubjectPredicate']), premise_core)
-        premises = Premise.objects.all()
+        premises = self.model.objects.all()
         detail_url = reverse('premises:detail', args = [str(premises[0].pk)])
         response_index = self.client.get(reverse('premises:index'))
         response_unstaged = self.client.get(reverse('premises:unstaged'))

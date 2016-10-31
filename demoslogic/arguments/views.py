@@ -5,25 +5,25 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView, ObjectListView
 
-from .models import Premise
+from .models import Argument
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 from .forms import CategorizationVoteForm
 
-class PremiseDetailView(DetailWithVoteView):
-    model = Premise
+class ArgumentDetailView(DetailWithVoteView):
+    model = Argument
     voteform = CategorizationVoteForm()
 
-class PremiseUpdateView(UpdateVoteView):
-    model = Premise
+class ArgumentUpdateView(UpdateVoteView):
+    model = Argument
     voteform = CategorizationVoteForm()
 
-class NewPremiseView(TemplateView):
+class NewArgumentView(TemplateView):
     template_name = 'premises/new_premise.html'
 
-class PremiseCreateView(CreateObjectView):
+class ArgumentCreateView(CreateObjectView):
     template_name = 'premises/create_premise.html'
     success_url = '/'
-    model = Premise
+    model = Argument
 
     def get_form_class(self):
         with Switch(self.kwargs['mode']) as case:
@@ -36,10 +36,10 @@ class PremiseCreateView(CreateObjectView):
             if case('WithComplement'):
                 return WithComplementInputForm
 
-class PremisesListView(ObjectListView):
-    model = Premise
+class ArgumentsListView(ObjectListView):
+    model = Argument
 
-class DeletePremiseView(DeleteView):
+class DeleteArgumentView(DeleteView):
     template_name = 'blockobjects/delete_object.html'
-    model = Premise
+    model = Argument
     success_url = reverse_lazy('premises:index')

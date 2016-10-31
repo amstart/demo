@@ -4,6 +4,7 @@ from demoslogic.blockobjects.models import BlockObject, VoteBase
 
 
 class Premise(BlockObject):
+    name = 'premise'   #this is used for URL namespaces alongside the class name!
     subject = models.CharField(default = '', max_length = 200)
     predicate = models.CharField(default = '', max_length = 200)
     object = models.CharField(default = '', max_length = 200, blank = True)
@@ -25,9 +26,6 @@ class Premise(BlockObject):
         if len(self.complement ) > 0:
             print_raw = print_raw + " " + self.complement
         return print_raw
-
-    def name(self):
-        return 'premise'   #this is used for URL namespaces!
 
 
 class Vote(VoteBase):

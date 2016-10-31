@@ -1,17 +1,16 @@
-from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from demoslogic.users.models import User
-from ..models import Premise, CategorizationVote
 
+from .base import BlockObjectsTests
 
-class CanDeletePremiseTest(TestCase):
+class CanDeleteObjectTest(BlockObjectsTests):
     fixtures = ['fixtures\\testset.yaml']
 
     def setUp(self):
-        self.new_premise = Premise.objects.create(user_id = 1)
-        self.detail_url = reverse('premises:detail', args = [self.new_premise.pk])
-        self.delete_url = reverse('premises:delete', args = [self.new_premise.pk])
+        new_premise = self.create_object()
+        self.detail_url = reverse(self.model.name + 's:detail', args = [new_premise.pk])
+        self.delete_url = reverse(self.model.name + 's:delete', args = [new_premise.pk])
 
     def assertCanDelete(self):
         response = self.client.get(self.detail_url)
@@ -26,56 +25,56 @@ class CanDeletePremiseTest(TestCase):
         self.assertNotContains(response, "<form")
 
     def test_delete_button_shows_up(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        self.login()
         self.assertCanDelete()
 
     def test_delete_button_not_there_for_old_premise(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
-        self.detail_url = reverse('premises:detail', args = [1])
-        self.delete_url = reverse('premises:delete', args = [1])
+        self.login()
+        self.detail_url = self.URL_detail
+        self.delete_url = self.URL_delete
         self.assertCannotDelete()
 
     def test_delete_button_not_there_for_other_user(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 2))
+        self.login(user_id = 2)
         self.assertCannotDelete()
 
     def test_delete_button_not_there_for_anonymous(self):
         self.assertCannotDelete()
 
-class CanVotePremiseTest(TestCase):
+class CanVoteObjectTest(BlockObjectsTests):
     fixtures = ['fixtures\\testset.yaml']
 
     def setUp(self):
-        super(CanVotePremiseTest, self).setUp()
+        super(CanVoteObjectTest, self).setUp()
         self.detail_url = reverse('premises:detail', args = [1])
 
     def test_right_number_of_radiobuttons_for_anonymous(self):
         response = self.client.get(self.detail_url)
-        choices = CategorizationVote._meta.get_field('value').choices
+        choices = self.vote_model._meta.get_field('value').choices
         self.assertContains(response, "class=\"radio\"", count = len(choices))
 
     def test_right_number_of_radiobuttons_for_user(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        self.client.force_login(user = User.objects.get(pk = 1))
         response = self.client.get(self.detail_url)
-        choices = CategorizationVote._meta.get_field('value').choices
+        choices = self.vote_model._meta.get_field('value').choices
         self.assertContains(response, "class=\"radio\"", count = len(choices))
 
-class SeeVotePremiseTest(TestCase):
+class SeeVoteObjectTest(BlockObjectsTests):
     fixtures = ['fixtures\\testset.yaml']
 
     def setUp(self):
-        super(SeeVotePremiseTest, self).setUp()
+        super(SeeVoteObjectTest, self).setUp()
         self.detail_url = reverse('premises:detail', args = [3])
 
     def test_see_options(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
-        choices = CategorizationVote._meta.get_field('value').choices
+        self.client.force_login(user = User.objects.get(pk = 1))
+        choices = self.vote_model._meta.get_field('value').choices
         response = self.client.get(self.detail_url)
         bar_labels = [x[1] for x in choices]
         for label in bar_labels:
             self.assertContains(response, label + ":", count = 1)
 
     def test_see_vote(self):
-        self.logged_in = self.client.force_login(user = User.objects.get(pk = 1))
+        self.client.force_login(user = User.objects.get(pk = 1))
         response = self.client.get(self.detail_url)
         self.assertContains(response, "1 (you)", count = 1)

@@ -29,6 +29,7 @@ urlpatterns = [
     ),
     # Your stuff: custom urls includes go here
     url(r'^premises/', include('demoslogic.premises.urls')),
+    url(r'^arguments/', include('demoslogic.arguments.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
