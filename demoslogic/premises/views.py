@@ -1,35 +1,29 @@
 from switch import Switch
 
-from django.views.generic import TemplateView, DeleteView
+from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse, reverse_lazy
 
-from demoslogic.blockobjects.views import DetailWithVoteView, UpdateVoteView, CreateObjectView, ObjectListView
+from demoslogic.blockobjects import views
 
 from .models import Premise
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
 from .forms import CategorizationVoteForm
 
-class PremiseDetailView(DetailWithVoteView):
+class PremiseDetailView(views.DetailWithVoteView):
     model = Premise
     voteform = CategorizationVoteForm()
 
-class PremiseUpdateView(UpdateVoteView):
+class PremiseUpdateView(views.UpdateVoteView):
     model = Premise
     voteform = CategorizationVoteForm()
 
 class NewPremiseView(TemplateView):
     template_name = 'premises/new_premise.html'
 
-class PremiseCreateView(CreateObjectView):
+class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Premise
-
-    def get_context_data(self, **kwargs):
-        context = super(PremiseCreateView, self).get_context_data(**kwargs)
-        context['object_name_upper'] = self.model.__name__
-        context['object_name_lower'] = self.model.__name__.lower()
-        return context
 
     def get_form_class(self):
         with Switch(self.kwargs['mode']) as case:
@@ -42,10 +36,9 @@ class PremiseCreateView(CreateObjectView):
             if case('WithComplement'):
                 return WithComplementInputForm
 
-class PremisesListView(ObjectListView):
+class PremisesListView(views.ObjectListView):
     model = Premise
 
-class DeletePremiseView(DeleteView):
-    template_name = 'blockobjects/delete_object.html'
+class DeletePremiseView(views.DeleteObjectView):
     model = Premise
     success_url = reverse_lazy('premises:index')

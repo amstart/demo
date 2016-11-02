@@ -38,31 +38,3 @@ def print_with_class(object):
                             text + ":</span> "  + \
                             print_premise(object.conclusion)
         return mark_safe(string_with_class)
-
-@register.filter
-def capitalize(value):
-    namelist = value.split(' ')
-    fixed = ''
-    for name in namelist:
-        name = name.lower()
-        # fixes mcdunnough
-        if name.startswith('mc'):
-            sub = name.split('mc')
-            name = "Mc" + sub[1].capitalize()
-        # fixes "o'neill"
-        elif name.startswith('o\''):
-            sub = name.split('o\'')
-            name = "O'" + sub[1].capitalize()
-
-        else: name = name.capitalize()
-
-        nlist = name.split('-')
-        for n in nlist:
-            if len(n) > 1:
-                up = n[0].upper()
-                old = "-%s" % (n[0],)
-                new = "-%s" % (up,)
-                name = name.replace(old,new)
-
-        fixed = fixed + " " + name
-    return fixed

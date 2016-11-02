@@ -3,7 +3,7 @@
 {% load blockobjects %}
 {% load static %}
 
-{% block head_title %}Delete {{ object.name|capitalize }}{% endblock %}
+{% block head_title %}Delete {{ object_name_upper }}{% endblock %}
 
 {% block inner %}
 {% if request.user == object.user and not object.staged %}

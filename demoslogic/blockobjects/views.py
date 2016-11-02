@@ -42,6 +42,21 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
         self.object = form.save()
         return HttpResponseRedirect(reverse(self.object.name + 's:detail', args = [self.object.pk]))
 
+    def get_context_data(self, **kwargs):
+        context = super(CreateObjectView, self).get_context_data(**kwargs)
+        context['object_name_upper'] = self.model.__name__
+        context['object_name_lower'] = self.model.__name__.lower()
+        return context
+
+class DeleteObjectView(LoginRequiredMixin, DeleteView):
+    template_name = 'blockobjects/delete_object.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteObjectView, self).get_context_data(**kwargs)
+        context['object_name_upper'] = self.model.__name__
+        context['object_name_lower'] = self.model.__name__.lower()
+        return context
+
 class DetailWithVoteView(DetailView):
     template_name = 'blockobjects/detail.html'
 
