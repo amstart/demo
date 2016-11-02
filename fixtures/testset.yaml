@@ -72,6 +72,45 @@
     last_voted: '2016-10-27T20:07:13.400Z'
     object: 3
     value: 4
+- model: arguments.argument
+  pk: 1
+  fields:
+    pub_date: '2016-09-20T19:07:44.618Z'
+    staged:
+    user: 1
+    premise1: 1
+    premise2: 2
+    conclusion: 3
+    aim: 2
+- model: arguments.argument
+  pk: 2
+  fields:
+    pub_date: '2016-09-20T19:07:44.618Z'
+    staged:
+    user: 2
+    premise1: 1
+    premise2: 2
+    conclusion: 3
+    aim: 2
+- model: arguments.argument
+  pk: 3
+  fields:
+    pub_date: '2016-09-20T19:07:44.618Z'
+    staged:
+    user: 1
+    premise1: 1
+    premise2: 2
+    conclusion: 3
+    aim: 2
+- model: arguments.argumentvote
+  pk: 1
+  fields:
+    pub_date: '2016-10-31T19:53:47.485Z'
+    staged:
+    user: 1
+    last_voted: '2016-10-31T19:53:47.485Z'
+    object: 3
+    value: 3
 - model: account.emailaddress
   pk: 1
   fields:

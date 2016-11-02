@@ -4,10 +4,7 @@ from django.utils import timezone
 
 from .base import BlockObjectsTests
 
-
 class ObjectTimeStampMethodsTests(BlockObjectsTests):
-    fixtures = ['fixtures\\testset.yaml']
-
     def test_old_object_was_not_published_recently(self):
         time = timezone.now() - datetime.timedelta(days = 30)
         old_object  =  self.create_object()

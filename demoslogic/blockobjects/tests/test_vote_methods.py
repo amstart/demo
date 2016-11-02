@@ -3,8 +3,6 @@ from demoslogic.users.models import User
 from .base import BlockObjectsTests
 
 class VoteMethodTests(BlockObjectsTests):
-    fixtures = ['fixtures\\testset.yaml']
-
     def test_updates_to_correct_vote_value(self):
         new_vote = self.create_vote_object(value = 2)
         last_voted = new_vote.last_voted
