@@ -1,9 +1,9 @@
-{% extends object.name|add:"s/base.html" %}
+{% extends object.namespace|add:"/base.html" %}
 
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
-{% load blockobjects %}
+{% load blockobjects_tags %}
 
 {% block head_title %}Update Vote{% endblock %}
 

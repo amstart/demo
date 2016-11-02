@@ -4,7 +4,8 @@ from demoslogic.blockobjects.models import BlockObject, VoteBase
 from demoslogic.premises.models import Premise
 
 class Argument(BlockObject):
-    name = 'argument'   #this is used for URL namespaces alongside the class name!
+    name = 'argument'
+    namespace = 'arguments'   #this is used for URL namespaces!
     premise1 = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='premise1')
     premise2 = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='premise2')
     conclusion = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='conclusion')

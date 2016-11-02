@@ -1,9 +1,9 @@
-{% extends object.name|add:"s/base.html" %}
+{% extends object.namespace|add:"/base.html" %}
 
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
-{% load blockobjects %}
+{% load blockobjects_tags %}
 
 {% block head_title %}{{ object }}{% endblock %}
 {% block inner %}
@@ -27,14 +27,14 @@
   <div class="row">
     {% if already_voted %}
       <div class="col-md-2">
-          <a href="{% url object.name|add:'s:update_vote' object.id %}" class="btn btn-secondary">
+          <a href="{% url object.namespace|add:':update_vote' object.id %}" class="btn btn-secondary">
             edit vote
           </a>
       </div>
     {% endif %}
     {% if request.user == object.user and not object.staged %}
       <div class="col-md-2">
-        <a href="{% url object.name|add:'s:delete' object.id %}" class="btn btn-secondary" id='id_delete'>
+        <a href="{% url object.namespace|add:':delete' object.id %}" class="btn btn-secondary" id='id_delete'>
           delete {{ object.name }}
         </a>
       </div>

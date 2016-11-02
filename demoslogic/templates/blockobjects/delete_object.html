@@ -1,6 +1,6 @@
-{% extends object.name|add:"s/base.html" %}
+{% extends object.namespace|add:"/base.html" %}
 
-{% load blockobjects %}
+{% load blockobjects_tags %}
 {% load static %}
 
 {% block head_title %}Delete {{ object_name_upper }}{% endblock %}

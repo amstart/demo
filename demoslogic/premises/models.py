@@ -4,7 +4,8 @@ from demoslogic.blockobjects.models import BlockObject, VoteBase
 
 
 class Premise(BlockObject):
-    name = 'premise'   #this is used for URL namespaces alongside the class name!
+    name = 'premise'
+    namespace = 'premises'   #this is used for URL namespaces!
     subject = models.CharField(default = '', max_length = 200)
     predicate = models.CharField(default = '', max_length = 200)
     object = models.CharField(default = '', max_length = 200, blank = True)

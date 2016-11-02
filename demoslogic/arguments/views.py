@@ -30,6 +30,9 @@ class ArgumentCreateView(views.CreateObjectView):
 class ArgumentsListView(views.ObjectListView):
     model = Argument
 
+    def get_queryset(self):
+        return Argument.objects.all().select_related('conclusion')
+
 class DeleteArgumentView(views.DeleteObjectView):
     model = Argument
     success_url = reverse_lazy('arguments:index')

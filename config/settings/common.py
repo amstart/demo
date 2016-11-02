@@ -145,6 +145,7 @@ TEMPLATES = [
             str(APPS_DIR.path('templates')),
         ],
         'OPTIONS': {
+            'string_if_invalid': 'INVALID EXPRESSION: %s', # see 2 scoops 13.7.6 Debugging Complex Templates
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders

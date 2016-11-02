@@ -1,12 +1,10 @@
-{% load blockobjects %}
-{% load static %}
-
+{% load blockobjects_tags %}
 {% if object_list %}
   <ul>
     {% for object in object_list %}
     <li class="object_link">
       <a class="object_link" id="id_{{ object.name }}{{ forloop.counter }}"
-         href="{% url object.name|add:'s:detail' object.id %}">
+         href="{% url object.namespace|add:':detail' object.id %}">
         {% print_with_class object %}
       </a>
     </li>

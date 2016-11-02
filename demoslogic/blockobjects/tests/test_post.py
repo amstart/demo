@@ -23,8 +23,9 @@ class CreatePremiseTest(BlockObjectsTests):
                 self.assertContains(response, value)
                 self.assertContains(response, "class=\"" + key + "\"")
         else:
+            object = self.get_object(pk = self.latest_model_id)
             for key, value in self.post_params[0].items():
                 if key == 'aim':
-                    self.assertContains(response, self.model.get_aim_display())
+                    self.assertContains(response, object.choice_headings[object.aim-1])
                 else:
-                    self.assertContains(response, str(getattr(self.get_object(pk = self.latest_model_id), key)))
+                    self.assertContains(response, str(getattr(object, key)))

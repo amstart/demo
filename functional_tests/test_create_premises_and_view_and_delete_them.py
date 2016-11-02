@@ -8,7 +8,7 @@ from django.test.utils import override_settings
 from .base import FunctionalTest
 
 class UserTest(FunctionalTest):
-    fixtures = ['fixtures\\testset.yaml']
+    fixtures = ['fixtures\\testusers.yaml']
 
     def test_create_premises_and_view_and_delete_them(self):
         self.create_pre_authenticated_session("Alfons")
@@ -23,7 +23,8 @@ class UserTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.browser.find_element_by_class_name('link_created_by').click()
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('Peacocks', page_text)
+        self.assertIn('created 1 premise and 0 arguments', page_text)
+        self.browser.find_element_by_link_text('Premises').click()
         self.browser.find_element_by_id('id_premise1').click()
         self.browser.find_element_by_id('id_delete').click()
         self.browser.find_element_by_tag_name('form').submit()
