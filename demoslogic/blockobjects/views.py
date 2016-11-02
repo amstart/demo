@@ -45,6 +45,7 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(CreateObjectView, self).get_context_data(**kwargs)
+        context['model_namespace'] = self.model.namespace
         context['object_name_upper'] = self.model.__name__
         context['object_name_lower'] = self.model.__name__.lower()
         return context
