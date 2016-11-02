@@ -27,14 +27,17 @@ def print_premise(object):
                             conditional_escape(element["value"]) + "</span> "
     return mark_safe(string_with_class)
 
-@register.simple_tag
+def print_argument(object):
+    text = conditional_escape(object.choice_headings[object.aim-1])
+    string_with_class = "<span class=\"aim-" + \
+                        str(object.aim) + "\">" + \
+                        text + ":</span> "  + \
+                        print_premise(object.conclusion)
+    return mark_safe(string_with_class)
+
+@register.filter
 def print_with_class(object):
     if type(object) == Premise:
         return print_premise(object)
     else:
-        text = conditional_escape(object.choice_headings[object.aim-1])
-        string_with_class = "<span class=\"aim-" + \
-                            str(object.aim) + "\">" + \
-                            text + ":</span> "  + \
-                            print_premise(object.conclusion)
-        return mark_safe(string_with_class)
+        return print_argument(object)

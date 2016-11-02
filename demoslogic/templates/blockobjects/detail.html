@@ -8,7 +8,7 @@
 {% block head_title %}{{ object }}{% endblock %}
 {% block inner %}
   <div class="row">
-    <h1> {% print_with_class object %} </h1>
+    <h1> {{ object|print_with_class }} </h1>
   </div>
   {% if already_voted or request.user == object.user %}
     <a class="link_created_by" href="{% url 'users:detail' object.user.username %}">
