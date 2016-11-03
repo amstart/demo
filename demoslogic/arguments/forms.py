@@ -1,8 +1,13 @@
+from dal import autocomplete
+
 from django import forms
+from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.blockobjects.forms import VoteForm
+from demoslogic.premises.models import Premise
 
 from .models import Argument, ArgumentVote
+
 
 class ArgumentVoteForm(VoteForm):
     class Meta:
@@ -24,3 +29,8 @@ class ArgumentInputForm(AbstractForm):
     class Meta:
         model = Argument
         fields = ['premise1', 'premise2', 'conclusion', 'aim']
+        widgets = {
+            'premise1': autocomplete.ModelSelect2(url = reverse_lazy('arguments:autocomplete')),
+            'premise2': autocomplete.ModelSelect2(url = reverse_lazy('arguments:autocomplete')),
+            'conclusion': autocomplete.ModelSelect2(url = reverse_lazy('arguments:autocomplete'))
+        }

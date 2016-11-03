@@ -5,6 +5,7 @@ from . import views
 app_name = 'arguments'
 urlpatterns = [
     url(r'^$', views.ArgumentsListView.as_view(), name = 'index'),
+    url(r'^autocomplete$', views.PremiseAutocomplete.as_view(), name = 'autocomplete'),
     url(r'^unstaged/$', views.ArgumentsListView.as_view(), name = 'unstaged'),
     url(r'^new/$', views.NewArgumentView.as_view(), name = 'new'),
     url(r'^new/create$', views.ArgumentCreateView.as_view(), name = 'create'),

@@ -1,12 +1,29 @@
 from switch import Switch
+from dal import autocomplete
 
+from django.db.models import Q
 from django.views.generic import TemplateView
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.blockobjects import views
+from demoslogic.premises.models import Premise
 
 from .models import Argument
 from .forms import ArgumentInputForm, ArgumentVoteForm
+
+
+
+class PremiseAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # if not self.request.user.is_authenticated():
+        #     return Premise.objects.none()
+        qs = Premise.objects.all()
+        if self.q:
+            qs = qs.filter(Q(subject__startswith=self.q)
+                           | Q(predicate__startswith=self.q)
+                           | Q(object__startswith=self.q)
+                           | Q(complement__startswith=self.q))
+        return qs
 
 class ArgumentDetailView(views.DetailWithVoteView):
     model = Argument

@@ -16,9 +16,11 @@
   {{ form|crispy }}
   <button class="btn btn-primary" type="submit"> submit {{ object_name_lower }} </button>
 </form>
-
 {% endblock %}
-
+{% block javascript %}
+{{ block.super }}
+{{ form.media }}
+{% endblock javascript %}
 {# {% if redirect_field_value %}
 <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 {% endif %}#}
