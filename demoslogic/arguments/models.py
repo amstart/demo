@@ -19,6 +19,9 @@ class Argument(BlockObject):
                        "Decision required",
                        "Unknowns")
 
+    def __str__(self):
+        return self.choice_headings[self.aim-1] + ': ' + str(self.conclusion)
+
 class Vote(VoteBase):
     object = models.ForeignKey(Argument, on_delete = models.CASCADE)
 

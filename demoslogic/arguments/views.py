@@ -19,10 +19,12 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
         #     return Premise.objects.none()
         qs = Premise.objects.all()
         if self.q:
-            qs = qs.filter(Q(subject__startswith=self.q)
-                           | Q(predicate__startswith=self.q)
-                           | Q(object__startswith=self.q)
-                           | Q(complement__startswith=self.q))
+            # qs = Premise.objects.raw("SELECT * FROM Premise WHERE %s == CONCAT(premise1, premise2)", [self.q])
+            qs = qs.filter(Q(subject__contains=self.q)
+                           | Q(predicate__contains=self.q)
+                           | Q(object__contains=self.q)
+                           | Q(complement__contains=self.q))
+        print(qs)
         return qs
 
 class ArgumentDetailView(views.DetailWithVoteView):

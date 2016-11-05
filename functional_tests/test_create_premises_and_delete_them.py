@@ -1,9 +1,4 @@
-from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-from selenium.webdriver.common.keys import Keys
-
-from django.test.utils import override_settings
 
 from .base import FunctionalTest
 
@@ -29,7 +24,7 @@ class UserTest(FunctionalTest):
         self.browser.find_element_by_id('id_delete').click()
         self.browser.find_element_by_tag_name('form').submit()
         try:
-            self.browser.find_element_by_link_text('Peacocks')
+            self.browser.find_element_by_id('id_premise1')
             self.fail('Premise could not be deleted (or there is another premise with the same text)!')
         except NoSuchElementException:
             pass

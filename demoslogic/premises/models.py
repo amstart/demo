@@ -2,8 +2,13 @@ from django.db import models
 
 from demoslogic.blockobjects.models import BlockObject, VoteBase
 
+class PremiseManager(models.Manager):
+    pass
+    # def with_counts(self, string = ""):
+    #     concatenated = Concat('subject', V(' ('), 'predicate')
 
 class Premise(BlockObject):
+    objects = PremiseManager
     name = 'premise'
     namespace = 'premises'   #this is used for URL namespaces!
     subject = models.CharField(default = '', max_length = 200)

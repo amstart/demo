@@ -1,7 +1,3 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-from selenium.webdriver.common.keys import Keys
-
 from .base import FunctionalTest
 
 class LayoutTest(FunctionalTest):

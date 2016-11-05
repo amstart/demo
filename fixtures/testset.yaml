@@ -62,7 +62,7 @@
     subject: This premise
     predicate: has been
     object: ''
-    complement: 'voted on'
+    complement: voted on
 - model: premises.categorizationvote
   pk: 1
   fields:
