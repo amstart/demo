@@ -11,6 +11,6 @@ class UserCanLoginTest(FunctionalTest):
         pwfield.send_keys("top-secretary")
         rememberfield = self.browser.find_element_by_id("id_remember")
         rememberfield.click()
-        loginbutton = self.browser.find_element_by_id("loginbutton")
-        loginbutton.click()
+        self.browser.find_element_by_tag_name("form").submit()
+        # loginbutton.click()
         self.assertIn('User: Alfons', self.browser.title)
