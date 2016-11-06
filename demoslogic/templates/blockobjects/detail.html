@@ -4,22 +4,25 @@
 {% load static %}
 {% load i18n %}
 {% load blockobjects_tags %}
-
+{% debug %}
 {% block head_title %}{{ object }}{% endblock %}
 {% block inner %}
   <div class="row">
-    <h1> {{ object|print_with_class }} </h1>
+    <h1> {{ object|print_head }} </h1>
   </div>
   {% if already_voted or request.user == object.user %}
     <a class="link_created_by" href="{% url 'users:detail' object.user.username %}">
       <small>created by</small> {{ object.user.username }}
     </a>
-    <div class="row">
-      <br>
-      <h4> Votes </h4>
-      {% include "blockobjects/barchart.html" %}
-      <br>
-    </div>
+  {% endif %}
+  <br>
+  <div class="object_body">
+    {{ object|print_body }}
+  </div>
+  {% if already_voted %}
+  <div class="container chart">
+    {% include "blockobjects/barchart.html" %}
+  </div>
   {% endif %}
   {% if not already_voted %}
     {% crispy voteform voteform.helper %}

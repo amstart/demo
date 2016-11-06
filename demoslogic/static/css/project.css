@@ -1,5 +1,10 @@
 /* These styles are generated from project.scss. */
 /*.radio:first-child {display:none}*/
+.object_body, .chart{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 span[class|="aim"] {  color: white;}
 
 li.object_link:hover {

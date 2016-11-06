@@ -1,4 +1,5 @@
 from .base import BlockObjectsTests
+from demoslogic.blockobjects.templatetags.blockobjects_tags import print_premise
 
 class CreateObjectTest(BlockObjectsTests):
     def setUp(self):
@@ -22,9 +23,9 @@ class CreateObjectTest(BlockObjectsTests):
             object = self.get_object(pk = self.latest_model_id)
             for key, value in self.post_params[0].items():
                 if key == 'aim':
-                    self.assertContains(response, object.choice_headings[object.aim-1])
+                    self.assertContains(response, object.choice_heading)
                 else:
-                    self.assertContains(response, str(getattr(object, key)))
+                    self.assertContains(response, print_premise(getattr(object, key)))
 
 class FailCreateObjectTest(BlockObjectsTests):
     def test_redirect_to_form_again(self):

@@ -1,7 +1,6 @@
-<div class="chart">
-  {% for data in plot_data %}
-    <div class="row">{{ data.label }}:</div>
-      <div id="id_choice{{ forloop.counter }}" class="row bar" style="width:{{data.bar_width}}px">
-        {{ data.bar_text }}</div>
-  {% endfor %}
-</div>
+<h4> Votes </h4>
+{% for data in plot_data %}
+  <div class="row">{{ data.label }}:</div>
+    <div id="id_choice{{ forloop.counter }}" class="row bar" style="width:{{data.bar_width}}px">
+      {{ data.bar_text }}</div>
+{% endfor %}

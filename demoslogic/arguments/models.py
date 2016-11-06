@@ -12,15 +12,26 @@ class Argument(BlockObject):
     aim = models.IntegerField(default = 1,
                               choices = ((1, "To support the positive version of the conclusion."),
                                          (2, "To support the negative version of the conclusion."),
-                                         (3, "To point why the conclusion should be resolved soon, if possible."),
+                                         (3, "To point why a decision on the matter is required soon."),
                                          (4, "To point out missing knowledge on the matter.")))
-    choice_headings = ("Pro",
+    choices_heading = ("Pro",
                        "Contra",
                        "Decision required",
                        "Unknowns")
 
+    choices_what = ("the negative version of the following conclusion is correct",
+                    "the positive version of the following conclusion is correct",
+                    "the following conclusion needs to be resolved soon",
+                    "the following conclusion needs to be voted on humbly")
+
+    def __init__(self, *args, **kwargs):
+        super(Argument,self).__init__(*args, **kwargs)
+        self.choice_heading = self.choices_heading[self.aim-1]
+        self.choice_what = self.choices_what[self.aim-1]
+        self.aim_str = str(self.aim)
+
     def __str__(self):
-        return self.choice_headings[self.aim-1] + ': ' + str(self.conclusion)
+        return self.choice_heading + ': ' + str(self.conclusion)
 
 class Vote(VoteBase):
     object = models.ForeignKey(Argument, on_delete = models.CASCADE)
