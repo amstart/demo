@@ -47,10 +47,7 @@ class BlockObjectsTests(TestCase):
 
     def create_object(self, **kwargs):
         user_id = kwargs.get('user_id', 1)
-        if is_premise:
-            return self.model.objects.create(user = self.get_user(user_id), **self.create_params[0])
-        else:
-            return self.model.objects.create(user = self.get_user(user_id), **self.create_params[0])
+        return self.model.objects.create(user = self.get_user(user_id), **self.create_params[0])
 
     def create_vote_object(self, **kwargs):
         user_id = kwargs.get('user_id', 1)

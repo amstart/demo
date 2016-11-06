@@ -6,14 +6,17 @@ from .base import FunctionalTest
 class UserTest(FunctionalTest):
     fixtures = ['fixtures\\testset.yaml']
 
-    def test_create_premises_and_view_and_delete_them(self):
+    def test_create_arguments_form(self):
+        # print('This is what the test sees:' + str(Premise.objects.all()))
         self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Arguments').click()
         self.browser.find_element_by_class_name('link_new_argument').click()
         self.browser.find_element_by_link_text('Create one!').click()
         self.browser.find_element_by_css_selector('#id_premise1 + span').click()
+        self.browser.find_element_by_class_name('select2-search__field').send_keys('This premise is from Alfons')
+        self.browser.find_element_by_css_selector('#id_premise2 + span')
+        self.browser.find_element_by_css_selector('#id_conclusion + span')
         # self.browser.implicitly_wait(0.5)
-        # self.browser.find_element_by_class_name('select2-search__field').send_keys('This premise is from Alfons')
         # # subContainerClass = '#select2-drop:not([style*='display: none'])'
         # # self.browser.wait.Until(self.browser.ExpectedConditions.ElementIsVisible(
         # #     self.browser.find_element_by_link_text("This premise is from Alfons")))

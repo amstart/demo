@@ -28,7 +28,7 @@ def create_pre_authenticated_session(browser, live_server_url):
         browser.add_cookie(dict(
             name=settings.SESSION_COOKIE_NAME,
             value=session.session_key,
-            path=live_server_url,
+            path='/',
         ))
     browser.get(live_server_url + "/selenium/")
     return browser
@@ -36,11 +36,14 @@ def create_pre_authenticated_session(browser, live_server_url):
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         super(FunctionalTest, self).setUp()
-        self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
-            firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
-
+        self.browser = webdriver.Chrome(executable_path = "C:\\Tools\\chromedriver\\chromedriver.exe")
+        # self.browser = webdriver.Firefox(firefox_binary=FirefoxBinary(
+        #     firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
+        self.browser.set_page_load_timeout(10)
+        self.browser.set_script_timeout(10)
+        
     def tearDown(self):
-        # self.browser.quit()
+        self.browser.quit()
         super(FunctionalTest, self).tearDown()
         pass
 

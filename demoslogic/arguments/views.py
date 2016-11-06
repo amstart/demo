@@ -24,7 +24,6 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
                            | Q(predicate__contains=self.q)
                            | Q(object__contains=self.q)
                            | Q(complement__contains=self.q))
-        print(qs)
         return qs
 
 class ArgumentDetailView(views.DetailWithVoteView):

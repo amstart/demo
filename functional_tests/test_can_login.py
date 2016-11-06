@@ -4,6 +4,7 @@ class UserCanLoginTest(FunctionalTest):
     fixtures = ['fixtures\\testset.yaml']
 
     def test_can_login(self):
+        self.browser.get(self.live_server_url)
         self.browser.find_element_by_link_text("Sign In").click()
         userfield = self.browser.find_element_by_id("id_login")
         userfield.send_keys("Alfons")

@@ -34,3 +34,13 @@ class ArgumentInputForm(AbstractForm):
             'premise2': autocomplete.ModelSelect2(url = reverse_lazy('arguments:autocomplete')),
             'conclusion': autocomplete.ModelSelect2(url = reverse_lazy('arguments:autocomplete'))
         }
+
+    def clean(self):
+        cleaned_data = super(ArgumentInputForm, self).clean()
+        premise1 = cleaned_data.get("premise1")
+        premise2 = cleaned_data.get("premise2")
+        conclusion = cleaned_data.get("conclusion")
+        if premise1 and premise2 and conclusion:
+            # Only do something if all fields are valid so far.
+            if premise1 == premise2 or premise1 == conclusion or premise2 == conclusion:
+                raise forms.ValidationError("A premise can only be used once per argument.")
