@@ -33,6 +33,9 @@ a.object_link:hover {
     color: green;
 }
 
+.itfollows {
+    text-align: right;
+}
 
 .chart .bar {
   font: 14px sans-serif;

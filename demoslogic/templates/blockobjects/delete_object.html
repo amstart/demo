@@ -9,7 +9,7 @@
 {% if request.user == object.user and not object.staged %}
   <form action="" method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete "{{ object|print_head }}"?</p>
+    <p>Are you sure you want to delete {{ object|print_link }}?</p>
       <input type="submit" class="btn btn-primary" value="Confirm" />
   </form>
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}

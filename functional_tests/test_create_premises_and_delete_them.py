@@ -20,11 +20,8 @@ class UserTest(FunctionalTest):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('created 1 premise and 0 arguments', page_text)
         self.browser.find_element_by_link_text('Premises').click()
-        self.browser.find_element_by_id('id_premise1').click()
+        self.browser.find_element_by_link_text("Peacocks are scary").click()
         self.browser.find_element_by_id('id_delete').click()
         self.browser.find_element_by_tag_name('form').submit()
-        try:
-            self.browser.find_element_by_id('id_premise1')
-            self.fail('Premise could not be deleted (or there is another premise with the same text)!')
-        except NoSuchElementException:
-            pass
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Peacocks', page_text)

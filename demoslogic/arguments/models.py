@@ -19,10 +19,10 @@ class Argument(BlockObject):
                        "Decision required",
                        "Unknowns")
 
-    choices_what = ("the negative version of the following conclusion is correct",
-                    "the positive version of the following conclusion is correct",
-                    "the following conclusion needs to be resolved soon",
-                    "the following conclusion needs to be voted on humbly")
+    choices_what = ("The negative version of the following is correct",
+                    "The positive version of the following is correct",
+                    "The following conclusion needs to be resolved soon",
+                    "Humility might be advised upon voting on the following")
 
     def __init__(self, *args, **kwargs):
         super(Argument,self).__init__(*args, **kwargs)

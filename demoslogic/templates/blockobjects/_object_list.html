@@ -3,13 +3,10 @@
   <ul>
     {% for object in object_list %}
     <li class="object_link">
-      <a class="object_link" id="id_{{ object.name }}{{ forloop.counter }}"
-         href="{% url object.namespace|add:':detail' object.id %}">
-        {{ object|print_head }}
-      </a>
+        {{ object|print_link }}
     </li>
   {% endfor %}
   </ul>
 {% else %}
-  Nothing to show.
+  Nothing to show. <br>
 {% endif %}

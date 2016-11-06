@@ -13,6 +13,12 @@ class PremiseDetailView(views.DetailWithVoteView):
     model = Premise
     voteform = CategorizationVoteForm()
 
+    def get_context_data(self, **kwargs):
+        context = super(PremiseDetailView, self).get_context_data(**kwargs)
+        context['as_premise_set'] = self.object.premise1.filter()
+        context['as_conclusion_set'] = self.object.conclusion.filter()
+        return context
+
 class PremiseUpdateView(views.UpdateVoteView):
     model = Premise
     voteform = CategorizationVoteForm()

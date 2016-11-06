@@ -17,16 +17,27 @@
   {% endif %}
   <br>
   <div class="object_body">
-    {{ object|print_body }}
+    {% if object.name == 'premise' %}
+      {% include "premises/_details.html" %}
+    {% else %}
+      {% include "arguments/_details.html" %}
+    {% endif %}
   </div>
   {% if already_voted %}
   <div class="container chart">
-    {% include "blockobjects/barchart.html" %}
+    <h4> Votes </h4>
+    {% include "blockobjects/_barchart.html" %}
   </div>
   {% endif %}
   {% if not already_voted %}
     {% crispy voteform voteform.helper %}
   {% endif %}
+  <div class="object_related">
+    {% if object.name == 'premise' %}
+      <h4> Arguments </h4>
+      {% include "premises/_related.html" %}
+    {% endif %}
+  </div>
   <div class="row">
     {% if already_voted %}
       <div class="col-md-2">

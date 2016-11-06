@@ -41,7 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         #     firefox_path='C:\\Program Files\\Mozilla FirefoxESR\\firefox.exe'))
         self.browser.set_page_load_timeout(10)
         self.browser.set_script_timeout(10)
-        
+
     def tearDown(self):
         self.browser.quit()
         super(FunctionalTest, self).tearDown()
