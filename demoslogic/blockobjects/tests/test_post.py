@@ -1,10 +1,6 @@
-from django.core.urlresolvers import reverse
-
-from demoslogic.users.models import User
-
 from .base import BlockObjectsTests
 
-class CreatePremiseTest(BlockObjectsTests):
+class CreateObjectTest(BlockObjectsTests):
     def setUp(self):
         self.login()
         self.response = self.client.post(self.URL_create(), self.post_params[0])
@@ -29,3 +25,10 @@ class CreatePremiseTest(BlockObjectsTests):
                     self.assertContains(response, object.choice_headings[object.aim-1])
                 else:
                     self.assertContains(response, str(getattr(object, key)))
+
+class FailCreateObjectTest(BlockObjectsTests):
+    def test_redirect_to_form_again(self):
+        self.login()
+        response = self.client.post(self.URL_create(), self.no_post_params[0])
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'blockobjects/create_object.html')

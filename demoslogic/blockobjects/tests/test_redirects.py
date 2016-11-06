@@ -1,5 +1,3 @@
-from django.core.urlresolvers import reverse
-
 from .base import BlockObjectsTests
 
 class RedirectsIfAnonymous(BlockObjectsTests):

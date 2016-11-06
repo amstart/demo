@@ -11,11 +11,13 @@ if is_premise:
     VOTEMODEL = CategorizationVote
     CREATEPARAMS = [{'subject': 'peas', 'predicate': 'make', 'object': 'peacocks', 'complement': 'cry'}]
     POSTPARAMS = [{'subject': 'peas', 'predicate': 'make', 'object': 'peacocks', 'complement': 'cry'}]
+    NOPOSTPARAMS = [{'subject': '', 'predicate': 'make', 'object': 'peacocks', 'complement': 'cry'}]
 else:
     CREATEARG = []
     VOTEMODEL = ArgumentVote
     CREATEPARAMS = [{'aim': 1, 'premise1_id': 1, 'premise2_id': 2, 'conclusion_id': 3}]
     POSTPARAMS = [{'aim': 1, 'premise1': 1, 'premise2': 2, 'conclusion': 3}]
+    NOPOSTPARAMS = [{'aim': 1, 'premise1': 1, 'premise2': 1, 'conclusion': 2}]
 
 class BlockObjectsTests(TestCase):
     fixtures = ['fixtures\\testset.yaml']
@@ -23,6 +25,7 @@ class BlockObjectsTests(TestCase):
     vote_model = VOTEMODEL
     create_params = CREATEPARAMS
     post_params = POSTPARAMS
+    no_post_params = NOPOSTPARAMS
     is_premise = is_premise
 
     def URL_login_redirect(self):
