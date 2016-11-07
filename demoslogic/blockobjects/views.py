@@ -15,6 +15,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
 
+class NetworkView(TemplateView):
+    template_name = 'blockobjects/network.html'
 
 class ObjectListView(ListView):
     template_name = 'blockobjects/index.html'

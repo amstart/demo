@@ -1,4 +1,6 @@
 from django.db import models
+from django import forms
+from django.core.validators import RegexValidator
 
 from demoslogic.blockobjects.models import BlockObject, VoteBase
 
@@ -7,14 +9,28 @@ class PremiseManager(models.Manager):
     # def with_counts(self, string = ""):
     #     concatenated = Concat('subject', V(' ('), 'predicate')
 
+
+class TrimmedCharFormField(forms.CharField):
+    def clean(self, value):
+        if value:
+            value = value.strip()
+        return super(TrimmedCharFormField, self).clean(value)
+
+
+class TrimmedCharField(models.CharField):
+    validators=[RegexValidator(regex='^[a-zA-Z ]+$', message='Only letters and spaces allowed.')]
+
+    def formfield(self, **kwargs):
+        return super(TrimmedCharField, self).formfield(form_class=TrimmedCharFormField, **kwargs)
+
 class Premise(BlockObject):
     objects = PremiseManager
     name = 'premise'
     namespace = 'premises'   #this is used for URL namespaces!
-    subject = models.CharField(default = '', max_length = 200)
-    predicate = models.CharField(default = '', max_length = 200)
-    object = models.CharField(default = '', max_length = 200, blank = True)
-    complement = models.CharField(default = '', max_length = 200, blank = True)
+    subject = TrimmedCharField(default = '', max_length = 200)
+    predicate = TrimmedCharField(default = '', max_length = 200)
+    object = TrimmedCharField(default = '', max_length = 200, blank = True)
+    complement = TrimmedCharField(default = '', max_length = 200, blank = True)
 
     def __init__(self, *args, **kwargs):
         super(Premise,self).__init__(*args, **kwargs)
