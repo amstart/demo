@@ -1,8 +1,12 @@
 import datetime
 
+from django.db.models.signals import post_save, post_save
+from django.dispatch import receiver
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+
+from .network import save_network
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
@@ -27,6 +31,17 @@ class BlockObject(models.Model):
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
 
+class NetworkObject(BlockObject):
+    class Meta:
+        abstract = True
+
+# @receiver(post_save, sender=NetworkObject)
+# def model_post_save(sender, **kwargs):
+#     save_network()
+#
+# @receiver(post_delete, sender=NetworkObject)
+# def model_post_save(sender, **kwargs):
+#     save_network()
 
 class VoteManager(models.Manager):
     pass

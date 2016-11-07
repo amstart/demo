@@ -1,9 +1,10 @@
 from django.db import models
 
-from demoslogic.blockobjects.models import BlockObject, VoteBase
+from demoslogic.blockobjects.models import NetworkObject, VoteBase
 from demoslogic.premises.models import Premise
 
-class Argument(BlockObject):
+
+class Argument(NetworkObject):
     name = 'argument'
     namespace = 'arguments'   #this is used for URL namespaces!
     premise1 = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='premise1')

@@ -2,7 +2,7 @@ from django.db import models
 from django import forms
 from django.core.validators import RegexValidator
 
-from demoslogic.blockobjects.models import BlockObject, VoteBase
+from demoslogic.blockobjects.models import NetworkObject, VoteBase
 
 class PremiseManager(models.Manager):
     pass
@@ -23,7 +23,7 @@ class TrimmedCharField(models.CharField):
     def formfield(self, **kwargs):
         return super(TrimmedCharField, self).formfield(form_class=TrimmedCharFormField, **kwargs)
 
-class Premise(BlockObject):
+class Premise(NetworkObject):
     objects = PremiseManager
     name = 'premise'
     namespace = 'premises'   #this is used for URL namespaces!
