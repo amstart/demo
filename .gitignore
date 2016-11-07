@@ -62,7 +62,9 @@ node_modules/
 
 # User-uploaded media
 demoslogic/media/
+.json
 
 
 
-
+demoslogic/static/json/miserables.json
+demoslogic/static/json/network.json
