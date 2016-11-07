@@ -15,6 +15,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
 
+from .network import save_network
+
 class NetworkView(TemplateView):
     template_name = 'blockobjects/network.html'
 
@@ -43,6 +45,7 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
     def form_valid(self, form): #login_required somwhere?
         form.instance.user = self.request.user
         self.object = form.save()
+        save_network()
         return HttpResponseRedirect(reverse(self.object.name + 's:detail', args = [self.object.pk]))
 
     def get_context_data(self, **kwargs):

@@ -88,9 +88,9 @@
     pub_date: '2016-09-20T19:07:44.618Z'
     staged:
     user: 2
-    premise1: 1
-    premise2: 2
-    conclusion: 3
+    premise1: 2
+    premise2: 3
+    conclusion: 1
     aim: 2
 - model: arguments.argument
   pk: 3
@@ -98,9 +98,9 @@
     pub_date: '2016-09-20T19:07:44.618Z'
     staged:
     user: 1
-    premise1: 1
-    premise2: 2
-    conclusion: 3
+    premise1: 3
+    premise2: 1
+    conclusion: 2
     aim: 2
 - model: arguments.argumentvote
   pk: 1

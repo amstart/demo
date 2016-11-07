@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% block title %} network
+{% endblock title %}
 {% load static %}
 
 {% block content %}
@@ -15,6 +17,21 @@ var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
+    svg.append("defs").selectAll("marker")
+        .data(["suit"])
+      .enter().append("marker")
+        .attr("id", function(d) { return d; })
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 25)
+        .attr("refY", 0)
+        .attr("markerWidth", 4)
+        .attr("markerHeight", 4)
+        .attr("orient", "auto")
+      .append("path")
+        .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
+        .style("stroke", "#4679BD")
+        .style("opacity", "0.6");
+
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 var simulation = d3.forceSimulation()
@@ -22,7 +39,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("{% static 'json/miserables.json' %}", function(error, graph) {
+d3.json("{% static 'json/network.json' %}", function(error, graph) {
   if (error) throw error;
 
   var link = svg.append("g")
@@ -30,7 +47,9 @@ d3.json("{% static 'json/miserables.json' %}", function(error, graph) {
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
-      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+      .attr("stroke-width", function(d) { return Math.sqrt(d.value); })
+      .attr("class", "link")
+      .style("marker-end",  "url(#suit)"); // Modified line
 
   var node = svg.append("g")
       .attr("class", "nodes")
@@ -45,7 +64,10 @@ d3.json("{% static 'json/miserables.json' %}", function(error, graph) {
           .on("end", dragended));
 
   node.append("title")
-      .text(function(d) { return d.id; });
+      .text(function(d) { return d.object; }); //changed
+
+  node.append("url")
+      .text("www.example.com")
 
   simulation
       .nodes(graph.nodes)
