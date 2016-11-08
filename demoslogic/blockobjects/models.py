@@ -1,12 +1,9 @@
 import datetime
 
-from django.db.models.signals import post_save, post_save
-from django.dispatch import receiver
+from django.core import serializers
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
-from .network import save_network
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
@@ -15,7 +12,6 @@ class BlockObject(models.Model):
 
     class Meta:
         abstract = True
-        get_latest_by = 'pub_date'
 
     def __init__(self, *args, **kwargs):
         super(BlockObject,self).__init__(*args, **kwargs)
@@ -32,16 +28,46 @@ class BlockObject(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 class NetworkObject(BlockObject):
+    def save(self, *args, **kwargs):
+        super(NetworkObject, self).save(*args, **kwargs)
+        self.save_network()
+
+    def delete(self, *args, **kwargs):
+        super(NetworkObject, self).delete(*args, **kwargs)
+        self.save_network()
+
+    def save_data(self, data, filename = 'data'):
+        import json
+        import os
+        from config.settings.common import APPS_DIR
+        filename = os.path.join(str(APPS_DIR), 'static/json/' + filename + '.json')
+        with open(filename, 'w') as fp:
+            json.dump(data, fp)
+
+    def save_network(self):
+        from demoslogic.arguments.models import Argument
+        from demoslogic.premises.models import Premise
+        statements_qs = Premise.objects.values('id', 'object')
+        nodes = [entry for entry in statements_qs]
+        for node in nodes:
+            node['group'] = 1
+            node['id'] = 'p' + str(node['id'])
+        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
+        arguments = [entry for entry in arguments_qs]
+        links = []
+        for argument in arguments:
+            node_id = 'a' + str(argument['id'])
+            nodes.append({'id': node_id, 'group': 2, 'object': str(argument['aim'])})
+            links.append({'source': 'p' + str(argument['premise1']), 'target': node_id, 'value': 2})
+            links.append({'source': 'p' + str(argument['premise2']), 'target': node_id, 'value': 2})
+            links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']), 'value': 1})
+        savedict = {'nodes': nodes, 'links': links}
+        self.save_data(savedict, 'network')
+
     class Meta:
         abstract = True
+        get_latest_by = 'pub_date'
 
-# @receiver(post_save, sender=NetworkObject)
-# def model_post_save(sender, **kwargs):
-#     save_network()
-#
-# @receiver(post_delete, sender=NetworkObject)
-# def model_post_save(sender, **kwargs):
-#     save_network()
 
 class VoteManager(models.Manager):
     pass
