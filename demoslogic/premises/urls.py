@@ -5,6 +5,7 @@ from . import views
 app_name = 'premises'
 urlpatterns = [
     url(r'^$', views.PremisesListView.as_view(), name = 'index'),
+    url(r'^autocomplete$', views.PremiseAutocomplete.as_view(), name = 'autocomplete'),
     url(r'^unstaged/$', views.PremisesListView.as_view(), name = 'unstaged'),
     url(r'^new/$', views.NewPremiseView.as_view(), name = 'new'),
     url(r'^new/(?P<mode>[a-zA-Z]+)$', views.PremiseCreateView.as_view(), name = 'create'),
