@@ -52,12 +52,13 @@ class NetworkObject(BlockObject):
         for node in nodes:
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
+            node['name'] = node.pop('object')
         arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
         arguments = [entry for entry in arguments_qs]
         links = []
         for argument in arguments:
             node_id = 'a' + str(argument['id'])
-            nodes.append({'id': node_id, 'group': 2, 'object': str(argument['aim'])})
+            nodes.append({'id': node_id, 'group': 2, 'name': str(argument['aim'])})
             links.append({'source': 'p' + str(argument['premise1']), 'target': node_id, 'value': 2})
             links.append({'source': 'p' + str(argument['premise2']), 'target': node_id, 'value': 2})
             links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']), 'value': 1})

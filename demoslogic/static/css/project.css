@@ -1,12 +1,30 @@
 /* These styles are generated from project.scss. */
 /*.radio:first-child {display:none}*/
+
+.nodes text {
+  display: none;
+  font: 10px sans-serif;
+}
+
+.nodes:hover circle {
+  fill: #000;
+}
+
+.nodes:hover text {
+  display: inline;
+}
+
+.cell {
+  fill: none;
+  pointer-events: all;
+}
+
 .forcelinks line {
   stroke: #999;
   stroke-opacity: 0.6;
 }
 
 .nodes circle {
-  stroke: #fff;
   stroke-width: 1.5px;
 }
 
