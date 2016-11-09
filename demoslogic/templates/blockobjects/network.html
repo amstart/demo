@@ -15,8 +15,9 @@
 {% block javascript %}
 {{ block.super }}
 {{ form.media }}
+<script src="{% static 'd3/d3.js' %}"></script>
+<script src="{% static 'd3-tip/index.js' %}"></script>
 {# <script type='text/javascript' src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"> </script>#}
-<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 //https://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048   Mike Bostock: Force Dragging 3
@@ -25,11 +26,6 @@
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
-
-var voronoi = d3.voronoi()
-    .x(function(d) { return d.x; })
-    .y(function(d) { return d.y; })
-    .size([[0, 0], [width, height]]);
 
     svg.append("defs").selectAll("marker")
         .data(["suit"])
@@ -53,6 +49,7 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
+
 d3.json("{% static 'json/network.json' %}", function(error, graph) {
   if (error) throw error;
 
@@ -74,19 +71,15 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
           .on("drag", dragged)
           .on("end", dragended));
 
-  var circle = node.append("circle")
-      .attr("r", 4.5)
-      .attr("fill", function(d) { return color(d.group); });
-
   var label = node.append("text")
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });
 
-  var cell = node.append("path")
-      .attr("class", "cell");
-
-  node.append("url")
-      .text("www.example.com")
+  var circle = node.append("circle")
+      .attr("r", 4.5)
+      .attr("fill", function(d) { return color(d.group); })
+      .on('mouseover', tool_tip.show) //Added
+      .on('mouseout', tool_tip.hide); //Added
 
   simulation
       .nodes(graph.nodes)
@@ -96,9 +89,6 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
       .links(graph.links);
 
   function ticked() {
-    // cell
-        // .data(voronoi(graph.nodes))
-        // .attr("d", function(d) { return d.length ? "M" + d.join("L") : null; });
     link
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
@@ -114,7 +104,6 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
         .attr("x", function(d) { return d.x + 8; })
         .attr("y", function(d) { return d.y; });
   }
-
   // var optArray = [];
   // for (var i = 0; i < graph.nodes.length - 1; i++) {
   //     optArray.push(graph.nodes[i].name);
@@ -128,6 +117,12 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
   // });
 
 });
+
+var tool_tip = d3.tip()
+  .attr("class", "d3-tip")
+  .offset([-8, 0])
+  .html(function(d) { return "Radius: " + d; });
+svg.call(tool_tip);
 
 function searchNode() {
     //find the node

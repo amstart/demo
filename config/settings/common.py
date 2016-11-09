@@ -19,6 +19,7 @@ APPS_DIR = ROOT_DIR.path('demoslogic')
 
 env = environ.Env()
 
+BOWER_COMPONENTS_ROOT = 'C:\\Users\\Jochen\\Documents\\demoslogic'
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
@@ -43,6 +44,7 @@ THIRD_PARTY_APPS = (
     'allauth',  # registration
     'allauth.account',  # registration
     'allauth.socialaccount',  # registration
+    'djangobower',
 )
 
 # Apps specific for this project go here.
@@ -57,6 +59,13 @@ LOCAL_APPS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'd3',
+    'tether',
+    'd3-tip'
+)
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -190,6 +199,7 @@ STATICFILES_DIRS = (
 
 # See: https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = (
+    'djangobower.finders.BowerFinder',
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
