@@ -1,7 +1,10 @@
+from dal import autocomplete
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 from django import forms
+
+from demoslogic.premises.models import Premise
 
 class VoteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -16,3 +19,13 @@ class VoteForm(forms.ModelForm):
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Submit'))
+
+class SearchPremiseForm(forms.Form):
+    premise_search = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+                                            widget=autocomplete.ModelSelect2(
+                                            url = 'premises:autocomplete',))
+                                            # attrs = {'data-minimum-input-length': 3}))
+    # search = forms.CharField()
+    # class Meta:
+    #     widgets = {
+    #         'search': autocomplete.ModelSelect2(url = reverse_lazy('premises:autocomplete'))}

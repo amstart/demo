@@ -2,17 +2,24 @@
 {% block title %} network
 {% endblock title %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-<svg width="960" height="600"></svg>
+<form action="javascript:searchNode();">
+  {{ form|crispy }}
+  <button class="btn btn-primary">Show</button>
+ </form>
+<svg width="600" height="350"></svg>
 {% endblock content %}
 
 {% block javascript %}
 {{ block.super }}
-
+{{ form.media }}
+{# <script type='text/javascript' src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js"> </script>#}
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
+//https://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048   Mike Bostock: Force Dragging 3
 //http://www.coppelia.io/2014/07/an-a-to-z-of-extra-features-for-the-d3-force-layout/
 
 var svg = d3.select("svg"),
@@ -107,7 +114,39 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
         .attr("x", function(d) { return d.x + 8; })
         .attr("y", function(d) { return d.y; });
   }
+
+  // var optArray = [];
+  // for (var i = 0; i < graph.nodes.length - 1; i++) {
+  //     optArray.push(graph.nodes[i].name);
+  // }
+  // optArray = optArray.sort();
+  //
+  // $(function () {
+  //     $("#search").autocomplete({
+  //         source: optArray
+  //     });
+  // });
+
 });
+
+function searchNode() {
+    //find the node
+    var selectedVal = document.querySelectorAll('.select2-id_premise_search-container:nth-child(2)').nodeValue;
+    var node = svg.selectAll(".node");
+    if (selectedVal == "none") {
+        node.style("stroke", "white").style("stroke-width", "1");
+    } else {
+        var selected = node.filter(function (d, i) {
+            return d.name != selectedVal;
+        });
+        selected.style("opacity", "0");
+        var link = svg.selectAll(".link")
+        link.style("opacity", "0");
+        d3.selectAll(".node, .link").transition()
+            .duration(5000)
+            .style("opacity", 1);
+    }
+}
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
