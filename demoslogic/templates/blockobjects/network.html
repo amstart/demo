@@ -5,10 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<form action="javascript:searchNode();">
-  {{ form|crispy }}
-  <button class="btn btn-primary">Show</button>
- </form>
+{% crispy form form.helper %}
 <svg width="600" height="350"></svg>
 {% endblock content %}
 
@@ -159,24 +156,24 @@ var tool_tip = d3.tip()
   .html(function(d) { return d.name; });
 svg.call(tool_tip);
 
-function searchNode() {
-    //find the node
-    var selectedVal = document.querySelectorAll('.select2-id_premise_search-container:nth-child(2)').nodeValue;
-    var node = svg.selectAll(".node");
-    if (selectedVal == "none") {
-        node.style("stroke", "white").style("stroke-width", "1");
-    } else {
-        var selected = node.filter(function (d, i) {
-            return d.name != selectedVal;
-        });
-        selected.style("opacity", "0");
-        var link = svg.selectAll(".link")
-        link.style("opacity", "0");
-        d3.selectAll(".node, .link").transition()
-            .duration(5000)
-            .style("opacity", 1);
-    }
-}
+$(document).on('keydown', ".select2-search__field", function searchNode(event) {
+      //find the node
+      var selectedVal = '1';
+      var node = svg.selectAll(".node");
+      if (selectedVal == "none") {
+          node.style("stroke", "white").style("stroke-width", "1");
+      } else {
+          var selected = node.filter(function (d, i) {
+              return d.name != selectedVal;
+          });
+          selected.style("opacity", "0");
+          var link = svg.selectAll(".link")
+          link.style("opacity", "0");
+          d3.selectAll(".node, .link").transition()
+              .duration(5000)
+              .style("opacity", 1);
+      }
+  });
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();

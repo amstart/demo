@@ -25,6 +25,15 @@ class SearchPremiseForm(forms.Form):
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:autocomplete',))
                                             # attrs = {'data-minimum-input-length': 3}))
+
+    def __init__(self, *args, **kwargs):
+        super(SearchPremiseForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-inline'
+        self.helper.form_id = 'id_search_premise'
+        self.helper.form_class = 'blueForms'
+        self.helper.form_action = 'javascript:searchNode();'
+        self.helper.add_input(Submit('submit', 'search'))
     # search = forms.CharField()
     # class Meta:
     #     widgets = {
