@@ -47,21 +47,27 @@ class NetworkObject(BlockObject):
     def save_network(self):
         from demoslogic.arguments.models import Argument
         from demoslogic.premises.models import Premise
+        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
+        arguments = [entry for entry in arguments_qs]
         statements_qs = Premise.objects.values('id', 'object')
         nodes = [entry for entry in statements_qs]
         for node in nodes:
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
             node['name'] = node.pop('object')
-        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
-        arguments = [entry for entry in arguments_qs]
+            # node['related_conclusions'] = 
+            # node['related_premises'] =
+            # node['related_argument'] =
         links = []
         for argument in arguments:
             node_id = 'a' + str(argument['id'])
             nodes.append({'id': node_id, 'group': 2, 'name': str(argument['aim'])})
-            links.append({'source': 'p' + str(argument['premise1']), 'target': node_id, 'value': 2})
-            links.append({'source': 'p' + str(argument['premise2']), 'target': node_id, 'value': 2})
-            links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']), 'value': 1})
+            links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
+                          'value': 2, 'aim': 0})
+            links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,
+                          'value': 2, 'aim': 0})
+            links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']),
+                          'value': 1, 'aim': argument['aim']})
         savedict = {'nodes': nodes, 'links': links}
         self.save_data(savedict, 'network')
 

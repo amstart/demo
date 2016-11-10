@@ -44,14 +44,15 @@
   display: inline;
 }
 
-.forcelinks line {
-  stroke: #999;
+line[class|="forcelink"] {
   stroke-opacity: 0.6;
 }
 
-.nodes circle {
-  stroke-width: 1.5px;
-}
+.forcelink-0 {  stroke: #999;}
+.forcelink-1 {  stroke: darkgreen;}
+.forcelink-2 {  stroke: darkred;}
+.forcelink-3 {  stroke: darkorange;}
+.forcelink-4 {  stroke: black;}
 
 .object_body, .chart{
     margin-top: 10px;
