@@ -1,0 +1,14 @@
+{% extends "premises/base.html" %}
+{% block title %} find statement
+{% endblock title %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% crispy form form.helper %}
+{% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+{{ form.media }}
+{% endblock javascript %}

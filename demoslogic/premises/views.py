@@ -1,15 +1,28 @@
 from dal import autocomplete
 from switch import Switch
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 
 from demoslogic.blockobjects import views
 
 from .models import Premise
 from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
-from .forms import CategorizationVoteForm
+from .forms import CategorizationVoteForm, SearchPremiseForm
+
+class PremiseSearchView(FormView):
+    template_name = 'premises/search.html'
+    form_class = SearchPremiseForm
+    success_url = '/'
+
+    def get(self, request, *args, **kwargs):
+        premise_search = request.GET.get('premise_search')
+        if premise_search:
+            return HttpResponseRedirect(reverse('premises:detail', args = [premise_search]))
+        else:
+            return super(PremiseSearchView, self).get(request, *args, **kwargs)
 
 class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):

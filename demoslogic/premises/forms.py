@@ -1,8 +1,15 @@
+from dal import autocomplete
 from django import forms
 
-from demoslogic.blockobjects.forms import VoteForm
+from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
 from .models import Premise, CategorizationVote
+
+class SearchPremiseForm(SearchForm):
+    premise_search = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+                                            widget=autocomplete.ModelSelect2(
+                                            url = 'premises:autocomplete',
+                                            attrs = {'data-minimum-input-length': 0}))
 
 class CategorizationVoteForm(VoteForm):
     class Meta:

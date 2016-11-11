@@ -2,16 +2,13 @@
 {% block title %} network
 {% endblock title %}
 {% load static %}
-{% load crispy_forms_tags %}
 
 {% block content %}
-{% crispy form form.helper %}
 <svg width="600" height="350"></svg>
 {% endblock content %}
 
 {% block javascript %}
 {{ block.super }}
-{{ form.media }}
 <script src="{% static 'd3/d3.js' %}"></script>
 <script src="{% static 'd3-tip/index.js' %}"></script>
 <script>

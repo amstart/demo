@@ -16,12 +16,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from demoslogic.users.models import User
 from demoslogic.premises.models import Premise
 
-from .forms import SearchPremiseForm
-
-class NetworkView(FormView):
+class NetworkView(TemplateView):
     template_name = 'blockobjects/network.html'
-    form_class = SearchPremiseForm
-    success_url = '/'
 
     # def get_context_data(self, **kwargs):
     #     context = super(NetworkView, self).get_context_data(**kwargs)

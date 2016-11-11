@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^$', views.PremisesListView.as_view(), name = 'index'),
     url(r'^autocomplete$', views.PremiseAutocomplete.as_view(), name = 'autocomplete'),
     url(r'^unstaged/$', views.PremisesListView.as_view(), name = 'unstaged'),
+    url(r'^search/$', views.PremiseSearchView.as_view(), name = 'search'),
     url(r'^new/$', views.NewPremiseView.as_view(), name = 'new'),
     url(r'^new/(?P<mode>[a-zA-Z]+)$', views.PremiseCreateView.as_view(), name = 'create'),
     url(r'^(?P<pk>[0-9]+)/$', views.PremiseDetailView.as_view(), name = 'detail'),
