@@ -4,8 +4,6 @@
 {% block title %}User: {{ object.username }}{% endblock %}
 
 {% block content %}
-<div class="container">
-
   <div class="row">
     <div class="col-sm-12">
 
@@ -31,9 +29,7 @@
   <br>
   <h4>Work done</h4>
   {% if request.user == object %}You have created {% else %}This user has created {% endif %}
-  {{ object.premise_set.count }} premise{{ object.premise_set.count|pluralize }}  and
+  {{ object.premise_set.count }} statement{{ object.premise_set.count|pluralize }}  and
   {{ object.argument_set.count }} argument{{ object.argument_set.count|pluralize }} so far.
   {# {% include 'blockobjects/object_list.html' with object_list=object.premise_set.filter %}#}
-
-</div>
 {% endblock content %}

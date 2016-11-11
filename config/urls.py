@@ -29,7 +29,7 @@ urlpatterns = [
     ),
     # Your stuff: custom urls includes go here
     url(r'^network/', NetworkView.as_view(), name='network'),
-    url(r'^premises/', include('demoslogic.premises.urls')),
+    url(r'^statements/', include('demoslogic.premises.urls')),
     url(r'^arguments/', include('demoslogic.arguments.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

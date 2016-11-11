@@ -1,5 +1,8 @@
+from unittest import skip
+
 from .base import FunctionalTest
 
+@skip("I see this everytime I look at something")
 class LayoutTest(FunctionalTest):
 
     def test_layout_and_styling(self):

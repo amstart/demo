@@ -1,5 +1,5 @@
-{% extends "premises/base.html" %}
-{% block inner %}
+{% extends "base.html" %}
+{% block content %}
 <h1>Create a new premise!</h1>
 {% if request.user.is_anonymous %}
 Only signed-in users can create premises!
@@ -12,4 +12,4 @@ Create a new premise:
   <li><a href="{% url 'premises:create' "WithObject"%}">With object</a></li>
   <li><a href="{% url 'premises:create' "WithComplementedObject"%}">With complemented object</a></li>
 </ul>
-{% endblock inner %}
+{% endblock content %}

@@ -1,16 +1,17 @@
-{% extends object.namespace|add:"/base.html" %}
+{% extends "base.html" %}
 
 {% load blockobjects_tags %}
 {% load static %}
 
-{% block head_title %}Delete {{ object_name_upper }}{% endblock %}
+{% block title %}Delete {{ object.name_upper }}{% endblock %}
 
-{% block inner %}
-{% if request.user == object.user and not object.staged %}
+{% block content %}
+{% if request.user == object.user and not object.has_vote %}
   <form action="" method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete {{ object|print_link }}?</p>
-      <input type="submit" class="btn btn-primary" value="Confirm" />
+    <div>Nobody has voted on your {{ object.name_lower }} yet, thus you can delete it right away.<br>
+      Are you sure you want to delete {{ object|print_link }}?</div>
+      <input id='id_confirm_delete' type="submit" class="btn btn-primary" value="Delete" />
   </form>
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% endif %}

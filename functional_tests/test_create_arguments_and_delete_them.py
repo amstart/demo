@@ -10,7 +10,7 @@ class UserTest(FunctionalTest):
         # print('This is what the test sees:' + str(Premise.objects.all()))
         self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Arguments').click()
-        self.browser.find_element_by_class_name('link_new_argument').click()
+        self.browser.find_element_by_class_name('new_object').click()
         self.browser.find_element_by_link_text('Create one!').click()
         self.browser.find_element_by_css_selector('#id_premise1 + span').click()
         self.browser.find_element_by_class_name('select2-search__field').send_keys('This premise is from Alfons')

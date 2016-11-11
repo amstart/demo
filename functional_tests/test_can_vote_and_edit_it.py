@@ -5,7 +5,7 @@ class UserCanVoteTest(FunctionalTest):
 
     def test_can_vote(self):
         self.create_pre_authenticated_session("Alfons")
-        self.browser.find_element_by_link_text('Premises').click()
+        self.browser.find_element_by_link_text('Statements').click()
         self.browser.find_element_by_link_text('This premise is from Gertrud').click()
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Gertrud', page_text)

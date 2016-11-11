@@ -29,12 +29,12 @@ class ObjectListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ObjectListView, self).get_context_data(**kwargs)
-        context['model_name'] = self.model.name
+        context['model_name'] = self.model.name_upper
         context['model_namespace'] = self.model.namespace
         if self.request.path.find("unstaged")  == -1:
-            context['heading'] = self.model.__name__ + "s"
+            context['heading'] = self.model.name_upper + "s"
         else:
-            context['heading'] = "Unstaged " + self.model.__name__ + "s"
+            context['heading'] = "Unstaged " + self.model.name_upper + "s"
         return context
 
     def get_queryset(self):
@@ -48,23 +48,17 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
     def form_valid(self, form): #login_required somwhere?
         form.instance.user = self.request.user
         self.object = form.save()
-        return HttpResponseRedirect(reverse(self.object.name + 's:detail', args = [self.object.pk]))
+        return HttpResponseRedirect(reverse(self.object.namespace + ':detail', args = [self.object.pk]))
 
     def get_context_data(self, **kwargs):
         context = super(CreateObjectView, self).get_context_data(**kwargs)
         context['model_namespace'] = self.model.namespace
-        context['object_name_upper'] = self.model.__name__
-        context['object_name_lower'] = self.model.__name__.lower()
+        context['object_name_upper'] = self.model.name_upper
+        context['object_name_lower'] = self.model.name_lower
         return context
 
 class DeleteObjectView(LoginRequiredMixin, DeleteView):
     template_name = 'blockobjects/delete_object.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(DeleteObjectView, self).get_context_data(**kwargs)
-        context['object_name_upper'] = self.model.__name__
-        context['object_name_lower'] = self.model.__name__.lower()
-        return context
 
 class DetailWithVoteView(DetailView):
     template_name = 'blockobjects/detail.html'
@@ -158,7 +152,8 @@ def show_server_error(request):
      """
     exc_type, exc_value, exc_traceback = sys.exc_info()
     error = ExceptionReporter(request, exc_type, exc_value, exc_traceback)
-    return http.HttpResponseServerError(error.get_traceback_html())
+    return http.HttpResponse('errpr')
+    # return http.HttpResponseServerError(error.get_traceback_html())
 
 def LoginSeleniumView(request):
     users = User.objects.all()

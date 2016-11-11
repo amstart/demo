@@ -5,7 +5,8 @@ from demoslogic.premises.models import Premise
 
 
 class Argument(NetworkObject):
-    name = 'argument'
+    name_lower = 'argument'
+    name_upper = 'Argument'
     namespace = 'arguments'   #this is used for URL namespaces!
     premise1 = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='premise1')
     premise2 = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='premise2')

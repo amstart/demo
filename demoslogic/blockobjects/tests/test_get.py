@@ -13,15 +13,15 @@ class CanDeleteObjectTest(BlockObjectsTests):
     def assertCanDelete(self):
         response = self.client.get(self.detail_url)
         self.assertContains(response, "id='id_delete'")
-        response = self.client.get(self.delete_url)
-        self.assertContains(response, "<form")
+        response = self.client.get(self.delete_url, follow=True)
+        self.assertContains(response, "id='id_confirm_delete'")
 
     def assertCannotDelete(self):
         response = self.client.get(self.detail_url)
         self.assertNotContains(response, "id='id_delete'")
-        response = self.client.get(self.delete_url)
+        response = self.client.get(self.delete_url, follow=True)
         if response.status_code == 200:
-            self.assertNotContains(response, "<form")
+            self.assertNotContains(response, "id='id_confirm_delete")
 
     def test_delete_button_shows_up(self):
         self.login()

@@ -14,4 +14,4 @@ class NetworkGraphTest(FunctionalTest):
         self.browser.find_element_by_tag_name('circle')
         page_text = self.browser.find_element_by_tag_name('body').get_attribute('innerHTML').encode('unicode_escape')
         self.assertEqual(page_text.count(b'<circle'), argument_count + premise_count)
-        self.assertEqual(page_text.count(b'class="link'), argument_count * 3)
+        self.assertEqual(page_text.count(b'class="forcelink'), argument_count * 3)

@@ -31,13 +31,13 @@ class BlockObjectsTests(TestCase):
     def URL_login_redirect(self):
         return reverse('account_login') + '?next='
     def URL_index(self):
-        return reverse(MODEL.name + 's:index')
+        return reverse(MODEL.namespace + ':index')
     def URL_create(self, args = CREATEARG):
-        return reverse(MODEL.name + 's:create', args = args)
+        return reverse(MODEL.namespace + ':create', args = args)
     def URL_detail(self, pk = 1):
-        return reverse(MODEL.name + 's:detail', args = [pk])
+        return reverse(MODEL.namespace + ':detail', args = [pk])
     def URL_delete(self, pk = 1):
-        return reverse(MODEL.name + 's:delete', args = [pk])
+        return reverse(MODEL.namespace + ':delete', args = [pk])
 
     def get_user(self, pk):
         return User.objects.get(pk = pk)

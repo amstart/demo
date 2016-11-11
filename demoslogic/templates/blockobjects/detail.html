@@ -1,12 +1,12 @@
-{% extends object.namespace|add:"/base.html" %}
+{% extends "base.html" %}
 
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
 {% load blockobjects_tags %}
 {% debug %}
-{% block head_title %}{{ object }}{% endblock %}
-{% block inner %}
+{% block title %}{{ object }}{% endblock %}
+{% block content %}
   <div class="row">
     <h1> {{ object|print_head }} </h1>
   </div>
@@ -17,7 +17,7 @@
   {% endif %}
   <br>
   <div class="object_body">
-    {% if object.name == 'premise' %}
+    {% if object.namespace == 'premises' %}
       {% include "premises/_details.html" %}
     {% else %}
       {% include "arguments/_details.html" %}
@@ -33,7 +33,7 @@
     {% crispy voteform voteform.helper %}
   {% endif %}
   <div class="object_related">
-    {% if object.name == 'premise' %}
+    {% if object.namespace == 'premises' %}
       <h4> Arguments </h4>
       {% include "premises/_related.html" %}
     {% endif %}
@@ -49,7 +49,7 @@
     {% if request.user == object.user and not object.staged %}
       <div class="col-md-2">
         <a href="{% url object.namespace|add:':delete' object.id %}" class="btn btn-secondary" id='id_delete'>
-          delete {{ object.name }}
+          request to delete {{ object.name_lower }}
         </a>
       </div>
     {% endif %}

@@ -1,13 +1,13 @@
-{% extends object.namespace|add:"/base.html" %}
+{% extends "base.html" %}
 
 {% load crispy_forms_tags %}
 {% load static %}
 {% load i18n %}
 {% load blockobjects_tags %}
 
-{% block head_title %}Update Vote{% endblock %}
+{% block title %}Update Vote{% endblock %}
 
-{% block inner %}
+{% block content %}
   <h1> {{ object|print_head }} </h1>
   <div> Update your vote here: </div>
   {% crispy voteform voteform.helper %}

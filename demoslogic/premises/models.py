@@ -25,7 +25,8 @@ class TrimmedCharField(models.CharField):
 
 class Premise(NetworkObject):
     objects = PremiseManager
-    name = 'premise'
+    name_lower = 'statement'
+    name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
     subject = TrimmedCharField(default = '', max_length = 200)
     predicate = TrimmedCharField(default = '', max_length = 200)
@@ -40,6 +41,7 @@ class Premise(NetworkObject):
             self.core_list.append({"textclass":"object", "value":self.object})
         if len(self.complement ) > 0:
             self.core_list.append({"textclass":"complement", "value":self.complement})
+        self.vote_model = CategorizationVote
 
     def __str__(self):
         print_raw = self.subject + " " + self.predicate

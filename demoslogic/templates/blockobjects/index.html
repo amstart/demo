@@ -1,17 +1,17 @@
-{% extends model_namespace|add:"/base.html" %}
+{% extends "base.html" %}
 
-{% block head_title %}{{ heading }}{% endblock %}
+{% block title %}{{ heading }}{% endblock %}
 
-{% block inner %}
+{% block content %}
 
 <h2>{{ heading }}</h2>
 
 {% if object_list %}
-  <a class="link_new_{{ model_name }}"
+  <a class="new_object"
   href="{% url model_namespace|add:':new' %}">Create another {{ model_name }}!</a>
   {% include 'blockobjects/_object_list.html' with sidebar=True sidebar_width=4 %}
   {% else %}
-    <p> <a class="link_new_{{ model_name }}"
+    <p> <a class="new_object"
       href="{% url model_namespace|add:':new' %}">Create the first {{ model_name }}!</a></p>
 {% endif %}
 

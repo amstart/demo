@@ -1,11 +1,11 @@
-{% extends model_namespace|add:"/base.html" %}
+{% extends "base.html" %}
 
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% block head_title %} New {{ object_name_upper }} {% endblock %}
+{% block title %} New {{ object_name_upper }} {% endblock %}
 
-{% block inner %}
+{% block content %}
 <h1>New {{ object_name_upper }}</h1>
 
 <form class="new_{{ object_name_lower }}"
