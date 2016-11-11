@@ -13,7 +13,6 @@
     is_active: true
     date_joined: '2016-10-20T19:01:14.334Z'
     name: ''
-    staged:
     groups: []
     user_permissions: []
 - model: users.user
@@ -30,7 +29,6 @@
     is_active: true
     date_joined: '2016-10-20T19:03:27.944Z'
     name: ''
-    staged:
     groups: []
     user_permissions: []
 - model: premises.premise
@@ -67,7 +65,6 @@
   pk: 1
   fields:
     pub_date: '2016-10-27T20:07:08.092Z'
-    staged: '2016-10-29T19:38:30.210Z'
     user: 1
     last_voted: '2016-10-27T20:07:13.400Z'
     object: 3
@@ -81,16 +78,16 @@
     premise1: 1
     premise2: 2
     conclusion: 3
-    aim: 2
+    aim: 1
 - model: arguments.argument
   pk: 2
   fields:
     pub_date: '2016-09-20T19:07:44.618Z'
     staged:
     user: 2
-    premise1: 2
-    premise2: 3
-    conclusion: 1
+    premise1: 1
+    premise2: 2
+    conclusion: 3
     aim: 2
 - model: arguments.argument
   pk: 3
@@ -98,15 +95,14 @@
     pub_date: '2016-09-20T19:07:44.618Z'
     staged:
     user: 1
-    premise1: 3
-    premise2: 1
-    conclusion: 2
-    aim: 2
+    premise1: 1
+    premise2: 2
+    conclusion: 3
+    aim: 3
 - model: arguments.argumentvote
   pk: 1
   fields:
     pub_date: '2016-10-31T19:53:47.485Z'
-    staged:
     user: 1
     last_voted: '2016-10-31T19:53:47.485Z'
     object: 3

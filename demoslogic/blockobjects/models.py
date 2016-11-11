@@ -7,17 +7,10 @@ from django.utils import timezone
 
 class BlockObject(models.Model):
     pub_date = models.DateTimeField('date published', default = timezone.now)
-    staged = models.DateTimeField(null = True, blank = True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     class Meta:
         abstract = True
-
-    def __init__(self, *args, **kwargs):
-        super(BlockObject,self).__init__(*args, **kwargs)
-        if self.staged is None and not self.was_published_recently():
-            self.staged = timezone.now()
-            self.save()
 
     def was_published_recently(self):
         now = timezone.now()
@@ -28,6 +21,14 @@ class BlockObject(models.Model):
     was_published_recently.short_description = 'Published recently?'
 
 class NetworkObject(BlockObject):
+    staged = models.DateTimeField(null = True, blank = True)
+
+    def __init__(self, *args, **kwargs):
+        super(NetworkObject,self).__init__(*args, **kwargs)
+        if self.staged is None and not self.was_published_recently():
+            self.staged = timezone.now()
+            self.save()
+
     def save(self, *args, **kwargs):
         super(NetworkObject, self).save(*args, **kwargs)
         self.save_network()
@@ -55,7 +56,7 @@ class NetworkObject(BlockObject):
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
             node['name'] = node.pop('object')
-            # node['related_conclusions'] = 
+            # node['related_conclusions'] =
             # node['related_premises'] =
             # node['related_argument'] =
         links = []

@@ -9,8 +9,8 @@
 {% if request.user == object.user and not object.has_vote %}
   <form action="" method="post">
     {% csrf_token %}
-    <div>Nobody has voted on your {{ object.name_lower }} yet, thus you can delete it right away.<br>
-      Are you sure you want to delete {{ object|print_link }}?</div>
+    <div class="row">Nobody has voted on your {{ object.name_lower }} yet, thus you can delete it right away.</div>
+      <div class="row">Are you sure you want to delete {{ object|print_link }}?</div>
       <input id='id_confirm_delete' type="submit" class="btn btn-primary" value="Delete" />
   </form>
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
