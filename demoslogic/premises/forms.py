@@ -34,8 +34,8 @@ class CategorizationVoteForm(VoteForm):
 class PremiseCreateForm(forms.ModelForm):
     class Meta:
         model = Premise
-        fields = ['sentence', 'key_subject', 'key_predicate']
+        fields = ['premise_type', 'key_subject', 'key_predicate']
         widgets = {
             'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create'),
-            'key_predicate': autocomplete.ModelSelect2(url = 'premises:predicate_autocomplete_create'),
+            'key_predicate': autocomplete.ModelSelect2(url = 'premises:predicates_autocomplete_create'),
         }
