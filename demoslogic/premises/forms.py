@@ -3,12 +3,23 @@ from django import forms
 
 from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
-from .models import Premise, CategorizationVote
+from .models import Premise, Noun, Predicate, CategorizationVote
 
 class SearchPremiseForm(SearchForm):
-    premise_search = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:autocomplete',
+                                            attrs = {'data-minimum-input-length': 0}))
+
+class SearchNounForm(SearchForm):
+    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+                                            widget=autocomplete.ModelSelect2(
+                                            url = 'premises:nouns_autocomplete',
+                                            attrs = {'data-minimum-input-length': 0}))
+class SearchPredicateForm(SearchForm):
+    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+                                            widget=autocomplete.ModelSelect2(
+                                            url = 'premises:predicates_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
 
 class CategorizationVoteForm(VoteForm):
@@ -21,11 +32,10 @@ class CategorizationVoteForm(VoteForm):
 
 
 class PremiseCreateForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(PremiseCreateForm, self).__init__(*args, **kwargs)
-        for key in self.fields:
-            self.fields[key].required = True
-
     class Meta:
         model = Premise
-        fields = ['subject', 'predicate']
+        fields = ['sentence', 'key_subject', 'key_predicate']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create'),
+            'key_predicate': autocomplete.ModelSelect2(url = 'premises:predicate_autocomplete_create'),
+        }

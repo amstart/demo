@@ -18,39 +18,39 @@ class TrimmedCharFormField(forms.CharField):
 
 
 class TrimmedCharField(models.CharField):
-    validators=[RegexValidator(regex='^[a-zA-Z ]+$', message='Only letters and spaces allowed.')]
+    validators = [RegexValidator(regex='^[a-zA-Z ]+$', message = 'Only letters and spaces allowed.')]
 
     def formfield(self, **kwargs):
-        return super(TrimmedCharField, self).formfield(form_class=TrimmedCharFormField, **kwargs)
+        return super(TrimmedCharField, self).formfield(form_class = TrimmedCharFormField, **kwargs)
+
+class Noun(models.Model):
+    name = TrimmedCharField(default = '', max_length = 50)
+    def __str__(self):
+        return self.name
+
+class Predicate(models.Model):
+    name = TrimmedCharField(default = '', max_length = 50)
+    def __str__(self):
+        return self.name
+
+class Complement(models.Model):
+    name = TrimmedCharField(default = '', max_length = 100)
+    def __str__(self):
+        return self.name
 
 class Premise(NetworkObject):
     objects = PremiseManager
     name_lower = 'statement'
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
-    subject = TrimmedCharField(default = '', max_length = 200)
-    predicate = TrimmedCharField(default = '', max_length = 200)
-    object = TrimmedCharField(default = '', max_length = 200, blank = True)
-    complement = TrimmedCharField(default = '', max_length = 200, blank = True)
-
-    def __init__(self, *args, **kwargs):
-        super(Premise,self).__init__(*args, **kwargs)
-        self.core_list = [{"textclass":"subject", "value":self.subject},
-                          {"textclass":"predicate", "value":self.predicate}]
-        if len(self.object) > 0:
-            self.core_list.append({"textclass":"object", "value":self.object})
-        if len(self.complement ) > 0:
-            self.core_list.append({"textclass":"complement", "value":self.complement})
-        self.vote_model = CategorizationVote
+    sentence = TrimmedCharField(default = '', max_length = 250)
+    key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_subject')
+    key_predicate = models.ForeignKey(Predicate, on_delete = models.DO_NOTHING)
+    key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
+    key_complement = models.ForeignKey(Complement, on_delete = models.DO_NOTHING, null = True)
 
     def __str__(self):
-        print_raw = self.subject + " " + self.predicate
-        if len(self.object) > 0:
-            print_raw = print_raw + " " + self.object
-        if len(self.complement ) > 0:
-            print_raw = print_raw + " " + self.complement
-        return print_raw
-
+        return self.sentence
 
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)

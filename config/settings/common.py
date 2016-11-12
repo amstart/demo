@@ -52,8 +52,8 @@ LOCAL_APPS = (
     # custom users app
     'demoslogic.users.apps.UsersConfig',
     'demoslogic',
-    'demoslogic.premises',
     'demoslogic.blockobjects',
+    'demoslogic.premises',
     'demoslogic.arguments',
 )
 

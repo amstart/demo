@@ -21,12 +21,7 @@ register.filter('jsonify', jsonify)
 jsonify.is_safe = True
 
 def print_premise(object):
-    html_text = ""
-    for element in object.core_list:
-        html_text = html_text + \
-                            "<span class=\"" + \
-                            element["textclass"] + "\">" + \
-                            conditional_escape(element["value"]) + "</span> "
+    html_text = object.sentence
     return html_text
 
 def print_argument(object):

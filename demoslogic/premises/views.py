@@ -8,20 +8,32 @@ from django.http import HttpResponseRedirect
 
 from demoslogic.blockobjects import views
 
-from .models import Premise
-from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
+from .models import Premise, Predicate, Noun, Complement
+from . import forms
+# from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
 
 class PremiseSearchView(FormView):
     template_name = 'premises/search.html'
-    form_class = SearchPremiseForm
+    form_class = forms.SearchPremiseForm
     success_url = '/'
+    suffix = 'detail'
 
     def get(self, request, *args, **kwargs):
-        premise_search = request.GET.get('premise_search')
-        if premise_search:
-            return HttpResponseRedirect(reverse('premises:detail', args = [premise_search]))
+        search_id = request.GET.get('search_id')
+        if search_id:
+            return HttpResponseRedirect(reverse('premises:' + self.suffix, args = [search_id]))
         else:
             return super(PremiseSearchView, self).get(request, *args, **kwargs)
+
+class NounSearchView(FormView):
+    template_name = 'premises/search.html'
+    form_class = forms.SearchNounForm
+    suffix = 'nouns'
+
+class PredicateSearchView(FormView):
+    template_name = 'premises/search.html'
+    form_class = forms.SearchPredicateForm
+    suffix = 'predicates'
 
 class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -38,18 +50,30 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
         if conclusion:
             qs = qs.exclude(id = conclusion)
         if self.q:
-            # premise2 = self.forwarded.get('premise2', None)
-            # conclusion = self.forwarded.get('conclusion', None)
-            # qs = Premise.objects.raw("SELECT * FROM Premise WHERE %s == CONCAT(premise1, premise2)", [self.q])
-            qs = qs.filter(Q(subject__contains = self.q)
-                           | Q(predicate__contains = self.q)
-                           | Q(object__contains = self.q)
-                           | Q(complement__contains = self.q))
+            qs = qs.filter(sentence__contains = self.q)
+        return qs
+
+class NounAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # if not self.request.user.is_authenticated():
+        #     return Premise.objects.none()
+        qs = Noun.objects.all()
+        if self.q:
+            qs = qs.filter(name__contains = self.q)
+        return qs
+
+class PredicateAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # if not self.request.user.is_authenticated():
+        #     return Premise.objects.none()
+        qs = Predicate.objects.all()
+        if self.q:
+            qs = qs.filter(name__contains = self.q)
         return qs
 
 class PremiseDetailView(views.DetailWithVoteView):
     model = Premise
-    voteform = CategorizationVoteForm()
+    voteform = forms.CategorizationVoteForm()
 
     def get_context_data(self, **kwargs):
         context = super(PremiseDetailView, self).get_context_data(**kwargs)
@@ -59,14 +83,14 @@ class PremiseDetailView(views.DetailWithVoteView):
 
 class PremiseUpdateView(views.UpdateVoteView):
     model = Premise
-    voteform = CategorizationVoteForm()
+    voteform = forms.CategorizationVoteForm()
 
 class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Premise
     def get_form_class(self):
-        return PremiseCreateForm
+        return forms.PremiseCreateForm
 
 class PremisesListView(views.ObjectListView):
     model = Premise

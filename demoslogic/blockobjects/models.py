@@ -50,12 +50,12 @@ class NetworkObject(BlockObject):
         from demoslogic.premises.models import Premise
         arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
         arguments = [entry for entry in arguments_qs]
-        statements_qs = Premise.objects.values('id', 'object')
+        statements_qs = Premise.objects.values('id', 'sentence')
         nodes = [entry for entry in statements_qs]
         for node in nodes:
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
-            node['name'] = node.pop('object')
+            node['name'] = node.pop('sentence')
             # node['related_conclusions'] =
             # node['related_premises'] =
             # node['related_argument'] =
