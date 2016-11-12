@@ -30,6 +30,7 @@ class CreateObjectTest(BlockObjectsTests):
 class FailCreateObjectTest(BlockObjectsTests):
     def test_redirect_to_form_again(self):
         self.login()
-        response = self.client.post(self.URL_create(), self.no_post_params[0])
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'blockobjects/create_object.html')
+        for no_post_param in self.no_post_params:
+            response = self.client.post(self.URL_create(), no_post_param)
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, 'blockobjects/create_object.html')

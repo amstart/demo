@@ -1,6 +1,7 @@
 from dal import autocomplete
 
 from django import forms
+from django.db.models import Q
 
 from demoslogic.blockobjects.forms import VoteForm
 from demoslogic.premises.models import Premise
@@ -34,7 +35,14 @@ class ArgumentInputForm(forms.ModelForm):
         premise1 = cleaned_data.get("premise1")
         premise2 = cleaned_data.get("premise2")
         conclusion = cleaned_data.get("conclusion")
+        aim = cleaned_data.get("aim")
         if premise1 and premise2 and conclusion:
             # Only do something if all fields are valid so far.
             if premise1 == premise2 or premise1 == conclusion or premise2 == conclusion:
                 raise forms.ValidationError("A premise can only be used once per argument.")
+        arguments = Argument.objects.filter(conclusion = conclusion) \
+                    .filter(Q(premise1 = premise1) | Q(premise1 = premise2)) \
+                    .filter(Q(premise2 = premise1) | Q(premise2 = premise2)) \
+                    .filter(aim = aim)
+        if arguments.count():
+            raise forms.ValidationError("This argument already exists.")

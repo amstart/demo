@@ -15,9 +15,11 @@ if is_premise:
 else:
     CREATEARG = []
     VOTEMODEL = ArgumentVote
-    CREATEPARAMS = [{'aim': 1, 'premise1_id': 1, 'premise2_id': 2, 'conclusion_id': 3}]
-    POSTPARAMS = [{'aim': 1, 'premise1': 1, 'premise2': 2, 'conclusion': 3}]
-    NOPOSTPARAMS = [{'aim': 1, 'premise1': 1, 'premise2': 1, 'conclusion': 2}]
+    CREATEPARAMS = [{'aim': 1, 'premise1_id': 3, 'premise2_id': 2, 'conclusion_id': 1}]
+    POSTPARAMS = [{'aim': 1, 'premise1': 3, 'premise2': 2, 'conclusion': 1}]
+    #no premise 2x and no argument 2x (testset has it already)
+    NOPOSTPARAMS = [{'aim': 1, 'premise1': 3, 'premise2': 3, 'conclusion': 2},
+                    {'aim': 1, 'premise1': 1, 'premise2': 2, 'conclusion': 3}]
 
 class BlockObjectsTests(TestCase):
     fixtures = ['fixtures\\testset.yaml']
