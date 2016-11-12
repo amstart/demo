@@ -8,11 +8,11 @@
 
 {% if object_list %}
   <a class="new_object"
-  href="{% url model_namespace|add:':new' %}">Create another {{ model_name }}!</a>
+  href="{% url model_namespace|add:':create' %}">Create another {{ model_name }}!</a>
   {% include 'blockobjects/_object_list.html' with sidebar=True sidebar_width=4 %}
   {% else %}
     <p> <a class="new_object"
-      href="{% url model_namespace|add:':new' %}">Create the first {{ model_name }}!</a></p>
+      href="{% url model_namespace|add:':create' %}">Create the first {{ model_name }}!</a></p>
 {% endif %}
 
 {% endblock %}

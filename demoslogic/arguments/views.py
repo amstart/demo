@@ -17,9 +17,6 @@ class ArgumentUpdateView(views.UpdateVoteView):
     model = Argument
     voteform = ArgumentVoteForm()
 
-class NewArgumentView(TemplateView):
-    template_name = 'arguments/new_argument.html'
-
 class ArgumentCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'

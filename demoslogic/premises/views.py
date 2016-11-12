@@ -9,8 +9,7 @@ from django.http import HttpResponseRedirect
 from demoslogic.blockobjects import views
 
 from .models import Premise
-from .forms import SubjectPredicateInputForm, WithComplementedObjectInputForm, WithObjectInputForm, WithComplementInputForm
-from .forms import CategorizationVoteForm, SearchPremiseForm
+from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
 
 class PremiseSearchView(FormView):
     template_name = 'premises/search.html'
@@ -62,24 +61,12 @@ class PremiseUpdateView(views.UpdateVoteView):
     model = Premise
     voteform = CategorizationVoteForm()
 
-class NewPremiseView(TemplateView):
-    template_name = 'premises/new_premise.html'
-
 class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Premise
-
     def get_form_class(self):
-        with Switch(self.kwargs['mode']) as case:
-            if case('SubjectPredicate'):
-                return SubjectPredicateInputForm
-            if case('WithComplementedObject'):
-                return WithComplementedObjectInputForm
-            if case('WithObject'):
-                return WithObjectInputForm
-            if case('WithComplement'):
-                return WithComplementInputForm
+        return PremiseCreateForm
 
 class PremisesListView(views.ObjectListView):
     model = Premise
