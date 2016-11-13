@@ -3,21 +3,27 @@ from django import forms
 
 from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
-from .models import Premise, Noun, Predicate, CategorizationVote
+from .models import Premise, Noun, Predicate, Complement, CategorizationVote
 
 class SearchPremiseForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find Statement:", queryset=Premise.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
 
 class SearchNounForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find Noun:", queryset=Premise.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:nouns_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
 class SearchPredicateForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "", queryset=Premise.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find Predicate:", queryset=Premise.objects.all(),
+                                            widget=autocomplete.ModelSelect2(
+                                            url = 'premises:predicates_autocomplete',
+                                            attrs = {'data-minimum-input-length': 0}))
+
+class SearchComplementForm(SearchForm):
+    search_id = forms.ModelChoiceField(label = "Find Complement:", queryset=Complement.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:predicates_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
