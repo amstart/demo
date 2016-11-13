@@ -25,15 +25,20 @@ class PremiseSearchView(FormView):
         else:
             return super(PremiseSearchView, self).get(request, *args, **kwargs)
 
-class NounSearchView(FormView):
+class NounSearchView(PremiseSearchView):
     template_name = 'premises/search.html'
     form_class = forms.SearchNounForm
     suffix = 'nouns'
 
-class PredicateSearchView(FormView):
+class PredicateSearchView(PremiseSearchView):
     template_name = 'premises/search.html'
     form_class = forms.SearchPredicateForm
     suffix = 'predicates'
+
+class ComplementSearchView(PremiseSearchView):
+    template_name = 'premises/search.html'
+    form_class = forms.SearchComplementForm
+    suffix = 'complements'
 
 class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -55,8 +60,6 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
 
 class NounAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # if not self.request.user.is_authenticated():
-        #     return Premise.objects.none()
         qs = Noun.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
@@ -64,9 +67,14 @@ class NounAutocomplete(autocomplete.Select2QuerySetView):
 
 class PredicateAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        # if not self.request.user.is_authenticated():
-        #     return Premise.objects.none()
         qs = Predicate.objects.all()
+        if self.q:
+            qs = qs.filter(name__contains = self.q)
+        return qs
+
+class ComplementAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Complement.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
