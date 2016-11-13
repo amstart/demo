@@ -1,5 +1,6 @@
 from dal import autocomplete
-
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Fieldset
 from django import forms
 from django.db.models import Q
 
@@ -29,6 +30,12 @@ class ArgumentInputForm(forms.ModelForm):
             'conclusion': autocomplete.ModelSelect2(url = 'premises:autocomplete',
                                                     forward = ['premise1', 'premise2'])
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ArgumentInputForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'blueForms'
+        self.helper.form_method = 'post'
 
     def clean(self):
         cleaned_data = super(ArgumentInputForm, self).clean()

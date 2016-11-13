@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 
 from demoslogic.blockobjects import views
 
-from .models import Premise, Predicate, Noun, Complement
+from .models import Premise, Noun, Verb, Adjective
 from . import forms
 # from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
 
@@ -30,15 +30,15 @@ class NounSearchView(PremiseSearchView):
     form_class = forms.SearchNounForm
     suffix = 'nouns'
 
-class PredicateSearchView(PremiseSearchView):
+class VerbSearchView(PremiseSearchView):
     template_name = 'premises/search.html'
-    form_class = forms.SearchPredicateForm
-    suffix = 'predicates'
+    form_class = forms.SearchVerbForm
+    suffix = 'verbs'
 
-class ComplementSearchView(PremiseSearchView):
+class AdjectiveSearchView(PremiseSearchView):
     template_name = 'premises/search.html'
-    form_class = forms.SearchComplementForm
-    suffix = 'complements'
+    form_class = forms.SearchAdjectiveForm
+    suffix = 'adjective'
 
 class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -61,20 +61,26 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
 class NounAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Noun.objects.all()
+        key_subject = self.forwarded.get('key_subject', None)
+        key_object = self.forwarded.get('key_object', None)
+        if key_subject:
+            qs = qs.exclude(id = key_subject)
+        if key_object:
+            qs = qs.exclude(id = key_object)
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
 
-class PredicateAutocomplete(autocomplete.Select2QuerySetView):
+class VerbAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Predicate.objects.all()
+        qs = Verb.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
 
-class ComplementAutocomplete(autocomplete.Select2QuerySetView):
+class AdjectiveAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Complement.objects.all()
+        qs = Adjective.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
@@ -98,7 +104,7 @@ class PremiseCreateView(views.CreateObjectView):
     success_url = '/'
     model = Premise
     def get_form_class(self):
-        return forms.PremiseCreateForm
+        return forms.CategorizationCreateForm
 
 class PremisesListView(views.ObjectListView):
     model = Premise

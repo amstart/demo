@@ -1,3 +1,5 @@
+from switch import Switch
+
 from django.db import models
 from django import forms
 from django.core.validators import RegexValidator
@@ -28,12 +30,12 @@ class Noun(models.Model):
     def __str__(self):
         return self.name
 
-class Predicate(models.Model):
+class Verb(models.Model):
     name = TrimmedCharField(default = '', max_length = 50, unique = True)
     def __str__(self):
         return self.name
 
-class Complement(models.Model):
+class Adjective(models.Model):
     name = TrimmedCharField(default = '', max_length = 100, unique = True)
     def __str__(self):
         return self.name
@@ -43,27 +45,23 @@ class Premise(NetworkObject):
     name_lower = 'statement'
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
-    sentence = TrimmedCharField(default = '', max_length = 250, blank = True, unique = True)
-    key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING,
-                                    related_name = 'key_subject', null = True, blank = True)
-    key_predicate = models.ForeignKey(Predicate, on_delete = models.DO_NOTHING,
-                                      null = True, blank = True)
-    key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING,
-                                   related_name = 'key_object', null = True, blank = True)
-    key_complement = models.ForeignKey(Complement, on_delete = models.DO_NOTHING,
-                                       null = True, blank = True)
+    sentence = TrimmedCharField(default = '', max_length = 250, unique = True)
+    key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_subject')
+    key_predicate = models.ForeignKey(Verb, on_delete = models.DO_NOTHING, null = True)
+    key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
+    key_complement = models.ForeignKey(Adjective, on_delete = models.DO_NOTHING, null = True)
     premise_type = models.IntegerField(default = 1,
                                        choices = ((1, "Categorization"),
                                                   (2, "Comparison"),
                                                   (3, "Empirical claim"),
                                                   (4, "Proposal")))
+    class Meta:
+        unique_together = ("premise_type", "key_subject", "key_predicate", "key_object", "key_complement")
 
     def save(self, *args, **kwargs):
-        self.sentence = str(self.key_subject) + " " + str(self.key_predicate)
-        if self.key_object:
-            self.sentence = self.sentence + " " + str(self.key_object)
-        if self.key_complement:
-            self.sentence = self.sentence + " " + str(self.key_complement)
+        with Switch(self.premise_type) as case:
+                if case(1):
+                    self.sentence = str(self.key_subject) + ' is/are a type of ' + str(self.key_object)
         super(Premise, self).save(*args, **kwargs)
 
     def __str__(self):

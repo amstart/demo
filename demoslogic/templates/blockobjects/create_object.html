@@ -6,16 +6,7 @@
 {% block title %} New {{ object_name_upper }} {% endblock %}
 
 {% block content %}
-<h1>New {{ object_name_upper }}</h1>
-
-<form class="new_{{ object_name_lower }}"
-      id="new_{{ object_name_lower }}_form"
-      method="post"
-      action="{{ request.get_full_path }}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  <button class="btn btn-primary" type="submit"> submit {{ object_name_lower }} </button>
-</form>
+  {% crispy form form.helper %}
 {% endblock %}
 {% block javascript %}
 {{ block.super }}
