@@ -7,9 +7,16 @@ from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
 from .models import Premise, Noun, Verb, Adjective, CategorizationVote
 
+class NewPremiseForm(forms.ModelForm):
+    class Meta:
+        model = Premise
+        fields = ['premise_type']
+        labels = {'premise_type': "Which type?"}
+
+
 class SearchPremiseForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "Find Statement:", queryset=Premise.objects.all(),
-                                            widget=autocomplete.ModelSelect2(
+    search_id = forms.ModelChoiceField(label = "Find Statement:", queryset = Premise.objects.all(),
+                                            widget = autocomplete.ModelSelect2(
                                             url = 'premises:autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
 

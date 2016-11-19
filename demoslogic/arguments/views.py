@@ -1,6 +1,7 @@
 from switch import Switch
 
-from django.views.generic import TemplateView
+from django.http import HttpResponseRedirect
+from django.views.generic import TemplateView, View
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.blockobjects import views
@@ -8,6 +9,10 @@ from demoslogic.premises.models import Premise
 
 from .models import Argument
 from .forms import ArgumentInputForm, ArgumentVoteForm
+
+class NewArgumentView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('arguments:create'))
 
 class ArgumentDetailView(views.DetailWithVoteView):
     model = Argument

@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^nouns/search/$', views.NounSearchView.as_view(), name = 'search_nouns'),
     url(r'^verbs/search/$', views.VerbSearchView.as_view(), name = 'search_verbs'),
     url(r'^adjectives/search/$', views.AdjectiveSearchView.as_view(), name = 'search_adjectives'),
+    url(r'^new/$', views.NewPremiseView.as_view(), name = 'new'),
     url(r'^create$', views.PremiseCreateView.as_view(), name = 'create'),
     url(r'^(?P<pk>[0-9]+)/$', views.PremiseDetailView.as_view(), name = 'detail'),
     url(r'^(?P<pk>[0-9]+)/update_vote$', views.PremiseUpdateView.as_view(), name = 'update_vote'),

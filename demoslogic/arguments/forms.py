@@ -21,7 +21,7 @@ class ArgumentVoteForm(VoteForm):
 class ArgumentInputForm(forms.ModelForm):
     class Meta:
         model = Argument
-        fields = ['premise1', 'premise2', 'conclusion', 'aim']
+        fields = ['premise1_if_clauses', 'premise1', 'premise2_if_clauses', 'premise2', 'aim', 'conclusion']
         widgets = {
             'premise1': autocomplete.ModelSelect2(url = 'premises:autocomplete',
                                                   forward = ['premise2', 'conclusion']),
@@ -30,6 +30,8 @@ class ArgumentInputForm(forms.ModelForm):
             'conclusion': autocomplete.ModelSelect2(url = 'premises:autocomplete',
                                                     forward = ['premise1', 'premise2'])
         }
+        labels = {'premise1_if_clauses': "", 'premise1': "", 'premise2_if_clauses': "",
+                  'premise2': "", 'aim': "", 'conclusion': ""}
 
     def __init__(self, *args, **kwargs):
         super(ArgumentInputForm, self).__init__(*args, **kwargs)

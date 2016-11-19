@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', views.ArgumentDetailView.as_view(), name = 'detail'),
     url(r'^(?P<pk>[0-9]+)/update_vote$', views.ArgumentUpdateView.as_view(), name = 'update_vote'),
     url(r'^(?P<pk>[0-9]+)/delete$', views.DeleteArgumentView.as_view(), name = 'delete'),
+    url(r'^new/$', views.NewArgumentView.as_view(), name = 'new'),
     # url(r'^(?P<premise_id>[0-9]+)/vote/$', views.vote, name = 'vote'),
 ]

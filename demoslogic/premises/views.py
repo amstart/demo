@@ -12,6 +12,11 @@ from .models import Premise, Noun, Verb, Adjective
 from . import forms
 # from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
 
+class NewPremiseView(FormView):
+    template_name = 'premises/new.html'
+    form_class = forms.NewPremiseForm
+    success_url = reverse_lazy('premises:create')
+
 class PremiseSearchView(FormView):
     template_name = 'premises/search.html'
     form_class = forms.SearchPremiseForm
