@@ -2,12 +2,12 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 class URLTest(TestCase):
-    fixtures = ['fixtures\\testset.yaml']
+    fixtures = ['fixtures\\testusers.yaml', 'fixtures\\testset.yaml']
 
     def test_new_premise_view(self):
         response = self.client.get(reverse('premises:new'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'premises/new_premise.html')
+        self.assertTemplateUsed(response, 'premises/new.html')
 # class AnonymousTest(TestCase):
 #     fixtures = ['fixtures\\testset.yaml']
 #

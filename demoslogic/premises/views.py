@@ -108,8 +108,15 @@ class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'
     model = Premise
+
     def get_form_class(self):
+        premise_type = self.request.GET.get('premise_type')
+        if premise_type:
+            with Switch(int(premise_type)) as case:
+                if case(1):
+                    return forms.CategorizationCreateForm
         return forms.CategorizationCreateForm
+
 
 class PremisesListView(views.ObjectListView):
     model = Premise

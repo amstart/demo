@@ -54,9 +54,11 @@ class Premise(NetworkObject):
                                        choices = ((1, "Categorization"),
                                                   (2, "Comparison"),
                                                   (3, "Empirical claim"),
-                                                  (4, "Proposal")))
+                                                  (4, "Diagnosis"),
+                                                  (5, "Proposal")))
     class Meta:
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object", "key_complement")
+        get_latest_by = 'pub_date'
 
     def save(self, *args, **kwargs):
         with Switch(self.premise_type) as case:

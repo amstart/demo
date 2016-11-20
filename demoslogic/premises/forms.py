@@ -3,6 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, HTML
 from django import forms
 
+from django.core.urlresolvers import reverse_lazy
 from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
 from .models import Premise, Noun, Verb, Adjective, CategorizationVote
@@ -12,6 +13,13 @@ class NewPremiseForm(forms.ModelForm):
         model = Premise
         fields = ['premise_type']
         labels = {'premise_type': "Which type?"}
+
+    def __init__(self, *args, **kwargs):
+        super(NewPremiseForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'get'
+        self.helper.form_action = reverse_lazy('premises:create')
+        self.helper.add_input(Submit('submit', 'Choose'))
 
 
 class SearchPremiseForm(SearchForm):

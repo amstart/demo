@@ -9,23 +9,23 @@ class CreateObjectTest(BlockObjectsTests):
         self.latest_model_id = self.latest_model.pk
 
     def test_redirecting_works(self):
+        print(self.response.content)
         self.assertRedirects(self.response, self.URL_detail(self.latest_model_id))
 
     def test_detail_view(self):
         self.client.logout()
         response = self.client.get(self.URL_detail(pk = self.latest_model_id))
         self.assertEqual(response.status_code, 200)
+        object = self.get_object(pk = self.latest_model_id)
         if self.is_premise:
-            for key, value in self.post_params[0].items():
-                self.assertContains(response, value)
-                self.assertContains(response, "class=\"" + key + "\"")
+            self.assertContains(response, object.sentence)
         else:
-            object = self.get_object(pk = self.latest_model_id)
-            for key, value in self.post_params[0].items():
-                if key == 'aim':
-                    self.assertContains(response, object.choice_heading)
-                else:
-                    self.assertContains(response, print_premise(getattr(object, key)))
+            self.assertContains(response, object.aim_heading)
+            self.assertContains(response, object.premise1_what)
+            self.assertContains(response, object.premise1_what)
+            for key, value in self.create_params[0].items():
+                if key.find('_id') > -1:
+                    self.assertContains(response, print_premise(getattr(object, key[0:-3])))
 
 class FailCreateObjectTest(BlockObjectsTests):
     def test_redirect_to_form_again(self):

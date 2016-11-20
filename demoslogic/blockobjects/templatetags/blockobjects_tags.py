@@ -25,13 +25,13 @@ def print_premise(object):
     return html_text
 
 def print_argument(object):
-    return print_aim(object.choice_heading, object.aim_str) + print_premise(object.conclusion)
+    return print_aim(object.aim_heading, object.aim) + print_premise(object.conclusion)
 
-def print_aim(choice_heading, aim):
-    return "<span class=\"aim-" + aim + "\">" + choice_heading + ":</span> "
+def print_aim(aim_heading, aim):
+    return "<span class=\"aim-" + str(aim) + "\">" + aim_heading + ":</span> "
 
-def print_what(what, aim):
-    return "<span class=\"what-" + aim + "\">" + what + ":</span> "
+def print_what(what, choice_field):
+    return "<span class=\"what-" + str(choice_field) + "\">" + what + ":</span> "
 
 @register.filter
 def print_head(object):

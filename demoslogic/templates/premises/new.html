@@ -8,6 +8,6 @@
 {% if request.user.is_anonymous %}
 Only signed-in users can create premises!
 {% else %}
-{{ form|crispy }}
+{% crispy form form.helper %}
 {% endif %}
 {% endblock content %}

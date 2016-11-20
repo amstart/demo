@@ -9,6 +9,7 @@ class UserTest(FunctionalTest):
         self.create_pre_authenticated_session("Alfons")
         self.browser.find_element_by_link_text('Statements').click()
         self.browser.find_element_by_class_name('new_object').click()
+        self.browser.find_element_by_tag_name('form').submit()
         self.browser.find_element_by_id('id_subject').send_keys('Peacocks')
         self.browser.find_element_by_id('id_predicate').send_keys('suck')
         self.browser.find_element_by_tag_name('form').submit()

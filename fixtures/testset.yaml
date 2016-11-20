@@ -1,101 +1,96 @@
----
-- model: users.user
+- model: premises.noun
   pk: 1
   fields:
-    password: pbkdf2_sha256$30000$eBFDUkuOZzEY$vuo6cW+EoyQaP/2gsNn8YwXphECLh3943DcXP39lJFY=
-    last_login: '2016-10-20T19:01:15.585Z'
-    is_superuser: false
-    username: Alfons
-    first_name: ''
-    last_name: ''
-    email: al@fons.com
-    is_staff: false
-    is_active: true
-    date_joined: '2016-10-20T19:01:14.334Z'
-    name: ''
-    groups: []
-    user_permissions: []
-- model: users.user
+    name: Footballs
+- model: premises.noun
   pk: 2
   fields:
-    password: pbkdf2_sha256$30000$szQNCwEoTf1Q$YnPC9seOv3SSft+ZpY3gIh/W+VVdR7GzGvcvDacSdkU=
-    last_login: '2016-10-20T19:03:28.053Z'
-    is_superuser: false
-    username: Gertrud
-    first_name: ''
-    last_name: ''
-    email: gert@rud.com
-    is_staff: false
-    is_active: true
-    date_joined: '2016-10-20T19:03:27.944Z'
-    name: ''
-    groups: []
-    user_permissions: []
+    name: Balls
+- model: premises.noun
+  pk: 3
+  fields:
+    name: Hens
+- model: premises.noun
+  pk: 4
+  fields:
+    name: Birds
+- model: premises.noun
+  pk: 5
+  fields:
+    name: Kangaroos
+- model: premises.noun
+  pk: 6
+  fields:
+    name: Mammals
 - model: premises.premise
   pk: 1
   fields:
-    pub_date: '2016-09-20T19:01:49.278Z'
-    staged:
+    pub_date: '2016-11-13T19:06:30.092Z'
     user: 1
-    subject: This premise
-    predicate: is
-    object: from Alfons
-    complement: ''
+    staged: '2016-11-19T18:50:51.116Z'
+    sentence: Footballs is/are a type of Balls
+    key_subject: 1
+    key_predicate:
+    key_object: 2
+    key_complement:
+    premise_type: 1
 - model: premises.premise
   pk: 2
   fields:
-    pub_date: '2016-09-20T19:07:44.618Z'
-    staged:
+    pub_date: '2016-11-13T19:06:30.092Z'
     user: 2
-    subject: This premise
-    predicate: is
-    object: from Gertrud
-    complement: ''
+    staged: '2016-11-19T18:50:51.116Z'
+    sentence: Hens is/are a type of Birds
+    key_subject: 3
+    key_predicate:
+    key_object: 4
+    key_complement:
+    premise_type: 1
 - model: premises.premise
   pk: 3
   fields:
-    pub_date: '2016-09-20T19:07:44.618Z'
-    staged:
+    pub_date: '2016-11-13T19:06:30.092Z'
     user: 1
-    subject: This premise
-    predicate: has been
-    object: ''
-    complement: voted on
-- model: premises.categorizationvote
-  pk: 1
-  fields:
-    pub_date: '2016-10-27T20:07:08.092Z'
-    user: 1
-    last_voted: '2016-10-27T20:07:13.400Z'
-    object: 3
-    value: 4
+    staged: '2016-11-19T18:50:51.116Z'
+    sentence: Kangaroos is/are a type of Mammals
+    key_subject: 5
+    key_predicate:
+    key_object: 6
+    key_complement:
+    premise_type: 1
 - model: arguments.argument
   pk: 1
   fields:
-    pub_date: '2016-09-20T19:07:44.618Z'
-    staged:
+    pub_date: '2016-11-19T20:47:06.372Z'
     user: 1
+    staged:
+    premise1_if: 1
     premise1: 1
+    premise2_if: 1
     premise2: 2
     conclusion: 3
     aim: 1
 - model: arguments.argument
   pk: 2
   fields:
-    pub_date: '2016-09-20T19:07:44.618Z'
-    staged:
+    pub_date: '2016-11-19T20:47:06.372Z'
     user: 2
+    staged:
+    premise1_if: 2
     premise1: 1
+    premise2_if: 1
     premise2: 2
     conclusion: 3
     aim: 2
 - model: arguments.argument
   pk: 3
   fields:
-    pub_date: '2016-09-20T19:07:44.618Z'
-    staged:
+    pub_date: '2016-11-19T20:47:06.372Z'
     user: 1
+    staged:
+    premise1_if: 1
     premise1: 1
+    premise2_if: 2
     premise2: 2
     conclusion: 3
     aim: 3
@@ -107,17 +102,11 @@
     last_voted: '2016-10-31T19:53:47.485Z'
     object: 3
     value: 3
-- model: account.emailaddress
+- model: premises.categorizationvote
   pk: 1
   fields:
+    pub_date: '2016-10-27T20:07:08.092Z'
     user: 1
-    email: al@fons.com
-    verified: false
-    primary: true
-- model: account.emailaddress
-  pk: 2
-  fields:
-    user: 2
-    email: gert@rud.com
-    verified: false
-    primary: true
+    last_voted: '2016-10-27T20:07:13.400Z'
+    object: 3
+    value: 4
