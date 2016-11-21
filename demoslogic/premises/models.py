@@ -6,6 +6,8 @@ from django.core.validators import RegexValidator
 
 from demoslogic.blockobjects.models import NetworkObject, VoteBase
 
+from . import settings
+
 class PremiseManager(models.Manager):
     pass
     # def with_counts(self, string = ""):
@@ -50,19 +52,19 @@ class Premise(NetworkObject):
     key_predicate = models.ForeignKey(Verb, on_delete = models.DO_NOTHING, null = True)
     key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
     key_complement = models.ForeignKey(Adjective, on_delete = models.DO_NOTHING, null = True)
-    premise_type = models.IntegerField(default = 1,
-                                       choices = ((1, "Categorization"),
-                                                  (2, "Comparison"),
-                                                  (3, "Empirical claim"),
-                                                  (4, "Diagnosis"),
-                                                  (5, "Proposal")))
+    premise_type = models.IntegerField(default = settings.TYPE_CATEGORIZATION,
+                                       choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
+                                                  (settings.TYPE_ASCRIPTION, "Ascription"),
+                                                  (settings.TYPE_COMPARISON, "Comparison"),
+                                                  (settings.TYPE_DIAGNOSIS, "Diagnosis"),
+                                                  (settings.TYPE_PROPOSAL, "Proposal")))
     class Meta:
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object", "key_complement")
         get_latest_by = 'pub_date'
 
     def save(self, *args, **kwargs):
         with Switch(self.premise_type) as case:
-                if case(1):
+                if case(settings.TYPE_CATEGORIZATION):
                     self.sentence = str(self.key_subject) + ' is/are a type of ' + str(self.key_object)
         super(Premise, self).save(*args, **kwargs)
 

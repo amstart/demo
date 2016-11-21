@@ -8,8 +8,7 @@ from django.http import HttpResponseRedirect
 
 from demoslogic.blockobjects import views
 
-from .models import Premise, Noun, Verb, Adjective
-from . import forms
+from . import forms, settings, models
 # from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
 
 class NewPremiseView(FormView):
@@ -49,7 +48,7 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # if not self.request.user.is_authenticated():
         #     return Premise.objects.none()
-        qs = Premise.objects.all()
+        qs = models.Premise.objects.all()
         premise1 = self.forwarded.get('premise1', None)
         premise2 = self.forwarded.get('premise2', None)
         conclusion = self.forwarded.get('conclusion', None)
@@ -65,7 +64,7 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
 
 class NounAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Noun.objects.all()
+        qs = models.Noun.objects.all()
         key_subject = self.forwarded.get('key_subject', None)
         key_object = self.forwarded.get('key_object', None)
         if key_subject:
@@ -78,20 +77,20 @@ class NounAutocomplete(autocomplete.Select2QuerySetView):
 
 class VerbAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Verb.objects.all()
+        qs = models.Verb.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
 
 class AdjectiveAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Adjective.objects.all()
+        qs = models.Adjective.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
 
 class PremiseDetailView(views.DetailWithVoteView):
-    model = Premise
+    model = models.Premise
     voteform = forms.CategorizationVoteForm()
 
     def get_context_data(self, **kwargs):
@@ -101,26 +100,34 @@ class PremiseDetailView(views.DetailWithVoteView):
         return context
 
 class PremiseUpdateView(views.UpdateVoteView):
-    model = Premise
+    model = models.Premise
     voteform = forms.CategorizationVoteForm()
 
 class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
     success_url = '/'
-    model = Premise
+    model = models.Premise
 
     def get_form_class(self):
         premise_type = self.request.GET.get('premise_type')
         if premise_type:
             with Switch(int(premise_type)) as case:
-                if case(1):
+                if case(settings.TYPE_CATEGORIZATION):
                     return forms.CategorizationCreateForm
+                if case(settings.TYPE_DESCRIPTION):
+                    return forms.DescriptionCreateForm
+                if case(settings.TYPE_COMPARISON):
+                    return forms.ComparisonCreateForm
+                if case(settings.TYPE_DIAGNOSIS):
+                    return forms.DiagnosisCreateForm
+                if case(settings.TYPE_PROPOSAL):
+                    return forms.ProposalCreateForm
         return forms.CategorizationCreateForm
 
 
 class PremisesListView(views.ObjectListView):
-    model = Premise
+    model = models.Premise
 
 class DeletePremiseView(views.DeleteObjectView):
-    model = Premise
+    model = models.Premise
     success_url = reverse_lazy('premises:index')
