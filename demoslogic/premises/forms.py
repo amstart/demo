@@ -60,9 +60,13 @@ class PremiseCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
+        self.fields['premise_type'].initial = self.premise_type
+        self.fields['premise_type'].widget.attrs['readonly'] = 'readonly'
+        self.fields['premise_type'].widget.attrs['onChange'] = "window.location='" + reverse("premises:new") + "'"
 
 
 class CategorizationCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_CATEGORIZATION
     class Meta:
         model =models.Premise
         fields = ['premise_type', 'key_subject', 'key_object']
@@ -80,23 +84,22 @@ class CategorizationCreateForm(PremiseCreateForm):
 
     def __init__(self, *args, **kwargs):
         super(CategorizationCreateForm, self).__init__(*args, **kwargs)
-        self.fields['premise_type'].initial = settings.TYPE_COMPARISON
-        self.fields['premise_type'].widget.attrs['readonly'] = 'readonly'
-        self.fields['premise_type'].widget.attrs['onChange'] = "window.location='" + reverse("premises:new") + "'"
         self.helper.add_input(Submit('submit', 'Categorize'))
+
+    def clean_premise_type(self):
+        return settings.TYPE_CATEGORIZATION
 
     def clean(self):
         cleaned_data = super(CategorizationCreateForm, self).clean()
         key_subject = cleaned_data.get("key_subject")
         key_object = cleaned_data.get("key_object")
-        premise_type = cleaned_data.get("premise_type")
-        premise_type = settings.TYPE_COMPARISON
         if key_subject and key_object and premise_type:
             if key_subject == key_object:
                 raise forms.ValidationError("Cannot categorize into self.")
         return cleaned_data
 
 class ComparisonCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_COMPARISON
     class Meta:
         model =models.Premise
         fields = ['premise_type', 'key_subject', 'key_complement', 'key_object', 'key_indirect_object']
@@ -120,8 +123,6 @@ class ComparisonCreateForm(PremiseCreateForm):
     def __init__(self, *args, **kwargs):
         super(ComparisonCreateForm, self).__init__(*args, **kwargs)
         self.fields['premise_type'].initial = settings.TYPE_COMPARISON
-        self.fields['premise_type'].widget.attrs['readonly'] = 'readonly'
-        self.fields['premise_type'].widget.attrs['onChange'] = "window.location='" + reverse("premises:new") + "'"
         self.helper.add_input(Submit('submit', 'Compare'))
 
     def clean_premise_type(self):
@@ -132,8 +133,6 @@ class ComparisonCreateForm(PremiseCreateForm):
         key_subject = cleaned_data.get("key_subject")
         key_object = cleaned_data.get("key_object")
         key_indirect_object = cleaned_data.get("key_indirect_object")
-        premise_type = cleaned_data.get("premise_type")
-        premise_type = settings.TYPE_COMPARISON
         key_complement = cleaned_data.get("key_complement")
         if key_subject and key_object and premise_type and key_indirect_object and key_complement:
             if key_subject == key_object:
