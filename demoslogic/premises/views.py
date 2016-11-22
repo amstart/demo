@@ -67,10 +67,13 @@ class NounAutocomplete(autocomplete.Select2QuerySetView):
         qs = models.Noun.objects.all()
         key_subject = self.forwarded.get('key_subject', None)
         key_object = self.forwarded.get('key_object', None)
+        key_indirect_object = self.forwarded.get('key_indirect_object', None)
         if key_subject:
             qs = qs.exclude(id = key_subject)
         if key_object:
             qs = qs.exclude(id = key_object)
+        if key_indirect_object:
+            qs = qs.exclude(id = key_indirect_object)
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
@@ -114,10 +117,10 @@ class PremiseCreateView(views.CreateObjectView):
             with Switch(int(premise_type)) as case:
                 if case(settings.TYPE_CATEGORIZATION):
                     return forms.CategorizationCreateForm
-                if case(settings.TYPE_DESCRIPTION):
-                    return forms.DescriptionCreateForm
                 if case(settings.TYPE_COMPARISON):
                     return forms.ComparisonCreateForm
+                if case(settings.TYPE_DEDUCTION):
+                    return forms.DeductionCreateForm
                 if case(settings.TYPE_DIAGNOSIS):
                     return forms.DiagnosisCreateForm
                 if case(settings.TYPE_PROPOSAL):

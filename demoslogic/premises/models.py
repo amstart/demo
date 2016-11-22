@@ -51,21 +51,28 @@ class Premise(NetworkObject):
     key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_subject')
     key_predicate = models.ForeignKey(Verb, on_delete = models.DO_NOTHING, null = True)
     key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
+    key_indirect_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING,
+                                            related_name = 'key_indirect_object', null = True)
     key_complement = models.ForeignKey(Adjective, on_delete = models.DO_NOTHING, null = True)
     premise_type = models.IntegerField(default = settings.TYPE_CATEGORIZATION,
                                        choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
-                                                  (settings.TYPE_ASCRIPTION, "Ascription"),
                                                   (settings.TYPE_COMPARISON, "Comparison"),
+                                                  (settings.TYPE_DEDUCTION, "Deduction"),
                                                   (settings.TYPE_DIAGNOSIS, "Diagnosis"),
                                                   (settings.TYPE_PROPOSAL, "Proposal")))
     class Meta:
-        unique_together = ("premise_type", "key_subject", "key_predicate", "key_object", "key_complement")
+        unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
+                           "key_complement", "key_indirect_object")
         get_latest_by = 'pub_date'
 
     def save(self, *args, **kwargs):
+        print(self.premise_type)
         with Switch(self.premise_type) as case:
                 if case(settings.TYPE_CATEGORIZATION):
                     self.sentence = str(self.key_subject) + ' is/are a type of ' + str(self.key_object)
+                if case(settings.TYPE_COMPARISON):
+                    self.sentence = str(self.key_subject) + ' is less/more ' + str(self.key_complement) \
+                                    + ' than ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
         super(Premise, self).save(*args, **kwargs)
 
     def __str__(self):
