@@ -60,10 +60,9 @@ class Premise(NetworkObject):
                                                   (settings.TYPE_DEDUCTION, "Deduction"),
                                                   (settings.TYPE_DIAGNOSIS, "Diagnosis"),
                                                   (settings.TYPE_PROPOSAL, "Proposal")))
-    class Meta:
+    class Meta(NetworkObject.Meta):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
-        get_latest_by = 'pub_date'
 
     def save(self, *args, **kwargs):
         print(self.premise_type)
