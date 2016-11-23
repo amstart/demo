@@ -1,11 +1,11 @@
 from dal import autocomplete
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Fieldset, HTML
+
 from django import forms
-
 from django.core.urlresolvers import reverse, reverse_lazy
-from demoslogic.blockobjects.forms import VoteForm, SearchForm
 
+from demoslogic.blockobjects.forms import VoteForm, SearchForm
 from . import models, settings
 
 class NewPremiseForm(forms.ModelForm):
@@ -55,20 +55,32 @@ class CategorizationVoteForm(VoteForm):
 
 
 class PremiseCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.Premise
+        fields = ['premise_type']
+
+    def clean(self):
+        cleaned_data = super(PremiseCreateForm, self).clean()
+        print(cleaned_data)
+        premise_type = cleaned_data.get("premise_type")
+        premise_type = self.premise_type
+        return cleaned_data
+
     def __init__(self, *args, **kwargs):
         super(PremiseCreateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
         self.fields['premise_type'].initial = self.premise_type
+        self.fields['premise_type'].label = 'Type of statement:'
         self.fields['premise_type'].widget.attrs['readonly'] = 'readonly'
         self.fields['premise_type'].widget.attrs['onChange'] = "window.location='" + reverse("premises:new") + "'"
 
 
 class CategorizationCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_CATEGORIZATION
-    class Meta:
-        model =models.Premise
+
+    class Meta(PremiseCreateForm.Meta):
         fields = ['premise_type', 'key_subject', 'key_object']
         widgets = {
             'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
@@ -77,7 +89,6 @@ class CategorizationCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject']),
         }
         labels = {
-            'premise_type': 'Type of statement:',
             'key_subject': 'What is being categorized?',
             'key_object': 'Into which category?',
         }
@@ -86,22 +97,20 @@ class CategorizationCreateForm(PremiseCreateForm):
         super(CategorizationCreateForm, self).__init__(*args, **kwargs)
         self.helper.add_input(Submit('submit', 'Categorize'))
 
-    def clean_premise_type(self):
-        return settings.TYPE_CATEGORIZATION
-
     def clean(self):
         cleaned_data = super(CategorizationCreateForm, self).clean()
+        print(cleaned_data)
         key_subject = cleaned_data.get("key_subject")
         key_object = cleaned_data.get("key_object")
-        if key_subject and key_object and premise_type:
+        if key_subject and key_object:
             if key_subject == key_object:
                 raise forms.ValidationError("Cannot categorize into self.")
         return cleaned_data
 
 class ComparisonCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_COMPARISON
-    class Meta:
-        model =models.Premise
+
+    class Meta(PremiseCreateForm.Meta):
         fields = ['premise_type', 'key_subject', 'key_complement', 'key_object', 'key_indirect_object']
         widgets = {
             'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
@@ -113,7 +122,6 @@ class ComparisonCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject', 'key_object']),
         }
         labels = {
-            'premise_type': 'Type of statement:',
             'key_subject': 'What entity is being compared?',
             'key_complement': 'It is less/more...',
             'key_object': 'than:',
@@ -122,11 +130,7 @@ class ComparisonCreateForm(PremiseCreateForm):
 
     def __init__(self, *args, **kwargs):
         super(ComparisonCreateForm, self).__init__(*args, **kwargs)
-        self.fields['premise_type'].initial = settings.TYPE_COMPARISON
         self.helper.add_input(Submit('submit', 'Compare'))
-
-    def clean_premise_type(self):
-        return settings.TYPE_COMPARISON
 
     def clean(self):
         cleaned_data = super(ComparisonCreateForm, self).clean()
@@ -134,7 +138,7 @@ class ComparisonCreateForm(PremiseCreateForm):
         key_object = cleaned_data.get("key_object")
         key_indirect_object = cleaned_data.get("key_indirect_object")
         key_complement = cleaned_data.get("key_complement")
-        if key_subject and key_object and premise_type and key_indirect_object and key_complement:
+        if key_subject and key_object and key_indirect_object and key_complement:
             if key_subject == key_object:
                 raise forms.ValidationError("Cannot compare with self.")
         return cleaned_data
