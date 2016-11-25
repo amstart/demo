@@ -46,6 +46,12 @@ class SearchAdjectiveForm(SearchForm):
                                             attrs = {'data-minimum-input-length': 0}))
 
 class CategorizationVoteForm(VoteForm):
+    def __init__(self, *args, **kwargs):
+        super(CategorizationVoteForm, self).__init__(*args, **kwargs)
+        choices = self.fields['value'].choices
+        choices[1][1] = "sdfsd"
+        self.fields['value'].choices = choices
+
     class Meta:
         model = models.CategorizationVote
         fields = ['value']

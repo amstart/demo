@@ -11,6 +11,7 @@ class VoteForm(forms.ModelForm):
         super(VoteForm, self).__init__(*args, **kwargs)
         if self.fields['value'].choices[0][0] == '':
             choices = self.fields['value'].choices
+            choices[0][1] = "Undecided"
             del choices[0] #get rid of the first empty radio button
             #http://stackoverflow.com/questions/8928565/django-cant-remove-empty-label-from-typedchoicefield#8995937
             self.fields['value'].choices = choices

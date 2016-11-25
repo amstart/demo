@@ -64,14 +64,24 @@ class Premise(NetworkObject):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
 
+    def __init__(self, *args, **kwargs):
+        super(Premise,self).__init__(*args, **kwargs)
+        with Switch(self.premise_type) as case:
+            if case(settings.TYPE_CATEGORIZATION):
+                self.theses = (self.sentence.replace("is't", "is"),
+                               self.sentence.replace("is't", "is not"))
+            if case(settings.TYPE_COMPARISON):
+                self.theses = (self.sentence.replace("eqmole", "more").replace("thas", "than"),
+                               self.sentence.replace("eqmole", "less").replace("thas", "than"),
+                               self.sentence.replace("eqmole", "equally").replace("thas", "as"))
+
     def save(self, *args, **kwargs):
-        print(self.premise_type)
         with Switch(self.premise_type) as case:
                 if case(settings.TYPE_CATEGORIZATION):
-                    self.sentence = str(self.key_subject) + ' is/are a type of ' + str(self.key_object)
+                    self.sentence = str(self.key_subject) + " is't a type of " + str(self.key_object)
                 if case(settings.TYPE_COMPARISON):
-                    self.sentence = str(self.key_subject) + ' is less/more ' + str(self.key_complement) \
-                                    + ' than ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
+                    self.sentence = str(self.key_subject) + ' is eqmole ' + str(self.key_complement) \
+                                    + ' thas ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
         super(Premise, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -85,10 +95,7 @@ class Vote(VoteBase):
 
 class CategorizationVote(Vote):
     value = models.IntegerField(default = 1,
-                                choices = ((1, "Not accurate at all or very little"),
-                                           (2, "Barely useful"),
-                                           (3, "Useful"),
-                                           (4, "Completely accurate")))
+                                choices = ((1, ""),(2, ""), (3, "")))
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
 #premises and arguments also might share a meta class
