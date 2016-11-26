@@ -91,10 +91,13 @@ class VoteBase(BlockObject):
     def get_plot_data(self, voteobjects_all):
         vote_number = []
         choices = self._meta.get_field('value').choices
+        if not choices:
+            choices = self.object.choices
         values = [x[0] for x in choices]
         for value in values:
             vote_number.append(sum(vote.value == value for vote in voteobjects_all))
             max_vote_number = max(vote_number)
+        print(choices)
         labels = [x[1] for x in choices]
         plot_data = []
         for index, value in enumerate(values):
@@ -102,7 +105,7 @@ class VoteBase(BlockObject):
                     'bar_width': max([15, vote_number[index]/max_vote_number*350]),
                     'bar_text': str(vote_number[index])}
             plot_data.append(item)
-        plot_data[self.value-1]['bar_text'] += " (you)"
+        plot_data[self.value]['bar_text'] += " (you)"
         return plot_data
 
     def update(self, new_value):

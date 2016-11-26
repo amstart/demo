@@ -12,9 +12,14 @@ from . import forms, settings, models
 # from .forms import PremiseCreateForm, PremiseVoteForm, SearchPremiseForm
 
 class NewPremiseView(FormView):
-    template_name = 'premises/new.html'
+    template_name = 'blockobjects/new.html'
     form_class = forms.NewPremiseForm
     success_url = reverse_lazy('premises:create')
+
+    def get_context_data(self, **kwargs):
+        context = super(NewPremiseView, self).get_context_data(**kwargs)
+        context['model_name_lower'] = models.Premise.name_lower
+        return context
 
 class PremiseSearchView(FormView):
     template_name = 'premises/search.html'

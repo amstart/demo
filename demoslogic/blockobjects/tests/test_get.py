@@ -43,21 +43,18 @@ class CanDeleteObjectTest(BlockObjectsTests):
 class CanVoteObjectTest(BlockObjectsTests):
     def test_right_number_of_radiobuttons_for_anonymous(self):
         response = self.client.get(self.URL_detail())
-        choices = self.vote_model._meta.get_field('value').choices
-        self.assertContains(response, "class=\"radio\"", count = len(choices))
+        self.assertContains(response, "class=\"radio\"", count = len(self.get_choices()))
 
     def test_right_number_of_radiobuttons_for_user(self):
         self.login()
         response = self.client.get(self.URL_detail())
-        choices = self.vote_model._meta.get_field('value').choices
-        self.assertContains(response, "class=\"radio\"", count = len(choices))
+        self.assertContains(response, "class=\"radio\"", count = len(self.get_choices()))
 
 class SeeVoteObjectTest(BlockObjectsTests):
     def test_see_options(self):
         self.login()
-        choices = self.vote_model._meta.get_field('value').choices
         response = self.client.get(self.URL_detail(pk = 3))
-        bar_labels = [x[1] for x in choices]
+        bar_labels = [x[1] for x in self.get_choices()]
         for label in bar_labels:
             self.assertContains(response, label + ":", count = 1)
 

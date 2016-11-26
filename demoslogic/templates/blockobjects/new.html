@@ -4,10 +4,15 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>Create a new statement!</h1>
+<h1>Create a new {{ model_name_lower }}!</h1>
 {% if request.user.is_anonymous %}
-Only signed-in users can create premises!
+Only signed-in users can create {{ model_name_lower }}s!
 {% else %}
 {% crispy form form.helper %}
 {% endif %}
 {% endblock content %}
+
+{% block javascript %}
+{{ block.super }}
+{{ form.media }}
+{% endblock javascript %}

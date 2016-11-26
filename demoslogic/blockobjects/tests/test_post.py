@@ -9,7 +9,6 @@ class CreateObjectTest(BlockObjectsTests):
         self.latest_model_id = self.latest_model.pk
 
     def test_redirecting_works(self):
-        print(self.response.content)
         self.assertRedirects(self.response, self.URL_detail(self.latest_model_id))
 
     def test_detail_view(self):

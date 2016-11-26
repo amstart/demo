@@ -26,8 +26,8 @@ class Argument(NetworkObject):
 
     def __init__(self, *args, **kwargs):
         super(Argument,self).__init__(*args, **kwargs)
-        self.aim_heading = aim_heading[self.aim-1]
-        self.aim_what = aim_what[self.aim-1]
+        self.aim_heading = "ab"
+        self.aim_what = "cs"
         self.premise1_what = "The positive or negative or neutral version of the following is correct"
         self.premise2_what = "And the positive or negative or neutral version of the following is correct"
 
@@ -42,7 +42,7 @@ class Vote(VoteBase):
 
 class ArgumentVote(Vote):
     value = models.IntegerField(default = 1,
-                                choices = ((1, "completely invalid"),
-                                           (2, "weak"),
-                                           (3, "strong"),
-                                           (4, "completely valid")))
+                                choices = ((0, "completely invalid"),
+                                           (1, "weak"),
+                                           (2, "strong"),
+                                           (3, "completely valid")))

@@ -53,8 +53,8 @@ class CreateObjectView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(CreateObjectView, self).get_context_data(**kwargs)
         context['model_namespace'] = self.model.namespace
-        context['object_name_upper'] = self.model.name_upper
-        context['object_name_lower'] = self.model.name_lower
+        context['model_name_upper'] = self.model.name_upper
+        context['model_name_lower'] = self.model.name_lower
         return context
 
 class DeleteObjectView(LoginRequiredMixin, DeleteView):

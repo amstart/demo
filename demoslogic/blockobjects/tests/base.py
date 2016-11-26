@@ -4,12 +4,12 @@ from demoslogic.premises.models import Premise, PremiseVote, Noun
 from demoslogic.arguments.models import Argument, ArgumentVote
 from demoslogic.users.models import User
 
-MODEL = Premise
+MODEL = Argument
 is_premise = MODEL == Premise
 if is_premise:
     VOTEMODEL = PremiseVote
-    CREATEPARAMS = [{'key_subject_id': 2, 'key_object_id': 1}]
-    NOCREATEPARAMS = [{'key_subject_id': 1, 'key_object_id': 1}]
+    CREATEPARAMS = [{'premise_type': 1, 'key_subject_id': 2, 'key_object_id': 1}]
+    NOCREATEPARAMS = [{'premise_type': 1, 'key_subject_id': 1, 'key_object_id': 1}]
 else:
     VOTEMODEL = ArgumentVote
     CREATEPARAMS = [{'aim': 1, 'premise1_if': 1, 'premise2_if': 1,
@@ -55,11 +55,17 @@ class BlockObjectsTests(TestCase):
     def URL_delete(self, pk = 1):
         return reverse(MODEL.namespace + ':delete', args = [pk])
 
-    def get_user(self, pk):
+    def get_user(self, pk = 1):
         return User.objects.get(pk = pk)
 
-    def get_object(self, pk):
+    def get_object(self, pk = 1):
         return self.model.objects.get(pk = pk)
+
+    def get_choices(self, pk = 1):
+        if is_premise:
+            return self.get_object(pk = pk).choices
+        else:
+            return self.vote_model._meta.get_field('value').choices
 
     def create_object(self, **kwargs):
         user_id = kwargs.get('user_id', 1)

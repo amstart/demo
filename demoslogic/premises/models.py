@@ -74,7 +74,8 @@ class Premise(NetworkObject):
                 self.theses = [self.sentence.replace("eqmole", "more").replace("thas", "than"),
                                self.sentence.replace("eqmole", "less").replace("thas", "than"),
                                self.sentence.replace("eqmole", "equally").replace("thas", "as")]
-        zipped = zip(list(range(0,len(self.theses)+2)), ["Undecided"] + self.theses)
+        self.max_choice = len(self.theses)+2
+        zipped = zip(list(range(0,self.max_choice)), ["Undecided"] + self.theses)
         self.choices = list(zipped)
 
     def save(self, *args, **kwargs):

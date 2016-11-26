@@ -10,7 +10,7 @@ from . import models, settings
 
 class NewPremiseForm(forms.ModelForm):
     class Meta:
-        model =models.Premise
+        model = models.Premise
         fields = ['premise_type']
         labels = {'premise_type': "Which type?"}
 
@@ -50,17 +50,21 @@ class PremiseVoteForm(VoteForm):
         object = kwargs.pop('object', None)
         super(PremiseVoteForm, self).__init__(*args, **kwargs) #loads form helper
         if object:
-            self.fields['value'].initial = 1
+            self.fields['value'].initial = None
             self.fields['value'].choices = (object.choices)
+            # self.max_choice = object.max_choice
 
     class Meta:
         model = models.PremiseVote
         fields = ['value']
         widgets = {'value': forms.RadioSelect}
         labels = {'value': "How accurate do you think this categorization is?"}
-    #     choices = {'value': [(1, 'Undecided'), (2, 'Balls is/are a type of Footballs'), (3, 'Balls is/are a type of Footballs')]}
-    #     # empty_labels = {'value': None}
 
+    # def clean_value(self):
+    #     value = self.cleaned_data.get("value")
+    #     if value > self.max_choice or value < 0:
+    #         raise forms.ValidationError("Value not allowed.")
+    #     return cleaned_data
 
 class PremiseCreateForm(forms.ModelForm):
     class Meta:
@@ -69,7 +73,6 @@ class PremiseCreateForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(PremiseCreateForm, self).clean()
-        print(cleaned_data)
         premise_type = cleaned_data.get("premise_type")
         premise_type = self.premise_type
         return cleaned_data
@@ -107,7 +110,6 @@ class CategorizationCreateForm(PremiseCreateForm):
 
     def clean(self):
         cleaned_data = super(CategorizationCreateForm, self).clean()
-        print(cleaned_data)
         key_subject = cleaned_data.get("key_subject")
         key_object = cleaned_data.get("key_object")
         if key_subject and key_object:
