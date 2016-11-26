@@ -17,7 +17,7 @@ class PremiseAdmin(admin.ModelAdmin):
     search_fields = ['sentence']
 
 admin.site.register(models.Premise, PremiseAdmin)
-admin.site.register(models.CategorizationVote)
+admin.site.register(models.PremiseVote)
 admin.site.register(models.Noun)
 admin.site.register(models.Verb)
 admin.site.register(models.Adjective)

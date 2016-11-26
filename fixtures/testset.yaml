@@ -102,7 +102,7 @@
     last_voted: '2016-10-31T19:53:47.485Z'
     object: 3
     value: 3
-- model: premises.categorizationvote
+- model: premises.premisevote
   pk: 1
   fields:
     pub_date: '2016-10-27T20:07:08.092Z'

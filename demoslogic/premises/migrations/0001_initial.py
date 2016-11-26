@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='CategorizationVote',
+            name='PremiseVote',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date published')),
@@ -83,12 +83,12 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
-            model_name='categorizationvote',
+            model_name='premisevote',
             name='object',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='premises.Premise'),
         ),
         migrations.AddField(
-            model_name='categorizationvote',
+            model_name='premisevote',
             name='user',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),

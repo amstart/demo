@@ -1,13 +1,13 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from demoslogic.premises.models import Premise, CategorizationVote, Noun
+from demoslogic.premises.models import Premise, PremiseVote, Noun
 from demoslogic.arguments.models import Argument, ArgumentVote
 from demoslogic.users.models import User
 
 MODEL = Premise
 is_premise = MODEL == Premise
 if is_premise:
-    VOTEMODEL = CategorizationVote
+    VOTEMODEL = PremiseVote
     CREATEPARAMS = [{'key_subject_id': 2, 'key_object_id': 1}]
     NOCREATEPARAMS = [{'key_subject_id': 1, 'key_object_id': 1}]
 else:

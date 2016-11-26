@@ -16,11 +16,11 @@ class NewArgumentView(View):
 
 class ArgumentDetailView(views.DetailWithVoteView):
     model = Argument
-    voteform = ArgumentVoteForm()
+    voteform = ArgumentVoteForm
 
 class ArgumentUpdateView(views.UpdateVoteView):
     model = Argument
-    voteform = ArgumentVoteForm()
+    voteform = ArgumentVoteForm
 
 class ArgumentCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'

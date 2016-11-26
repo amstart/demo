@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from demoslogic.blockobjects import views
 
 from . import forms, settings, models
-# from .forms import PremiseCreateForm, CategorizationVoteForm, SearchPremiseForm
+# from .forms import PremiseCreateForm, PremiseVoteForm, SearchPremiseForm
 
 class NewPremiseView(FormView):
     template_name = 'premises/new.html'
@@ -94,7 +94,7 @@ class AdjectiveAutocomplete(autocomplete.Select2QuerySetView):
 
 class PremiseDetailView(views.DetailWithVoteView):
     model = models.Premise
-    voteform = forms.CategorizationVoteForm()
+    voteform = forms.PremiseVoteForm
 
     def get_context_data(self, **kwargs):
         context = super(PremiseDetailView, self).get_context_data(**kwargs)
@@ -104,7 +104,7 @@ class PremiseDetailView(views.DetailWithVoteView):
 
 class PremiseUpdateView(views.UpdateVoteView):
     model = models.Premise
-    voteform = forms.CategorizationVoteForm()
+    voteform = forms.PremiseVoteForm
 
 class PremiseCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'

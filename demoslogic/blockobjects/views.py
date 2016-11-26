@@ -65,7 +65,6 @@ class DetailWithVoteView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailWithVoteView, self).get_context_data(**kwargs)
-        context['voteform'] = self.voteform
         context['user_choice'] = 0
         context['already_voted'] = 0
         return context
@@ -76,8 +75,10 @@ class DetailWithVoteView(DetailView):
         return context
 
     def render_to_response(self, context, **kwargs):
+        voteform = self.voteform(object = self.object)
+        context['voteform'] = voteform
         if self.request.user.is_authenticated:
-            votemodel = self.voteform.Meta.model
+            votemodel = voteform.Meta.model
             voteobjects_all = votemodel.objects.filter(object = self.object)
             voteobjects_user = voteobjects_all.filter(user = self.request.user)
             if voteobjects_user.count():
@@ -88,12 +89,12 @@ class DetailWithVoteView(DetailView):
                     raise Exception('More than one vote object found!')
                 context = self.plot(context, voteobjects_user[0], voteobjects_all)
             else:
-                self.voteform.fields['value'].initial = None #this seems to be required for an unkown reason
+                voteform.fields['value'].initial = None #this seems to be required for an unkown reason
         return super(DetailWithVoteView, self).render_to_response(context, **kwargs)
 
     @method_decorator(login_required)
     def post(self, request, **post_data):
-        voteform = type(self.voteform)(request.POST)
+        voteform = self.voteform(request.POST)
         pk = post_data['pk']
         if voteform.is_valid():
             # if self.request.user.is_authenticated:
@@ -112,21 +113,18 @@ class DetailWithVoteView(DetailView):
 class UpdateVoteView(LoginRequiredMixin, DetailView):
     template_name = 'blockobjects/update_vote.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(UpdateVoteView, self).get_context_data(**kwargs)
-        context['voteform'] = self.voteform
-        return context
-
     def render_to_response(self, context, **kwargs):
-        votemodel = self.voteform.Meta.model
+        voteform = self.voteform(object = self.object)
+        context['voteform'] = voteform
+        votemodel = voteform.Meta.model
         voteobjects = votemodel.objects.filter(user = self.request.user).filter(object = self.object)
-        self.voteform.fields['value'].initial = voteobjects[0].value
+        voteform.fields['value'].initial = voteobjects[0].value
         if voteobjects.count() > 1:
             raise Exception('More than one vote object found!')
         return super(UpdateVoteView, self).render_to_response(context, **kwargs)
 
     def post(self, request, **post_data):
-        voteform = type(self.voteform)(request.POST)
+        voteform = self.voteform(request.POST)
         pk = post_data['pk']
         if voteform.is_valid():
             votemodel = self.voteform.Meta.model

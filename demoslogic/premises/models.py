@@ -68,12 +68,14 @@ class Premise(NetworkObject):
         super(Premise,self).__init__(*args, **kwargs)
         with Switch(self.premise_type) as case:
             if case(settings.TYPE_CATEGORIZATION):
-                self.theses = (self.sentence.replace("is't", "is"),
-                               self.sentence.replace("is't", "is not"))
+                self.theses = [self.sentence.replace("is't", "is"),
+                               self.sentence.replace("is't", "is not")]
             if case(settings.TYPE_COMPARISON):
-                self.theses = (self.sentence.replace("eqmole", "more").replace("thas", "than"),
+                self.theses = [self.sentence.replace("eqmole", "more").replace("thas", "than"),
                                self.sentence.replace("eqmole", "less").replace("thas", "than"),
-                               self.sentence.replace("eqmole", "equally").replace("thas", "as"))
+                               self.sentence.replace("eqmole", "equally").replace("thas", "as")]
+        zipped = zip(list(range(0,len(self.theses)+2)), ["Undecided"] + self.theses)
+        self.choices = list(zipped)
 
     def save(self, *args, **kwargs):
         with Switch(self.premise_type) as case:
@@ -93,9 +95,8 @@ class Vote(VoteBase):
     class Meta:
         abstract = True
 
-class CategorizationVote(Vote):
-    value = models.IntegerField(default = 1,
-                                choices = ((1, ""),(2, ""), (3, "")))
+class PremiseVote(Vote):
+    value = models.IntegerField()
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
 #premises and arguments also might share a meta class

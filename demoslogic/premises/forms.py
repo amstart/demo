@@ -45,19 +45,21 @@ class SearchAdjectiveForm(SearchForm):
                                             url = 'premises:adjectives_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
 
-class CategorizationVoteForm(VoteForm):
+class PremiseVoteForm(VoteForm):
     def __init__(self, *args, **kwargs):
-        super(CategorizationVoteForm, self).__init__(*args, **kwargs)
-        choices = self.fields['value'].choices
-        choices[1][1] = "sdfsd"
-        self.fields['value'].choices = choices
+        object = kwargs.pop('object', None)
+        super(PremiseVoteForm, self).__init__(*args, **kwargs) #loads form helper
+        if object:
+            self.fields['value'].initial = 1
+            self.fields['value'].choices = (object.choices)
 
     class Meta:
-        model = models.CategorizationVote
+        model = models.PremiseVote
         fields = ['value']
         widgets = {'value': forms.RadioSelect}
         labels = {'value': "How accurate do you think this categorization is?"}
-        # empty_labels = {'value': None}
+    #     choices = {'value': [(1, 'Undecided'), (2, 'Balls is/are a type of Footballs'), (3, 'Balls is/are a type of Footballs')]}
+    #     # empty_labels = {'value': None}
 
 
 class PremiseCreateForm(forms.ModelForm):
