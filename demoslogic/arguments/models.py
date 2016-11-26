@@ -26,13 +26,13 @@ class Argument(NetworkObject):
 
     def __init__(self, *args, **kwargs):
         super(Argument,self).__init__(*args, **kwargs)
-        self.aim_heading = "ab"
-        self.aim_what = "cs"
-        self.premise1_what = "The positive or negative or neutral version of the following is correct"
-        self.premise2_what = "And the positive or negative or neutral version of the following is correct"
+        if hasattr(self, 'premise1'):
+            self.premise1_what = self.premise1.theses[self.premise1_if]
+            self.premise2_what = self.premise2.theses[self.premise2_if]
+            self.conclusion_what = self.conclusion.theses[self.aim]
 
     def __str__(self):
-        return self.aim_heading + ': ' + str(self.conclusion)
+        return self.conclusion_what
 
 class Vote(VoteBase):
     object = models.ForeignKey(Argument, on_delete = models.CASCADE)

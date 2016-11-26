@@ -33,6 +33,7 @@ class NewArgumentForm(forms.ModelForm):
 
 class ArgumentVoteForm(VoteForm):
     def __init__(self, *args, **kwargs):
+        object = kwargs.pop('object', None)
         super(ArgumentVoteForm, self).__init__(*args, **kwargs)
         if self.fields['value'].choices[0][0] == '':
             choices = self.fields['value'].choices
@@ -52,22 +53,43 @@ class ArgumentVoteForm(VoteForm):
 class ArgumentCreateForm(forms.ModelForm):
     class Meta:
         model = Argument
-        fields = ['premise1_if', 'premise2_if', 'aim']
-        labels = {'premise1_if': "", 'premise2_if': "", 'aim': ""}
+        fields = ['premise1', 'premise1_if', 'premise2', 'premise2_if', 'conclusion', 'aim',]
+        labels = {'premise1_if': "", 'premise1': "", 'premise2_if': "",
+                  'premise2': "", 'aim': "", 'conclusion': ""}
 
     def __init__(self, *args, **kwargs):
+        premise1 = Premise.objects.get(pk = kwargs.pop('premise1', None))
+        premise2 = Premise.objects.get(pk = kwargs.pop('premise2', None))
+        conclusion = Premise.objects.get(pk = kwargs.pop('conclusion', None))
         super(ArgumentCreateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
         self.helper.add_input(Submit('submit', 'Argue'))
-        choice_default = ((0, 'Select Statement first'),
-                          (0, 'You need to select a statement first for proper choices to appear here.'))
-        self.fields['premise1_if'].widget = forms.Select(choices = choice_default)
-        self.fields['premise1_if'].intial = 0
+        if premise1:
+            self.fields['premise1'].initial = premise1
+            self.fields['premise2'].initial = premise2
+            self.fields['conclusion'].initial = conclusion
+            self.fields['premise1'].widget.attrs['readonly'] = 'readonly'
+            self.fields['premise2'].widget.attrs['readonly'] = 'readonly'
+            self.fields['conclusion'].widget.attrs['readonly'] = 'readonly'
+            self.fields['premise1'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
+            self.fields['premise2'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
+            self.fields['conclusion'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
+            self.fields['premise1_if'].widget = forms.Select(choices = [(0, 'Choose')] + premise1.choices[1:])
+            self.fields['premise1_if'].initial = 0
+            self.fields['premise2_if'].widget = forms.Select(choices = [(0, 'Choose')] + premise2.choices[1:])
+            self.fields['premise2_if'].initial = 0
+            self.fields['aim'].widget = forms.Select(choices = [(0, 'Choose')] + conclusion.choices[1:])
+            self.fields['aim'].initial = 0
 
     def clean(self):
-        cleaned_data = super(ArgumentInputForm, self).clean()
+        cleaned_data = super(ArgumentCreateForm, self).clean()
+        premise1_if = cleaned_data.get("premise1_if")
+        premise2_if = cleaned_data.get("premise2_if")
+        aim = cleaned_data.get("aim")
+        if aim < 1 or premise1_if < 1 or premise2_if < 1:
+            raise forms.ValidationError("Choose a thesis for your statements.")
         premise1 = cleaned_data.get("premise1")
         premise2 = cleaned_data.get("premise2")
         conclusion = cleaned_data.get("conclusion")

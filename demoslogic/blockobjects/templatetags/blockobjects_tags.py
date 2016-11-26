@@ -20,31 +20,31 @@ def jsonify(object):
 register.filter('jsonify', jsonify)
 jsonify.is_safe = True
 
-def print_premise(object):
+def get_premise(object):
     html_text = object.sentence
     return html_text
 
-def print_argument(object):
-    return print_aim(object.aim_heading, object.aim) + print_premise(object.conclusion)
-
-def print_aim(aim_heading, aim):
-    return "<span class=\"aim-" + str(aim) + "\">" + aim_heading + ":</span> "
-
-def print_what(what, choice_field):
-    return "<span class=\"what-" + str(choice_field) + "\">" + what + ":</span> "
+def get_argument(object):
+    return object.conclusion.theses[object.aim]
 
 @register.filter
 def print_head(object):
     if type(object) == Premise:
-        return mark_safe(print_premise(object))
+        return mark_safe(get_premise(object))
     else:
-        return mark_safe(print_argument(object))
+        return mark_safe(get_argument(object))
 
 @register.filter
 def print_link(object):
     url = reverse(object.namespace + ':detail', args = [object.id])
     html = '<a class=\"object_link\" href=\"' + url + '\">'
     if type(object) == Premise:
-        return mark_safe(html + print_premise(object) + '</a>')
+        return mark_safe(html + get_premise(object) + '</a>')
     else:
-        return mark_safe(html + print_argument(object) + '</a>')
+        return mark_safe(html + get_argument(object) + '</a>')
+
+@register.filter
+def print_thesis(object, thesis_id):
+    url = reverse(object.namespace + ':detail', args = [object.id])
+    html = '<a class=\"object_link\" href=\"' + url + '\">' + object.theses[thesis_id] + '</a>'
+    return mark_safe(html)

@@ -30,11 +30,19 @@ class ArgumentUpdateView(views.UpdateVoteView):
 
 class ArgumentCreateView(views.CreateObjectView):
     template_name = 'blockobjects/create_object.html'
-    success_url = '/'
+    success_url = reverse_lazy('arguments:create')
     model = Argument
 
-    def get_form_class(self):
+    def get_form_class(self):#, form_class=None):
         return forms.ArgumentCreateForm
+
+    def get_form_kwargs(self):
+        kwargs = super(ArgumentCreateView, self).get_form_kwargs()
+        kwargs['premise1'] = self.request.GET.get('premise1', None)
+        kwargs['premise2'] = self.request.GET.get('premise2', None)
+        kwargs['conclusion'] = self.request.GET.get('conclusion', None)
+        return kwargs#(premise1 = premise1, premise2 = premise2, conclusion = conclusion)
+
 
 class ArgumentsListView(views.ObjectListView):
     model = Argument
