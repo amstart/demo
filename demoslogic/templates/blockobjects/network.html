@@ -4,6 +4,7 @@
 {% load static %}
 
 {% block content %}
+<input type="text" id="search_field" class="form-control" value="" size=40 onkeypress="return searchNode(event)">
 <svg width="600" height="350"></svg>
 {% endblock content %}
 
@@ -65,9 +66,11 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
           .on("end", dragended))
       .on('dblclick', connectedNodes);
 
-  // var label = node.append("text")
-  //     .attr("dy", ".35em")
-  //     .text(function(d) { return d.name; });
+  var label = node.append("text")
+      .attr("dy", ".35em")
+      .attr("visibility", "hidden")
+      .attr("class", "node-label")
+      .text(function(d) { return d.name; });
 
   var circle = node.append("circle")
       .attr("r", 8)
@@ -132,20 +135,6 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
           toggle = 0;
       }
   }
-
-
-  // var optArray = [];
-  // for (var i = 0; i < graph.nodes.length - 1; i++) {
-  //     optArray.push(graph.nodes[i].name);
-  // }
-  // optArray = optArray.sort();
-  //
-  // $(function () {
-  //     $("#search").autocomplete({
-  //         source: optArray
-  //     });
-  // });
-
 });
 
 var tool_tip = d3.tip()
@@ -154,24 +143,33 @@ var tool_tip = d3.tip()
   .html(function(d) { return d.name; });
 svg.call(tool_tip);
 
-$(document).on('keydown', ".select2-search__field", function searchNode(event) {
+function searchNode(event) {
       //find the node
-      var selectedVal = '1';
-      var node = svg.selectAll(".node");
-      if (selectedVal == "none") {
-          node.style("stroke", "white").style("stroke-width", "1");
-      } else {
-          var selected = node.filter(function (d, i) {
-              return d.name != selectedVal;
-          });
-          selected.style("opacity", "0");
-          var link = svg.selectAll(".link")
-          link.style("opacity", "0");
-          d3.selectAll(".node, .link").transition()
-              .duration(5000)
-              .style("opacity", 1);
+      if (event.keyCode == 13) {
+        var selectedVal = document.getElementById("search_field").value;
+        var labels = svg.selectAll(".node-label");
+        labels.attr("visibility", "visible");
+        var node = svg.selectAll(".node");
+        if (selectedVal == "none") {
+            node.style("stroke", "white").style("stroke-width", "1");
+        } else {
+            var selected = node.filter(function (d, i) {
+                return d.name.indexOf(selectedVal) == -1;
+            });
+            selected.style("opacity", "0");
+            // selected.each(function(d,i) {
+            //    d3.selectAll(this.childNodes).attr("visibility", "visible");
+            // });
+            var link = svg.selectAll(".link")
+            link.style("opacity", "0");
+            d3.selectAll(".node, .link").transition()
+                .duration(5000)
+                .delay(5000)
+                .style("opacity", 1);
+            labels.transition().duration(0).delay(5000).attr("visibility", "hidden");
+        }
       }
-  });
+}
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
