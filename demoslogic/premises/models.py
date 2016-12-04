@@ -47,7 +47,7 @@ class Premise(NetworkObject):
     name_lower = 'statement'
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
-    sentence = TrimmedCharField(default = '', max_length = 250, unique = True)
+    sentence = TrimmedCharField(default = '', max_length = 250)
     key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_subject')
     key_predicate = models.ForeignKey(Verb, on_delete = models.DO_NOTHING, null = True)
     key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
@@ -65,21 +65,28 @@ class Premise(NetworkObject):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
 
+    @staticmethod
+    def get_theses(premise_type, sentence):
+        print(premise_type)
+        print(sentence)
+        with Switch(premise_type) as case:
+            if case(settings.TYPE_CATEGORIZATION):
+                theses = [sentence.replace("is't", "is not"),
+                          sentence.replace("is't", "is")]
+            if case(settings.TYPE_COLLECTION):
+                theses = [sentence.replace("nartlusively", "not"),
+                          sentence.replace("nartlusively", "exclusively"),
+                          sentence.replace("nartlusively", "partly")]
+            if case(settings.TYPE_COMPARISON):
+                theses = [sentence.replace("eqmole", "less").replace("thas", "than"),
+                          sentence.replace("eqmole", "more").replace("thas", "than"),
+                          sentence.replace("eqmole", "equally").replace("thas", "as")]
+        return ["Undecided"] + theses
+
+
     def __init__(self, *args, **kwargs):
         super(Premise,self).__init__(*args, **kwargs)
-        with Switch(self.premise_type) as case:
-            if case(settings.TYPE_CATEGORIZATION):
-                theses = [self.sentence.replace("is't", "is not"),
-                          self.sentence.replace("is't", "is")]
-            if case(settings.TYPE_COLLECTION):
-                theses = [self.sentence.replace("nartlusively", "not"),
-                          self.sentence.replace("nartlusively", "exclusively"),
-                          self.sentence.replace("nartlusively", "partly")]
-            if case(settings.TYPE_COMPARISON):
-                theses = [self.sentence.replace("eqmole", "less").replace("thas", "than"),
-                          self.sentence.replace("eqmole", "more").replace("thas", "than"),
-                          self.sentence.replace("eqmole", "equally").replace("thas", "as")]
-        self.theses = ["Undecided"] + theses
+        self.theses = self.get_theses(self.premise_type, self.sentence)
         self.max_choice = len(self.theses)+1
         zipped = zip(list(range(0, self.max_choice)), self.theses)
         self.choices = list(zipped)

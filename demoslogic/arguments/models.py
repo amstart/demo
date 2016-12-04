@@ -14,6 +14,10 @@ class Argument(NetworkObject):
     aim = models.IntegerField()
     conclusion = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='conclusion')
 
+    class Meta(NetworkObject.Meta):
+        unique_together = ("premise1_if", "premise1", "premise2", "premise2_if",
+                           "aim", "conclusion")
+
     def __init__(self, *args, **kwargs):
         super(Argument,self).__init__(*args, **kwargs)
         if hasattr(self, 'premise1'):

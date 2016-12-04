@@ -98,9 +98,10 @@ class ArgumentCreateForm(forms.ModelForm):
             # Only do something if all fields are valid so far.
             if premise1 == premise2 or premise1 == conclusion or premise2 == conclusion:
                 raise forms.ValidationError("A premise can only be used once per argument.")
-        arguments = Argument.objects.filter(conclusion = conclusion) \
-                    .filter(Q(premise1 = premise1) | Q(premise1 = premise2)) \
-                    .filter(Q(premise2 = premise1) | Q(premise2 = premise2)) \
-                    .filter(aim = aim)
+        arguments = Argument.objects.filter(conclusion = conclusion).filter(aim = aim) \
+                    .filter((Q(premise1 = premise1) & Q(premise1_if = premise1_if)) | \
+                            (Q(premise1 = premise2)) & Q(premise1_if = premise2_if)) \
+                    .filter((Q(premise2 = premise1) & Q(premise2_if = premise1_if)) | \
+                            (Q(premise2 = premise2)) & Q(premise2_if = premise2_if))
         if arguments.count():
             raise forms.ValidationError("This argument already exists.")

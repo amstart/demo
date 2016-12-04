@@ -51,8 +51,15 @@ class NetworkObject(BlockObject):
         arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion',
                                                'aim', 'premise1_if', 'premise2_if')
         arguments = [entry for entry in arguments_qs]
-        statements_qs = Premise.objects.values('id', 'sentence')
+        statements_qs = Premise.objects.values('id', 'premise_type', 'sentence')
         nodes = [entry for entry in statements_qs]
+        for argument in arguments:
+            p1 = next(item for item in nodes if item["id"] == argument['premise1'])
+            p2 = next(item for item in nodes if item["id"] == argument['premise2'])
+            c = next(item for item in nodes if item["id"] == argument['conclusion'])
+            argument['p1'] = Premise.get_theses(p1['premise_type'], p1['sentence'])[argument['premise1_if']]
+            argument['p2'] = Premise.get_theses(p2['premise_type'], p2['sentence'])[argument['premise2_if']]
+            argument['c'] = Premise.get_theses(c['premise_type'], c['sentence'])[argument['aim']]
         for node in nodes:
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
@@ -63,7 +70,8 @@ class NetworkObject(BlockObject):
         links = []
         for argument in arguments:
             node_id = 'a' + str(argument['id'])
-            nodes.append({'id': node_id, 'group': 2, 'name': ''})
+            arg_sentence = "IF " + argument['p1'] + "<br> AND " + argument['p2'] + "<br> THEN " + argument['c']
+            nodes.append({'id': node_id, 'group': 2, 'name': arg_sentence})
             links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
                           'value': 2, 'aim': argument['premise1_if']})
             links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,

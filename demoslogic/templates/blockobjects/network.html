@@ -70,7 +70,9 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
       .attr("dy", ".35em")
       .attr("visibility", "hidden")
       .attr("class", "node-label")
-      .text(function(d) { return d.name; });
+      .text(function(d) { if (d.name.indexOf("<br>") == -1)
+                            {return d.name; }
+                            else {return ""; };});
 
   var circle = node.append("circle")
       .attr("r", 8)

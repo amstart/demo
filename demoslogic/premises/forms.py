@@ -77,6 +77,18 @@ class PremiseCreateForm(forms.ModelForm):
         premise_type = self.premise_type
         return cleaned_data
 
+    def clean_doublets(self, cd):
+        premises = models.Premise.objects.filter(premise_type = cd.get("premise_type")) \
+                    .filter(key_subject = cd.get("key_subject", None)) \
+                    .filter(key_object = cd.get("key_object", None)) \
+                    .filter(key_indirect_object = cd.get("key_indirect_object", None)) \
+                    .filter(key_complement = cd.get("key_complement", None)) \
+                    .filter(key_predicate = cd.get("key_predicate", None))
+        if premises.count():
+            raise forms.ValidationError("This premise already exists.")
+        else:
+            return cd
+
     def __init__(self, *args, **kwargs):
         super(PremiseCreateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -115,6 +127,7 @@ class CategorizationCreateForm(PremiseCreateForm):
         if key_subject and key_object:
             if key_subject == key_object:
                 raise forms.ValidationError("Cannot categorize into self.")
+        cleaned_data = self.clean_doublets(cleaned_data)
         return cleaned_data
 
 class CollectionCreateForm(PremiseCreateForm):
