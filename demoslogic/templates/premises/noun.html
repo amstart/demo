@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %} {{ object.name }}
+{% endblock title %}
+
+{% block content %}
+<h2>{{ object.name }}</h2>
+<br>Featured in the following statements as a subject:<br>
+{% include 'blockobjects/_object_list.html' with object_list=object.key_subject.filter %}
+<br>Featured in the following statements as a direct object:<br>
+{% include 'blockobjects/_object_list.html' with object_list=object.key_object.filter %}
+<br>Featured in the following statements as an indirect object:<br>
+{% include 'blockobjects/_object_list.html' with object_list=object.key_indirect_object.filter %}
+{% endblock content %}

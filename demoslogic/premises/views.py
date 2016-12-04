@@ -1,15 +1,28 @@
 from dal import autocomplete
 from switch import Switch
 
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, DetailView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
 from demoslogic.blockobjects import views
 
 from . import forms, settings, models
 # from .forms import PremiseCreateForm, PremiseVoteForm, SearchPremiseForm
+
+class NounDetailView(DetailView):
+    template_name = 'premises/noun.html'
+    model = models.Noun
+
+class VerbDetailView(DetailView):
+    template_name = 'premises/verb.html'
+    model = models.Verb
+
+class AdjectiveDetailView(DetailView):
+    template_name = 'premises/adjective.html'
+    model = models.Adjective
 
 class NewPremiseView(FormView):
     template_name = 'blockobjects/new.html'
@@ -47,7 +60,7 @@ class VerbSearchView(PremiseSearchView):
 class AdjectiveSearchView(PremiseSearchView):
     template_name = 'premises/search.html'
     form_class = forms.SearchAdjectiveForm
-    suffix = 'adjective'
+    suffix = 'adjectives'
 
 class PremiseAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):

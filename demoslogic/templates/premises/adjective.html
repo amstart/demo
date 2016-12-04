@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %} {{ object.name }}
+{% endblock title %}
+
+{% block content %}
+<h2>{{ object.name }}</h2>
+<br>Featured in the following statements:<br>
+{% include 'blockobjects/_object_list.html' with object_list=object.premise_set.filter %}
+{% endblock content %}

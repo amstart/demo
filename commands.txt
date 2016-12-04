@@ -1,3 +1,6 @@
+cd C:\Tools\Anaconda\envs\demoslogic\Scripts
+& cmd /k condactivate demoslogic
+python manage.py shell_plus --notebook
 python manage.py createsuperuser
 python manage.py makemigrations
 python manage.py migrate
