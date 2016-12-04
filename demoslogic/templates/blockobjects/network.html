@@ -145,28 +145,36 @@ svg.call(tool_tip);
 
 function searchNode(event) {
       //find the node
-      if (event.keyCode == 13) {
-        var selectedVal = document.getElementById("search_field").value;
+      if (event.keyCode == 8) {
         var labels = svg.selectAll(".node-label");
-        labels.attr("visibility", "visible");
+        labels.attr("visibility", "hidden");
+        d3.selectAll(".node, line").style("opacity", 1);
+      }
+      if (event.keyCode == 13) {
+        var labels = svg.selectAll(".node-label");
+        labels.attr("visibility", "hidden");
+        var selectedVal = document.getElementById("search_field").value;
+        var link = svg.selectAll("line");
+        link.style("opacity", 0.1);
         var node = svg.selectAll(".node");
+        node.style("opacity", 1);
         if (selectedVal == "none") {
             node.style("stroke", "white").style("stroke-width", "1");
         } else {
-            var selected = node.filter(function (d, i) {
+            var nodes_hidden = node.filter(function (d, i) {
                 return d.name.indexOf(selectedVal) == -1;
             });
-            selected.style("opacity", "0");
-            // selected.each(function(d,i) {
-            //    d3.selectAll(this.childNodes).attr("visibility", "visible");
-            // });
-            var link = svg.selectAll(".link")
-            link.style("opacity", "0");
-            d3.selectAll(".node, .link").transition()
-                .duration(5000)
-                .delay(5000)
-                .style("opacity", 1);
-            labels.transition().duration(0).delay(5000).attr("visibility", "hidden");
+            var nodes_visible = node.filter(function (d, i) {
+                return d.name.indexOf(selectedVal) !== -1;
+            });
+            nodes_hidden.style("opacity", "0.1");
+            nodes_visible.each(function(d,i) {
+               d3.selectAll(this.childNodes).attr("visibility", "visible");
+               d = d3.select(this).node().__data__;
+               link.filter(function (o) {
+                   return d.index==o.source.index | d.index==o.target.index;
+               }).style("opacity", "1");
+            });
         }
       }
 }
