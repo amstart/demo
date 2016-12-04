@@ -48,7 +48,8 @@ class NetworkObject(BlockObject):
     def save_network(self):
         from demoslogic.arguments.models import Argument
         from demoslogic.premises.models import Premise
-        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion', 'aim')
+        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion',
+                                               'aim', 'premise1_if', 'premise2_if')
         arguments = [entry for entry in arguments_qs]
         statements_qs = Premise.objects.values('id', 'sentence')
         nodes = [entry for entry in statements_qs]
@@ -64,9 +65,9 @@ class NetworkObject(BlockObject):
             node_id = 'a' + str(argument['id'])
             nodes.append({'id': node_id, 'group': 2, 'name': ''})
             links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
-                          'value': 2, 'aim': 0})
+                          'value': 2, 'aim': argument['premise1_if']})
             links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,
-                          'value': 2, 'aim': 0})
+                          'value': 2, 'aim': argument['premise2_if']})
             links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']),
                           'value': 1, 'aim': argument['aim']})
         savedict = {'nodes': nodes, 'links': links}

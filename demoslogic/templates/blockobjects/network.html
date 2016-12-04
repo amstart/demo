@@ -27,13 +27,13 @@ var svg = d3.select("svg"),
         .attr("viewBox", "0 -5 10 10")
         .attr("refX", 25)
         .attr("refY", 0)
-        .attr("markerWidth", 4)
+        .attr("markerWidth", 3)
         .attr("markerHeight", 4)
         .attr("orient", "auto")
       .append("path")
         .attr("d", "M0,-5L10,0L0,5 L10,0 L0, -5")
-        .style("stroke", "#4679BD")
-        .style("opacity", "0.6");
+        .style("stroke", "#222222")
+        .style("opacity", "0.8");
 
 var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -51,7 +51,7 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
-      .attr("stroke-width", function(d) { return Math.sqrt(d.value); })
+      // .attr("stroke-width", function(d) { return Math.sqrt(d.value); })
       .attr("class", function(d) { return ("forcelink-" + d.aim); })
       .style("marker-end",  "url(#suit)") // Modified line
       .style("stroke-width", "3px");
