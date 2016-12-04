@@ -100,8 +100,8 @@ class CategorizationCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject']),
         }
         labels = {
-            'key_subject': 'What is being categorized?',
-            'key_object': 'Into which category?',
+            'key_subject': 'Which item is being categorized?',
+            'key_object': 'Which category does (not?) comprise the given item?',
         }
 
     def __init__(self, *args, **kwargs):
@@ -110,6 +110,35 @@ class CategorizationCreateForm(PremiseCreateForm):
 
     def clean(self):
         cleaned_data = super(CategorizationCreateForm, self).clean()
+        key_subject = cleaned_data.get("key_subject")
+        key_object = cleaned_data.get("key_object")
+        if key_subject and key_object:
+            if key_subject == key_object:
+                raise forms.ValidationError("Cannot categorize into self.")
+        return cleaned_data
+
+class CollectionCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_COLLECTION
+
+    class Meta(PremiseCreateForm.Meta):
+        fields = ['premise_type', 'key_subject', 'key_object']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                     forward = ['key_object']),
+            'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                    forward = ['key_subject']),
+        }
+        labels = {
+            'key_subject': 'What is the collection?',
+            'key_object': 'What is the collection (not/partly/exclusively) comprising?',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CollectionCreateForm, self).__init__(*args, **kwargs)
+        self.helper.add_input(Submit('submit', 'Categorize'))
+
+    def clean(self):
+        cleaned_data = super(CollectionCreateForm, self).clean()
         key_subject = cleaned_data.get("key_subject")
         key_object = cleaned_data.get("key_object")
         if key_subject and key_object:
@@ -133,8 +162,8 @@ class ComparisonCreateForm(PremiseCreateForm):
         }
         labels = {
             'key_subject': 'What entity is being compared?',
-            'key_complement': 'It is less/more...',
-            'key_object': 'than:',
+            'key_complement': 'It is equally/less/more...',
+            'key_object': 'as/than:',
             'key_indirect_object': 'for'
         }
 

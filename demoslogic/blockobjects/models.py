@@ -62,7 +62,7 @@ class NetworkObject(BlockObject):
         links = []
         for argument in arguments:
             node_id = 'a' + str(argument['id'])
-            nodes.append({'id': node_id, 'group': 2, 'name': str(argument['aim'])})
+            nodes.append({'id': node_id, 'group': 2, 'name': ''})
             links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
                           'value': 2, 'aim': 0})
             links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,
@@ -97,7 +97,6 @@ class VoteBase(BlockObject):
         for value in values:
             vote_number.append(sum(vote.value == value for vote in voteobjects_all))
             max_vote_number = max(vote_number)
-        print(choices)
         labels = [x[1] for x in choices]
         plot_data = []
         for index, value in enumerate(values):

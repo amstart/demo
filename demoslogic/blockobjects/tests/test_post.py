@@ -20,8 +20,8 @@ class CreateObjectTest(BlockObjectsTests):
             self.assertContains(response, object.sentence)
         else:
             self.assertContains(response, object.aim_heading)
-            self.assertContains(response, object.premise1_what)
-            self.assertContains(response, object.premise1_what)
+            self.assertContains(response, object.premise1_thesis)
+            self.assertContains(response, object.premise2_thesis)
             for key, value in self.create_params[0].items():
                 if key.find('_id') > -1:
                     self.assertContains(response, print_premise(getattr(object, key[0:-3])))

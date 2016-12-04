@@ -122,6 +122,8 @@ class PremiseCreateView(views.CreateObjectView):
             with Switch(int(premise_type)) as case:
                 if case(settings.TYPE_CATEGORIZATION):
                     return forms.CategorizationCreateForm
+                if case(settings.TYPE_COLLECTION):
+                    return forms.CollectionCreateForm
                 if case(settings.TYPE_COMPARISON):
                     return forms.ComparisonCreateForm
                 if case(settings.TYPE_DEDUCTION):

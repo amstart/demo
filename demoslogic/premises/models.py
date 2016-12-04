@@ -56,6 +56,7 @@ class Premise(NetworkObject):
     key_complement = models.ForeignKey(Adjective, on_delete = models.DO_NOTHING, null = True)
     premise_type = models.IntegerField(default = settings.TYPE_CATEGORIZATION,
                                        choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
+                                                  (settings.TYPE_COLLECTION, "Collection"),
                                                   (settings.TYPE_COMPARISON, "Comparison"),
                                                   (settings.TYPE_DEDUCTION, "Deduction"),
                                                   (settings.TYPE_DIAGNOSIS, "Diagnosis"),
@@ -68,12 +69,16 @@ class Premise(NetworkObject):
         super(Premise,self).__init__(*args, **kwargs)
         with Switch(self.premise_type) as case:
             if case(settings.TYPE_CATEGORIZATION):
-                theses = [self.sentence.replace("is't", "is"),
-                               self.sentence.replace("is't", "is not")]
+                theses = [self.sentence.replace("is't", "is not"),
+                          self.sentence.replace("is't", "is")]
+            if case(settings.TYPE_COLLECTION):
+                theses = [self.sentence.replace("nartlusively", "not"),
+                          self.sentence.replace("nartlusively", "exclusively"),
+                          self.sentence.replace("nartlusively", "partly")]
             if case(settings.TYPE_COMPARISON):
-                theses = [self.sentence.replace("eqmole", "more").replace("thas", "than"),
-                               self.sentence.replace("eqmole", "less").replace("thas", "than"),
-                               self.sentence.replace("eqmole", "equally").replace("thas", "as")]
+                theses = [self.sentence.replace("eqmole", "less").replace("thas", "than"),
+                          self.sentence.replace("eqmole", "more").replace("thas", "than"),
+                          self.sentence.replace("eqmole", "equally").replace("thas", "as")]
         self.theses = ["Undecided"] + theses
         self.max_choice = len(self.theses)+1
         zipped = zip(list(range(0, self.max_choice)), self.theses)
@@ -83,6 +88,8 @@ class Premise(NetworkObject):
         with Switch(self.premise_type) as case:
                 if case(settings.TYPE_CATEGORIZATION):
                     self.sentence = str(self.key_subject) + " is't a type of " + str(self.key_object)
+                if case(settings.TYPE_COLLECTION):
+                    self.sentence = str(self.key_subject) + " does nartlusively consist of " + str(self.key_object)
                 if case(settings.TYPE_COMPARISON):
                     self.sentence = str(self.key_subject) + ' is eqmole ' + str(self.key_complement) \
                                     + ' thas ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
