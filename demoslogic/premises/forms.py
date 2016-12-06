@@ -75,6 +75,8 @@ class PremiseCreateForm(forms.ModelForm):
         cleaned_data = super(PremiseCreateForm, self).clean()
         premise_type = cleaned_data.get("premise_type")
         premise_type = self.premise_type
+        if cleaned_data.get("key_subject", None) == cleaned_data.get("key_object", None):
+            raise forms.ValidationError("Same thing twice? Try harder :).")
         return cleaned_data
 
     def clean_doublets(self, cd):
@@ -112,8 +114,8 @@ class CategorizationCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject']),
         }
         labels = {
-            'key_subject': 'Which item is being categorized?',
-            'key_object': 'Which category does (not?) comprise the given item?',
+            'key_subject': '',
+            'key_object': 'is (not) a type of',
         }
 
     def __init__(self, *args, **kwargs):
@@ -122,12 +124,6 @@ class CategorizationCreateForm(PremiseCreateForm):
 
     def clean(self):
         cleaned_data = super(CategorizationCreateForm, self).clean()
-        key_subject = cleaned_data.get("key_subject")
-        key_object = cleaned_data.get("key_object")
-        if key_subject and key_object:
-            if key_subject == key_object:
-                raise forms.ValidationError("Cannot categorize into self.")
-        cleaned_data = self.clean_doublets(cleaned_data)
         return cleaned_data
 
 class CollectionCreateForm(PremiseCreateForm):
@@ -142,22 +138,18 @@ class CollectionCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject']),
         }
         labels = {
-            'key_subject': 'What is the collection?',
-            'key_object': 'What is the collection (not/partly/exclusively) comprising?',
+            'key_subject': '',
+            'key_object': 'does not/partly/exclusively comprise',
         }
 
     def __init__(self, *args, **kwargs):
         super(CollectionCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Categorize'))
+        self.helper.add_input(Submit('submit', 'Collect'))
 
     def clean(self):
         cleaned_data = super(CollectionCreateForm, self).clean()
-        key_subject = cleaned_data.get("key_subject")
-        key_object = cleaned_data.get("key_object")
-        if key_subject and key_object:
-            if key_subject == key_object:
-                raise forms.ValidationError("Cannot categorize into self.")
         return cleaned_data
+
 
 class ComparisonCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_COMPARISON
@@ -174,8 +166,8 @@ class ComparisonCreateForm(PremiseCreateForm):
                                                     forward = ['key_subject', 'key_object']),
         }
         labels = {
-            'key_subject': 'What entity is being compared?',
-            'key_complement': 'It is equally/less/more...',
+            'key_subject': '',
+            'key_complement': 'is equally/less/more...',
             'key_object': 'as/than:',
             'key_indirect_object': 'for'
         }
@@ -186,11 +178,54 @@ class ComparisonCreateForm(PremiseCreateForm):
 
     def clean(self):
         cleaned_data = super(ComparisonCreateForm, self).clean()
-        key_subject = cleaned_data.get("key_subject")
-        key_object = cleaned_data.get("key_object")
-        key_indirect_object = cleaned_data.get("key_indirect_object")
-        key_complement = cleaned_data.get("key_complement")
-        if key_subject and key_object and key_indirect_object and key_complement:
-            if key_subject == key_object:
-                raise forms.ValidationError("Cannot compare with self.")
+        return cleaned_data
+
+
+class RelationCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_RELATION
+
+    class Meta(PremiseCreateForm.Meta):
+        fields = ['premise_type', 'key_subject', 'key_object']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                     forward = ['key_object']),
+            'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                    forward = ['key_subject']),
+        }
+        labels = {
+            'key_subject': '',
+            'key_object': 'is equally/more/less often thas not accompanied with the following:',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RelationCreateForm, self).__init__(*args, **kwargs)
+        self.helper.add_input(Submit('submit', 'Relate'))
+
+    def clean(self):
+        cleaned_data = super(RelationCreateForm, self).clean()
+        return cleaned_data
+
+
+class DiagnosisCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_RELATION
+
+    class Meta(PremiseCreateForm.Meta):
+        fields = ['premise_type', 'key_subject', 'key_object']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                     forward = ['key_object']),
+            'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                    forward = ['key_subject']),
+        }
+        labels = {
+            'key_subject': 'There should be more/less',
+            'key_object': 'for',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(DiagnosisCreateForm, self).__init__(*args, **kwargs)
+        self.helper.add_input(Submit('submit', 'Relate'))
+
+    def clean(self):
+        cleaned_data = super(DiagnosisCreateForm, self).clean()
         return cleaned_data

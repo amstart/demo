@@ -58,17 +58,14 @@ class Premise(NetworkObject):
                                        choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
                                                   (settings.TYPE_COLLECTION, "Collection"),
                                                   (settings.TYPE_COMPARISON, "Comparison"),
-                                                  (settings.TYPE_DEDUCTION, "Deduction"),
-                                                  (settings.TYPE_DIAGNOSIS, "Diagnosis"),
-                                                  (settings.TYPE_PROPOSAL, "Proposal")))
+                                                  (settings.TYPE_RELATION, "Relation"),
+                                                  (settings.TYPE_DIAGNOSIS, "Diagnosis")))
     class Meta(NetworkObject.Meta):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
 
     @staticmethod
     def get_theses(premise_type, sentence):
-        print(premise_type)
-        print(sentence)
         with Switch(premise_type) as case:
             if case(settings.TYPE_CATEGORIZATION):
                 theses = [sentence.replace("is't", "is not"),
@@ -77,10 +74,13 @@ class Premise(NetworkObject):
                 theses = [sentence.replace("nartlusively", "not"),
                           sentence.replace("nartlusively", "exclusively"),
                           sentence.replace("nartlusively", "partly")]
-            if case(settings.TYPE_COMPARISON):
+            if case(settings.TYPE_COMPARISON) or case(settings.TYPE_RELATION):
                 theses = [sentence.replace("eqmole", "less").replace("thas", "than"),
                           sentence.replace("eqmole", "more").replace("thas", "than"),
                           sentence.replace("eqmole", "equally").replace("thas", "as")]
+            if case(settings.TYPE_DIAGNOSIS):
+                theses = [sentence.replace("mole", "less"),
+                          sentence.replace("mole", "more")]
         return ["Undecided"] + theses
 
 
@@ -100,6 +100,12 @@ class Premise(NetworkObject):
                 if case(settings.TYPE_COMPARISON):
                     self.sentence = str(self.key_subject) + ' is eqmole ' + str(self.key_complement) \
                                     + ' thas ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
+                if case(settings.TYPE_RELATION):
+                    self.sentence = str(self.key_subject) + \
+                                    ' is eqmole often than not accompanied with ' + str(self.key_object)
+                if case(settings.TYPE_DIAGNOSIS):
+                    self.sentence = 'There should be mole ' + str(self.key_subject) + \
+                                    ' for ' + str(self.key_object)
         super(Premise, self).save(*args, **kwargs)
 
     def __str__(self):

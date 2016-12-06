@@ -80,7 +80,14 @@ class PremiseAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(sentence__contains = self.q)
         return qs
 
-class NounAutocomplete(autocomplete.Select2QuerySetView):
+class Select2CreateView(autocomplete.Select2QuerySetView):
+    def has_add_permission(self, request):
+        if not request.user.is_authenticated():
+            return False
+        else:
+            return True
+
+class NounAutocomplete(Select2CreateView):
     def get_queryset(self):
         qs = models.Noun.objects.all()
         key_subject = self.forwarded.get('key_subject', None)
@@ -96,14 +103,14 @@ class NounAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__contains = self.q)
         return qs
 
-class VerbAutocomplete(autocomplete.Select2QuerySetView):
+class VerbAutocomplete(Select2CreateView):
     def get_queryset(self):
         qs = models.Verb.objects.all()
         if self.q:
             qs = qs.filter(name__contains = self.q)
         return qs
 
-class AdjectiveAutocomplete(autocomplete.Select2QuerySetView):
+class AdjectiveAutocomplete(Select2CreateView):
     def get_queryset(self):
         qs = models.Adjective.objects.all()
         if self.q:
@@ -139,8 +146,8 @@ class PremiseCreateView(views.CreateObjectView):
                     return forms.CollectionCreateForm
                 if case(settings.TYPE_COMPARISON):
                     return forms.ComparisonCreateForm
-                if case(settings.TYPE_DEDUCTION):
-                    return forms.DeductionCreateForm
+                if case(settings.TYPE_RELATION):
+                    return forms.RelationCreateForm
                 if case(settings.TYPE_DIAGNOSIS):
                     return forms.DiagnosisCreateForm
                 if case(settings.TYPE_PROPOSAL):
