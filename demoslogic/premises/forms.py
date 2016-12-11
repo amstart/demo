@@ -204,28 +204,3 @@ class RelationCreateForm(PremiseCreateForm):
     def clean(self):
         cleaned_data = super(RelationCreateForm, self).clean()
         return cleaned_data
-
-
-class DiagnosisCreateForm(PremiseCreateForm):
-    premise_type = settings.TYPE_RELATION
-
-    class Meta(PremiseCreateForm.Meta):
-        fields = ['premise_type', 'key_subject', 'key_object']
-        widgets = {
-            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
-                                                     forward = ['key_object']),
-            'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
-                                                    forward = ['key_subject']),
-        }
-        labels = {
-            'key_subject': 'There should be more/less',
-            'key_object': 'for',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super(DiagnosisCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Relate'))
-
-    def clean(self):
-        cleaned_data = super(DiagnosisCreateForm, self).clean()
-        return cleaned_data

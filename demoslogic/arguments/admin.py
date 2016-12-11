@@ -8,7 +8,7 @@ from .models import Argument, ArgumentVote
 
 class ArgumentAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Core', {'fields': ['premise1', 'premise2', 'conclusion', 'aim']}),
+        ('Core', {'fields': ['premise1', 'premise2', 'conclusion', 'premise1_if', 'premise2_if', 'aim']}),
         ('Meta', {'fields': ['staged', 'user', 'pub_date']}),
     ]
     # inlines = [ChoiceInline]
