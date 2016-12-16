@@ -21,9 +21,9 @@ class Argument(NetworkObject):
     def __init__(self, *args, **kwargs):
         super(Argument,self).__init__(*args, **kwargs)
         if hasattr(self, 'premise1'):
-            self.premise1_thesis = self.premise1.theses[self.premise1_if]
-            self.premise2_thesis = self.premise2.theses[self.premise2_if]
-            self.conclusion_thesis = self.conclusion.theses[self.aim]
+            self.premise1_thesis = self.premise1.get_premise_choice(self.premise1_if)
+            self.premise2_thesis = self.premise2.get_premise_choice(self.premise2_if)
+            self.conclusion_thesis = self.conclusion.get_premise_choice(self.aim)
 
     def __str__(self):
         return self.conclusion_thesis

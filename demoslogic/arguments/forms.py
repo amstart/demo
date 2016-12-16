@@ -76,11 +76,12 @@ class ArgumentCreateForm(forms.ModelForm):
             self.fields['premise1'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
             self.fields['premise2'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
             self.fields['conclusion'].widget.attrs['onChange'] = "window.location='" + reverse("arguments:new") + "'"
-            self.fields['premise1_if'].widget = forms.Select(choices = [(0, 'Choose')] + premise1.choices[1:])
+            self.fields['premise1_if'].widget = forms.Select(choices = premise1.get_argument_choices())
             self.fields['premise1_if'].initial = 0
-            self.fields['premise2_if'].widget = forms.Select(choices = [(0, 'Choose')] + premise2.choices[1:])
+            self.fields['premise2_if'].widget = forms.Select(choices = [(0, 'Choose')] + \
+                                                             premise2.get_argument_choices())
             self.fields['premise2_if'].initial = 0
-            self.fields['aim'].widget = forms.Select(choices = [(0, 'Choose')] + conclusion.choices[1:])
+            self.fields['aim'].widget = forms.Select(choices = [(0, 'Choose')] + conclusion.get_argument_choices())
             self.fields['aim'].initial = 0
 
     def clean(self):
@@ -88,7 +89,7 @@ class ArgumentCreateForm(forms.ModelForm):
         premise1_if = cleaned_data.get("premise1_if")
         premise2_if = cleaned_data.get("premise2_if")
         aim = cleaned_data.get("aim")
-        if aim < 1 or premise1_if < 1 or premise2_if < 1:
+        if aim == 0 or premise1_if == 0 or premise2_if == 0:
             raise forms.ValidationError("Choose a thesis for your statements.")
         premise1 = cleaned_data.get("premise1")
         premise2 = cleaned_data.get("premise2")

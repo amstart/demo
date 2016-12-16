@@ -25,7 +25,7 @@ def get_premise(object):
     return html_text
 
 def get_argument(object):
-    return object.conclusion.theses[object.aim]
+    return object.conclusion.get_premise_choice(object.aim)
 
 @register.filter
 def print_head(object):
@@ -46,5 +46,5 @@ def print_link(object):
 @register.filter
 def print_thesis(object, thesis_id):
     url = reverse(object.namespace + ':detail', args = [object.id])
-    html = '<a class=\"object_link\" href=\"' + url + '\">' + object.theses[thesis_id] + '</a>'
+    html = '<a class=\"object_link\" href=\"' + url + '\">' + object.get_premise_choice(thesis_id) + '</a>'
     return mark_safe(html)

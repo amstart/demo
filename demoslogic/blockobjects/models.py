@@ -57,9 +57,9 @@ class NetworkObject(BlockObject):
             p1 = next(item for item in nodes if item["id"] == argument['premise1'])
             p2 = next(item for item in nodes if item["id"] == argument['premise2'])
             c = next(item for item in nodes if item["id"] == argument['conclusion'])
-            argument['p1'] = Premise.get_theses(p1['premise_type'], p1['sentence'])[argument['premise1_if']]
-            argument['p2'] = Premise.get_theses(p2['premise_type'], p2['sentence'])[argument['premise2_if']]
-            argument['c'] = Premise.get_theses(c['premise_type'], c['sentence'])[argument['aim']]
+            argument['p1'] = Premise.get_choice(p1['premise_type'], p1['sentence'], argument['premise1_if'])
+            argument['p2'] = Premise.get_choice(p2['premise_type'], p2['sentence'], argument['premise2_if'])
+            argument['c'] = Premise.get_choice(c['premise_type'], c['sentence'], argument['aim'])
         for node in nodes:
             node['group'] = 1
             node['id'] = 'p' + str(node['id'])
@@ -101,7 +101,7 @@ class VoteBase(BlockObject):
         vote_number = []
         choices = self._meta.get_field('value').choices
         if not choices:
-            choices = self.object.choices
+            choices = self.object.get_theses_choices()
         values = [x[0] for x in choices]
         for value in values:
             vote_number.append(sum(vote.value == value for vote in voteobjects_all))

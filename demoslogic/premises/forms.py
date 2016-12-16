@@ -51,7 +51,7 @@ class PremiseVoteForm(VoteForm):
         super(PremiseVoteForm, self).__init__(*args, **kwargs) #loads form helper
         if object:
             self.fields['value'].initial = None
-            self.fields['value'].choices = (object.choices)
+            self.fields['value'].choices = object.get_theses_choices()
             # self.max_choice = object.max_choice
 
     class Meta:

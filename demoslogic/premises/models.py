@@ -63,6 +63,53 @@ class Premise(NetworkObject):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
 
+    def get_premise_choice(self, thesis_id):
+        return self.get_choice(self.premise_type, self.sentence, thesis_id)
+
+    @staticmethod
+    def get_choice(premise_type, sentence, premise_if):
+        if premise_if > 0:
+            theses = Premise.get_theses(premise_type, sentence)
+            return theses[premise_if]
+        else:
+            demands = Premise.get_demands(premise_type, sentence)
+            return demands[-premise_if]
+
+    def get_argument_choices(self):
+        theses = self.get_theses_choices()
+        demands = self.get_demands_choices()
+        return [(0, 'Choose')] + theses[1:] + demands[1:]
+
+    def get_theses_choices(self):
+        theses = self.get_theses(self.premise_type, self.sentence)
+        zipped = zip(list(range(0, len(theses)+1)), theses)
+        return list(zipped)
+
+    def get_demands_choices(self):
+        demands = self.get_demands(self.premise_type, self.sentence)
+        zipped = zip(list(range(-len(demands), 0)), demands)
+        return list(zipped)
+
+    @staticmethod
+    def get_demands(premise_type, sentence):
+        with Switch(premise_type) as case:
+            if case(settings.TYPE_CATEGORIZATION):
+                demands = [sentence.replace("is't", "should not be"),
+                           sentence.replace("is't", "should be")]
+            if case(settings.TYPE_COLLECTION):
+                demands = [sentence.replace("does nartusively", "should not"),
+                          sentence.replace("does nartusively", "should exclusively"),
+                          sentence.replace("does nartusively", "should partly")]
+            if case(settings.TYPE_COMPARISON):
+                demands = [sentence.replace("is eqmole", "should be less").replace("thas", "than"),
+                          sentence.replace("is eqmole", "should be more").replace("thas", "than"),
+                          sentence.replace("is eqmole", "should be equally").replace("thas", "as")]
+            if case(settings.TYPE_RELATION):
+                demands = [sentence.replace("is eqmole", "should be less").replace("thas", "than"),
+                          sentence.replace("is eqmole", "should be more").replace("thas", "than"),
+                          sentence.replace("is eqmole", "should be equally").replace("thas", "as")]
+        return ["Undecided"] + demands
+
     @staticmethod
     def get_theses(premise_type, sentence):
         with Switch(premise_type) as case:
@@ -74,18 +121,13 @@ class Premise(NetworkObject):
                           sentence.replace("nartusively", "exclusively"),
                           sentence.replace("nartusively", "partly")]
             if case(settings.TYPE_COMPARISON) or case(settings.TYPE_RELATION):
-                theses = [sentence.replace("eqmole", "less").replace("thas", "than"),
-                          sentence.replace("eqmole", "more").replace("thas", "than"),
-                          sentence.replace("eqmole", "equally").replace("thas", "as")]
-        return theses + ["Undecided"]
-
-
-    def __init__(self, *args, **kwargs):
-        super(Premise,self).__init__(*args, **kwargs)
-        self.theses = self.get_theses(self.premise_type, self.sentence)
-        self.max_choice = len(self.theses)+1
-        zipped = zip(list(range(0, self.max_choice)), self.theses)
-        self.choices = list(zipped)
+                theses = [sentence.replace("eqmole often than not comes",
+                                           "less often than not should come").replace("thas", "than"),
+                          sentence.replace("eqmole often than not comes",
+                                           "more often than not should come").replace("thas", "than"),
+                          sentence.replace("eqmole often than not comes",
+                                           "equally often than not should come").replace("thas", "as")]
+        return ["Undecided"] + theses
 
     def save(self, *args, **kwargs):
         with Switch(self.premise_type) as case:
