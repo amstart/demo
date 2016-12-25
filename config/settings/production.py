@@ -11,7 +11,7 @@ Production Configurations
 from __future__ import absolute_import, unicode_literals
 
 # from boto.s3.connection import OrdinaryCallingFormat
-from django.utils import six
+# from django.utils import six
 
 
 from .common import *  # noqa
@@ -28,8 +28,8 @@ SECRET_KEY = env('DJANGO_SECRET_KEY')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Use Whitenoise to serve static files
 # See: https://whitenoise.readthedocs.io/
-WHITENOISE_MIDDLEWARE = ('whitenoise.middleware.WhiteNoiseMiddleware', )
-MIDDLEWARE = WHITENOISE_MIDDLEWARE + MIDDLEWARE
+# WHITENOISE_MIDDLEWARE = ('whitenoise.middleware.WhiteNoiseMiddleware', )
+# MIDDLEWARE = WHITENOISE_MIDDLEWARE + MIDDLEWARE
 
 
 # SECURITY CONFIGURATION
@@ -98,13 +98,13 @@ DEFAULT_FROM_EMAIL = env('DJANGO_DEFAULT_FROM_EMAIL',
 EMAIL_SUBJECT_PREFIX = env('DJANGO_EMAIL_SUBJECT_PREFIX', default='[demoslogic] ')
 SERVER_EMAIL = env('DJANGO_SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
-# Anymail with Mailgun
-INSTALLED_APPS += ("anymail", )
-ANYMAIL = {
-    "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": env('MAILGUN_SENDER_DOMAIN')
-}
-EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
+# # Anymail with Mailgun
+# INSTALLED_APPS += ("anymail", )
+# ANYMAIL = {
+#     "MAILGUN_API_KEY": env('DJANGO_MAILGUN_API_KEY'),
+#     "MAILGUN_SENDER_DOMAIN": env('MAILGUN_SENDER_DOMAIN')
+# }
+# EMAIL_BACKEND = "anymail.backends.mailgun.MailgunBackend"
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -125,6 +125,9 @@ DATABASES = {
         'USER': 'Jochen2',
         'PASSWORD': 'b83cfghj',
         'HOST': 'Jochen2.mysql.pythonanywhere-services.com',
+        'OPTIONS': {
+            'sql_mode': 'traditional',
+        }
     }
 }
 
@@ -192,9 +195,6 @@ LOGGING = {
         }
     }
 }
-
-# Custom Admin URL, use {% url 'admin:index' %}
-ADMIN_URL = env('DJANGO_ADMIN_URL')
 
 # Your production stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------

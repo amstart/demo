@@ -65,6 +65,6 @@ demoslogic/media/
 .json
 
 
-
+staticfiles/
 demoslogic/static/json/miserables.json
 demoslogic/static/json/network.json
