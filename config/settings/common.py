@@ -19,7 +19,7 @@ APPS_DIR = ROOT_DIR.path('demoslogic')
 
 env = environ.Env()
 
-BOWER_COMPONENTS_ROOT = 'C:\\Users\\Jochen\\Documents\\demoslogic'
+BOWER_COMPONENTS_ROOT = str(ROOT_DIR)
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
 DJANGO_APPS = (
@@ -266,7 +266,7 @@ AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
 
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
-ADMIN_URL = r'^admin/'
+ADMIN_URL = r'^immahaxor/'
 
 # Your common stuff: Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
