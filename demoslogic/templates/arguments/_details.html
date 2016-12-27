@@ -1,11 +1,18 @@
 {% load blockobjects_tags %}
 
-<div class="row"> <div class="col-md-2"> Premise 1: </div>
+<div class="row"> <div class="col-md-2"> IF: </div>
  <div class="col-md-5"> {{ object.premise1|print_thesis:object.premise1_if }}  </div>
 </div>
-<div class="row">  <div class="col-md-2"> Premise 2: </div>
- <div class="col-md-5"> {{ object.premise2|print_thesis:object.premise2_if }} </div>
-</div>
-<div class="row">  <div class="col-md-2"> Conclusion: </div>
+{% if object.premise2 %}
+  <div class="row">  <div class="col-md-2"> AND: </div>
+   <div class="col-md-5"> {{ object.premise2|print_thesis:object.premise2_if }} </div>
+  </div>
+{% endif %}
+{% if object.premise3 %}
+  <div class="row">  <div class="col-md-2"> AND: </div>
+   <div class="col-md-5"> {{ object.premise3|print_thesis:object.premise3_if }} </div>
+  </div>
+{% endif %}
+<div class="row">  <div class="col-md-2"> THEN: </div>
  <div class="col-md-5"> {{ object.conclusion|print_thesis:object.aim }} </div>
 </div>

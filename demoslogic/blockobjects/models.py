@@ -31,7 +31,7 @@ class NetworkObject(BlockObject):
 
     def save(self, *args, **kwargs):
         super(NetworkObject, self).save(*args, **kwargs)
-        self.save_network()
+        # self.save_network()
 
     def delete(self, *args, **kwargs):
         super(NetworkObject, self).delete(*args, **kwargs)

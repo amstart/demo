@@ -40,6 +40,7 @@ class ArgumentCreateView(views.CreateObjectView):
         kwargs = super(ArgumentCreateView, self).get_form_kwargs()
         kwargs['premise1'] = self.request.GET.get('premise1', None)
         kwargs['premise2'] = self.request.GET.get('premise2', None)
+        kwargs['premise3'] = self.request.GET.get('premise3', None)
         kwargs['conclusion'] = self.request.GET.get('conclusion', None)
         return kwargs#(premise1 = premise1, premise2 = premise2, conclusion = conclusion)
 

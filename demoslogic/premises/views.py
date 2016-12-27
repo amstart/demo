@@ -1,5 +1,6 @@
 from dal import autocomplete
 from switch import Switch
+from itertools import chain
 
 from django.views.generic import TemplateView, FormView, DetailView
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -123,7 +124,8 @@ class PremiseDetailView(views.DetailWithVoteView):
 
     def get_context_data(self, **kwargs):
         context = super(PremiseDetailView, self).get_context_data(**kwargs)
-        context['as_premise_set'] = self.object.premise1.filter()
+        context['as_premise_set'] = self.object.premise1.filter() | self.object.premise2.filter() \
+                                    | self.object.premise3.filter()
         context['as_conclusion_set'] = self.object.conclusion.filter()
         return context
 

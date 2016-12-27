@@ -78,7 +78,7 @@ class Premise(NetworkObject):
     def get_argument_choices(self):
         theses = self.get_theses_choices()
         demands = self.get_demands_choices()
-        return [(0, 'Choose')] + theses[1:] + demands[1:]
+        return [(0, 'Choose version')] + theses[1:] + demands[1:]
 
     def get_theses_choices(self):
         theses = self.get_theses(self.premise_type, self.sentence)
