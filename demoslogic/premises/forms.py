@@ -58,7 +58,7 @@ class PremiseVoteForm(VoteForm):
         model = models.PremiseVote
         fields = ['value']
         widgets = {'value': forms.RadioSelect}
-        labels = {'value': "How accurate do you think this categorization is?"}
+        labels = {'value': "With which version of that statement would you agree most?"}
 
     # def clean_value(self):
     #     value = self.cleaned_data.get("value")

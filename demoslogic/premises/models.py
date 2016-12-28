@@ -87,7 +87,7 @@ class Premise(NetworkObject):
 
     def get_demands_choices(self):
         demands = self.get_demands(self.premise_type, self.sentence)
-        zipped = zip(list(range(-len(demands), 0)), demands)
+        zipped = zip(list(range(0, -len(demands), -1)), demands)
         return list(zipped)
 
     @staticmethod

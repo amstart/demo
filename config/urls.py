@@ -28,7 +28,7 @@ urlpatterns = [
         name='selenium'
     ),
     # Your stuff: custom urls includes go here
-    url(r'^network/', NetworkView.as_view(), name='network'),
+    url(r'^visualize/', NetworkView.as_view(), name='network'),
     url(r'^statements/', include('demoslogic.premises.urls')),
     url(r'^arguments/', include('demoslogic.arguments.urls')),
 
