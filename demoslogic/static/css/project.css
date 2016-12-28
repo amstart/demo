@@ -43,14 +43,9 @@
   display: inline;
 }
 
-line[class|="forcelink"] {
-  stroke-opacity: 0.7;
+line {
+  stroke-opacity: 0.8;
 }
-
-.forcelink-0 {  stroke: darkgreen;}
-.forcelink-1 {  stroke: darkred;}
-.forcelink-2 {  stroke: #999;}
-.forcelink-3 {  stroke: black;}
 
 .object_body, .chart{
     margin-top: 10px;

@@ -15,13 +15,41 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
 from demoslogic.premises.models import Premise
+from demoslogic.arguments.models import Argument
 
 class NetworkView(TemplateView):
     template_name = 'blockobjects/network.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(NetworkView, self).get_context_data(**kwargs)
-    #     print(context['form'])
+    def get_context_data(self, **kwargs):
+        return self.compute_network()
+
+    @staticmethod
+    def compute_network():
+        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'premise3', 'conclusion',
+                                               'aim', 'premise1_if', 'premise2_if', 'premise3_if', 'sentence')
+        arguments = [entry for entry in arguments_qs]
+        statements_qs = Premise.objects.values('id', 'premise_type', 'sentence')
+        nodes = [entry for entry in statements_qs]
+        for node in nodes:
+            node['group'] = 1
+            node['id'] = 'p' + str(node['id'])
+            node['name'] = node.pop('sentence')
+        links = []
+        for argument in arguments:
+            node_id = 'a' + str(argument['id'])
+            arg_sentence = argument['sentence']
+            nodes.append({'id': node_id, 'group': 2, 'name': arg_sentence})
+            links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
+                          'value': 2, 'aim': argument['premise1_if']})
+            if argument['premise2']:
+                links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,
+                              'value': 2, 'aim': argument['premise2_if']})
+            if argument['premise3']:
+                links.append({'source': 'p' + str(argument['premise3']), 'target': node_id,
+                              'value': 2, 'aim': argument['premise3_if']})
+            links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']),
+                          'value': 1, 'aim': argument['aim']})
+        return {'nodes': nodes, 'links': links}
 
 class ObjectListView(ListView):
     template_name = 'blockobjects/index.html'

@@ -2,9 +2,11 @@
 {% block title %} network
 {% endblock title %}
 {% load static %}
+{% load blockobjects_tags %}
 
 {% block content %}
-<input type="text" id="search_field" class="form-control" value="" size=40 onkeypress="return searchNode(event)">
+<input type="text" id="search_field" class="form-control"
+ placeholder="search..." value="" size=40 onkeypress="return searchNode(event)">
 <svg width="600" height="350"></svg>
 {% endblock content %}
 
@@ -35,29 +37,38 @@ var svg = d3.select("svg"),
         .style("stroke", "#222222")
         .style("opacity", "0.8");
 
-var color = d3.scaleOrdinal(d3.schemeCategory20);
+var nodecolor = function(d) {
+  var colormap = ["#000000", "#0570b0", "#74a9cf"];
+  if (d < 0) {d = -d};
+  return colormap[d]; };
+
+var linkcolor = function(d) {
+  var colormap = ["#000000", "#e41a1c", "#4daf4a", "#333333"];
+  if (d < 0) {d = -d};
+  return colormap[d]; };
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; }))
       // .strength(function(d) { return d.value; }))
-    .force("charge", d3.forceManyBody())
+    .force("charge", d3.forceManyBody().strength(-100))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("{% static 'json/network.json' %}", function(error, graph) {
-  if (error) throw error;
+function do_simulation(node_data, link_data) {
 
   var link = svg.append("g")
     .selectAll("line")
-    .data(graph.links)
+    .data(link_data)
     .enter().append("line")
       // .attr("stroke-width", function(d) { return Math.sqrt(d.value); })
-      .attr("class", function(d) { return ("forcelink-" + d.aim); })
+      // .attr("class", function(d) { return ("forcelink-" + d.aim); })
+      .attr("stroke", function(d) { return linkcolor(d.aim);})
+      .attr("stroke-dasharray", function(d) { if (d.aim < 0) {return "5"} else {return "0"};})
       .style("marker-end",  "url(#suit)") // Modified line
       .style("stroke-width", "3px");
 
   var node = svg.selectAll(".node")
-      .data(graph.nodes)
+      .data(node_data)
     .enter().append("g")
       .attr("class", "node")
       .call(d3.drag()
@@ -76,16 +87,16 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
 
   var circle = node.append("circle")
       .attr("r", 8)
-      .attr("fill", function(d) { return color(d.group); })
+      .attr("fill", function(d) { return nodecolor(d.group); })
       .on('mouseover', tool_tip.show) //Added
       .on('mouseout', tool_tip.hide); //Added
 
   simulation
-      .nodes(graph.nodes)
+      .nodes(node_data)
       .on("tick", ticked);
 
   simulation.force("link")
-      .links(graph.links);
+      .links(link_data);
 
   function ticked() {
     link
@@ -108,10 +119,10 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
   var toggle = 0;
   //Create an array logging what is connected to what
   var linkedByIndex = {};
-  for (i = 0; i < graph.nodes.length; i++) {
+  for (i = 0; i < node_data.length; i++) {
       linkedByIndex[i + "," + i] = 1;
   };
-  graph.links.forEach(function (d) {
+  link_data.forEach(function (d) {
       linkedByIndex[d.source.index + "," + d.target.index] = 1;
   });
   //This function looks up whether a pair are neighbours
@@ -137,7 +148,7 @@ d3.json("{% static 'json/network.json' %}", function(error, graph) {
           toggle = 0;
       }
   }
-});
+};
 
 var tool_tip = d3.tip()
   .attr("class", "d3-tip")
@@ -198,5 +209,6 @@ function dragended(d) {
   d.fy = null;
 }
 
+do_simulation({{ nodes|jsonify }}, {{ links|jsonify }})
 </script>
 {% endblock javascript %}

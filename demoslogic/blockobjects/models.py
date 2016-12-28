@@ -29,58 +29,6 @@ class NetworkObject(BlockObject):
             self.staged = timezone.now()
             self.save()
 
-    def save(self, *args, **kwargs):
-        super(NetworkObject, self).save(*args, **kwargs)
-        # self.save_network()
-
-    def delete(self, *args, **kwargs):
-        super(NetworkObject, self).delete(*args, **kwargs)
-        self.save_network()
-
-    def save_data(self, data, filename = 'data'):
-        import json
-        import os
-        from config.settings.common import APPS_DIR
-        filename = os.path.join(str(APPS_DIR), 'static/json/' + filename + '.json')
-        with open(filename, 'w') as fp:
-            json.dump(data, fp)
-
-    def save_network(self):
-        from demoslogic.arguments.models import Argument
-        from demoslogic.premises.models import Premise
-        arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'conclusion',
-                                               'aim', 'premise1_if', 'premise2_if')
-        arguments = [entry for entry in arguments_qs]
-        statements_qs = Premise.objects.values('id', 'premise_type', 'sentence')
-        nodes = [entry for entry in statements_qs]
-        for argument in arguments:
-            p1 = next(item for item in nodes if item["id"] == argument['premise1'])
-            p2 = next(item for item in nodes if item["id"] == argument['premise2'])
-            c = next(item for item in nodes if item["id"] == argument['conclusion'])
-            argument['p1'] = Premise.get_choice(p1['premise_type'], p1['sentence'], argument['premise1_if'])
-            argument['p2'] = Premise.get_choice(p2['premise_type'], p2['sentence'], argument['premise2_if'])
-            argument['c'] = Premise.get_choice(c['premise_type'], c['sentence'], argument['aim'])
-        for node in nodes:
-            node['group'] = 1
-            node['id'] = 'p' + str(node['id'])
-            node['name'] = node.pop('sentence')
-            # node['related_conclusions'] =
-            # node['related_premises'] =
-            # node['related_argument'] =
-        links = []
-        for argument in arguments:
-            node_id = 'a' + str(argument['id'])
-            arg_sentence = "IF " + argument['p1'] + "<br> AND " + argument['p2'] + "<br> THEN " + argument['c']
-            nodes.append({'id': node_id, 'group': 2, 'name': arg_sentence})
-            links.append({'source': 'p' + str(argument['premise1']), 'target': node_id,
-                          'value': 2, 'aim': argument['premise1_if']})
-            links.append({'source': 'p' + str(argument['premise2']), 'target': node_id,
-                          'value': 2, 'aim': argument['premise2_if']})
-            links.append({'source': node_id, 'target': 'p' + str(argument['conclusion']),
-                          'value': 1, 'aim': argument['aim']})
-        savedict = {'nodes': nodes, 'links': links}
-        self.save_data(savedict, 'network')
-
     class Meta:
         abstract = True
         get_latest_by = 'pub_date'
