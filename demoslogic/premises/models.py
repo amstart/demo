@@ -124,7 +124,7 @@ class Premise(NetworkObject):
                           sentence.replace("nartusively", "exclusively"),
                           sentence.replace("nartusively", "partly")]
             if case(settings.TYPE_COMPARISON):
-                demands = [sentence.replace("is eqmole", "is less").replace("thas", "than"),
+                theses = [sentence.replace("is eqmole", "is less").replace("thas", "than"),
                           sentence.replace("is eqmole", "is more").replace("thas", "than"),
                           sentence.replace("is eqmole", "is equally").replace("thas", "as")]
             if case(settings.TYPE_RELATION):
