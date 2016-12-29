@@ -37,21 +37,15 @@
           <div class="collapse navbar-toggleable-xs" id="bs-navbar-collapse-1">
             <ul class="nav navbar-nav">
               <li class="nav-item dropdown">
-                  <a href="{% url 'premises:index' %}" class="nav-link">Statements</a>
+                  <a href="{% url 'network' %}" class="nav-link">Substance</a>
                   <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{% url 'network' %}">Visualize</a></li>
-                    <li><a class="nav-link" href="{% url 'premises:index' %}">List</a></li>
-                    <li><a class="nav-link" href="{% url 'premises:search' %}">Find</a></li>
+                    <li><a class="nav-link" href="{% url 'arguments:index' %}">List Arguments</a></li>
+                    <li><a class="nav-link" href="{% url 'premises:index' %}">List Statements</a></li>
+                    <li><a class="nav-link" href="{% url 'premises:search' %}">Find Statement</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_nouns' %}">Nouns</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_verbs' %}">Verbs</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_adjectives' %}">Adjectives</a></li>
-                  </ul>
-              </li>
-              <li class="nav-item dropdown">
-                  <a href="{% url 'arguments:index' %}" class="nav-link">Arguments</a>
-                  <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{% url 'network' %}">Visualize</a></li>
-                    <li><a class="nav-link" href="{% url 'arguments:index' %}">List</a></li>
                   </ul>
               </li>
               <li class="nav-item dropdown">

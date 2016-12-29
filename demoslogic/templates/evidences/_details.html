@@ -1,0 +1,7 @@
+{% load blockobjects_tags %}
+<div class="row"> <div class="col-md-2"> URL: </div>
+ <div class="col-md-8"> <a href="{{ object.URL }}">{{ object.URL }}</a>  </div>
+</div>
+<div class="row">  <div class="col-md-2"> Statement: </div>
+ <div class="col-md-5"> {{ object.statement|print_link }} </div>
+</div>

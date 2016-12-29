@@ -17,19 +17,16 @@
   {% endif %}
   <br>
   <div class="object_body">
-    {% if object.namespace == 'premises' %}
-      {% include "premises/_details.html" %}
-    {% else %}
-      {% include "arguments/_details.html" %}
-    {% endif %}
+    {% include object.namespace|add:"/_details.html" %}
   </div>
   {% if already_voted %}
   <div class="container chart">
-    <h4> Votes </h4>
+    <h4> Vote Results </h4>
     {% include "blockobjects/_barchart.html" %}
   </div>
   {% endif %}
   {% if not already_voted %}
+    <h4> Vote </h4>
     {% crispy voteform voteform.helper %}
   {% endif %}
   <div class="object_related">

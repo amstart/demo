@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^visualize/', NetworkView.as_view(), name='network'),
     url(r'^statements/', include('demoslogic.premises.urls')),
     url(r'^arguments/', include('demoslogic.arguments.urls')),
+    url(r'^evidences/', include('demoslogic.evidences.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

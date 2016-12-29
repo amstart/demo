@@ -21,8 +21,7 @@ register.filter('jsonify', jsonify)
 jsonify.is_safe = True
 
 def get_premise(object):
-    html_text = object.sentence
-    return html_text
+    return object.sentence
 
 def get_argument(object):
     return object.conclusion.get_premise_choice(object.aim)
@@ -31,8 +30,10 @@ def get_argument(object):
 def print_head(object):
     if type(object) == Premise:
         return mark_safe(get_premise(object))
-    else:
+    elif type(object) == Argument:
         return mark_safe(get_argument(object))
+    else:
+        return mark_safe(str(object))
 
 @register.filter
 def print_link(object):
@@ -40,8 +41,10 @@ def print_link(object):
     html = '<a class=\"object_link\" href=\"' + url + '\">'
     if type(object) == Premise:
         return mark_safe(html + get_premise(object) + '</a>')
-    else:
+    elif type(object) == Argument:
         return mark_safe(html + get_argument(object) + '</a>')
+    else:
+        return mark_safe(html + str(object) + '</a>')
 
 @register.filter
 def print_thesis(object, thesis_id):

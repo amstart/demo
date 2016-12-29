@@ -1,2 +1,6 @@
+<h4> Evidence </h4>
 <div class="row"> The following sources have been cited to directly issue that statement <br>
 (if applicable, please try to verify the sources):</div>
+{% include 'blockobjects/_object_list.html' with object_list=object.evidence_set.filter %}
+<a class="new_evidence"
+href="{% url 'evidences:create' %}?statement={{ object.pk }}">Add evidence!</a>
