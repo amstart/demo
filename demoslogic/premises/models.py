@@ -129,11 +129,11 @@ class Premise(NetworkObject):
                           sentence.replace("is eqmole", "is equally").replace("thas", "as")]
             if case(settings.TYPE_RELATION):
                 theses = [sentence.replace("eqmole often than not comes",
-                                           "less often than not should come").replace("thas", "than"),
+                                           "less often than not comes").replace("thas", "than"),
                           sentence.replace("eqmole often than not comes",
-                                           "more often than not should come").replace("thas", "than"),
+                                           "more often than not comes").replace("thas", "than"),
                           sentence.replace("eqmole often than not comes",
-                                           "equally often as not should come").replace("thas", "as")]
+                                           "equally often as not comes").replace("thas", "as")]
         return ["Undecided"] + theses
 
     def save(self, *args, **kwargs):
