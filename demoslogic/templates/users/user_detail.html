@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}User: {{ object.username }}{% endblock %}
+{% block title %}Member: {{ object.username }}{% endblock %}
 
 {% block content %}
   <div class="row">
@@ -30,7 +30,7 @@
   <h4>Work done</h4>
   <ul>
     <li>
-      {% if request.user == object %}You have created {% else %}This user has created {% endif %}
+      {% if request.user == object %}You have created {% else %}This member has created {% endif %}
       {{ object.premise_set.count }} statement{{ object.premise_set.count|pluralize }}  and
       {{ object.argument_set.count }} argument{{ object.argument_set.count|pluralize }} so far.
     </li>

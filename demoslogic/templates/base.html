@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}demoslogic{% endblock title %}</title>
+    <title>{% block title %}demologic{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Just logical democracy.">
     <meta name="author" content="Jochen Krattenmacher">
@@ -28,7 +28,7 @@
     <div class="m-b-1">
       <nav class="navbar navbar-dark navbar-static-top bg-inverse">
         <div class="container">
-          <a class="navbar-brand" href="/">demoslogic</a>
+          <a class="navbar-brand" href="/">demologic</a>
           <button type="button" class="navbar-toggler hidden-sm-up pull-xs-right" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
             &#9776;
           </button>
@@ -39,17 +39,17 @@
               <li class="nav-item dropdown">
                   <a href="{% url 'network' %}" class="nav-link">Substance</a>
                   <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{% url 'arguments:index' %}">List Arguments</a></li>
-                    <li><a class="nav-link" href="{% url 'premises:index' %}">List Statements</a></li>
-                    <li><a class="nav-link" href="{% url 'premises:search' %}">Find Statement</a></li>
+                    <li><a class="nav-link" href="{% url 'arguments:index' %}">Arguments</a></li>
+                    <li><a class="nav-link" href="{% url 'premises:index' %}">Statements</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_nouns' %}">Nouns</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_verbs' %}">Verbs</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_adjectives' %}">Adjectives</a></li>
+                    <li><a class="nav-link" href="{% url 'premises:search' %}">Find</a></li>
                     <li><a class="nav-link" href="{% url 'network' %}">Visualize</a></li>
                   </ul>
               </li>
               <li class="nav-item dropdown">
-                  <a href="{% url 'users:list' %}" class="nav-link">Users</a>
+                  <a href="{% url 'users:list' %}" class="nav-link">Members</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>

@@ -48,12 +48,12 @@ class Premise(NetworkObject):
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
     sentence = TrimmedCharField(default = '', max_length = 250)
-    key_subject = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_subject')
-    key_predicate = models.ForeignKey(Verb, on_delete = models.DO_NOTHING, null = True)
-    key_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING, related_name = 'key_object', null = True)
-    key_indirect_object = models.ForeignKey(Noun, on_delete = models.DO_NOTHING,
+    key_subject = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_subject')
+    key_predicate = models.ForeignKey(Verb, on_delete = models.CASCADE, null = True)
+    key_object = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_object', null = True)
+    key_indirect_object = models.ForeignKey(Noun, on_delete = models.CASCADE,
                                             related_name = 'key_indirect_object', null = True)
-    key_complement = models.ForeignKey(Adjective, on_delete = models.DO_NOTHING, null = True)
+    key_complement = models.ForeignKey(Adjective, on_delete = models.CASCADE, null = True)
     premise_type = models.IntegerField(default = settings.TYPE_CATEGORIZATION,
                                        choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
                                                   (settings.TYPE_COLLECTION, "Collection"),
