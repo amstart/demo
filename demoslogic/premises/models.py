@@ -47,18 +47,20 @@ class Premise(NetworkObject):
     name_lower = 'statement'
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
-    sentence = TrimmedCharField(default = '', max_length = 250)
+    sentence = models.CharField(default = '', max_length = 250)
     key_subject = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_subject')
     key_predicate = models.ForeignKey(Verb, on_delete = models.CASCADE, null = True)
     key_object = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_object', null = True)
     key_indirect_object = models.ForeignKey(Noun, on_delete = models.CASCADE,
-                                            related_name = 'key_indirect_object', null = True)
+                                            related_name = 'key_indirect_object', null = True, blank = True)
     key_complement = models.ForeignKey(Adjective, on_delete = models.CASCADE, null = True)
     premise_type = models.IntegerField(default = settings.TYPE_CATEGORIZATION,
                                        choices = ((settings.TYPE_CATEGORIZATION, "Categorization"),
                                                   (settings.TYPE_COLLECTION, "Collection"),
                                                   (settings.TYPE_COMPARISON, "Comparison"),
-                                                  (settings.TYPE_RELATION, "Relation")))
+                                                  (settings.TYPE_RELATION, "Correlation"),
+                                                  (settings.TYPE_QUANTITY, "Existence"),
+                                                  (settings.TYPE_ENCOURAGEMENT, "Encouragment")))
     class Meta(NetworkObject.Meta):
         unique_together = ("premise_type", "key_subject", "key_predicate", "key_object",
                            "key_complement", "key_indirect_object")
@@ -94,60 +96,87 @@ class Premise(NetworkObject):
     def get_demands(premise_type, sentence):
         with Switch(premise_type) as case:
             if case(settings.TYPE_CATEGORIZATION):
-                demands = [sentence.replace("is't", "should not be"),
-                           sentence.replace("is't", "should be")]
+                out = Premise.get_list(premise_type, sentence, "should not be", "should be")
             if case(settings.TYPE_COLLECTION):
-                demands = [sentence.replace("does nartusively", "should not"),
-                          sentence.replace("does nartusively", "should exclusively"),
-                          sentence.replace("does nartusively", "should partly")]
+                out = Premise.get_list(premise_type, sentence, "should not", "should exclusively", "should partly")
             if case(settings.TYPE_COMPARISON):
-                demands = [sentence.replace("is eqmole", "should be less").replace("thas", "than"),
-                          sentence.replace("is eqmole", "should be more").replace("thas", "than"),
-                          sentence.replace("is eqmole", "should be equally").replace("thas", "as")]
+                out = Premise.get_list(premise_type, sentence, "should be less", "should be more", "should be equally")
             if case(settings.TYPE_RELATION):
-                demands = [sentence.replace("eqmole often than not comes",
-                                            "should come less often then not").replace("thas", "than"),
-                          sentence.replace("eqmole often than not comes",
-                                           "should come more often then not").replace("thas", "than"),
-                          sentence.replace("eqmole often than not comes",
-                                           "should come equally often as not").replace("thas", "as")]
-        return ["Undecided"] + demands
+                out = Premise.get_list(premise_type, sentence, "should be less", "should be more",
+                                       "should be no change in")
+            if case(settings.TYPE_QUANTITY):
+                out = Premise.get_list(premise_type, sentence, "should be less", "should be more",
+                                       "might be an equal amount of")
+            if case(settings.TYPE_ENCOURAGEMENT):
+                out = Premise.get_list(premise_type, sentence, "should be discouraged", "should be encouraged",
+                                          "should neither be encouraged nor discouraged")
+        return ["Undecided"] + out
 
     @staticmethod
     def get_theses(premise_type, sentence):
         with Switch(premise_type) as case:
             if case(settings.TYPE_CATEGORIZATION):
-                theses = [sentence.replace("is't", "is not"),
-                          sentence.replace("is't", "is")]
+                out = Premise.get_list(premise_type, sentence, "is not", "is")
             if case(settings.TYPE_COLLECTION):
-                theses = [sentence.replace("nartusively", "not"),
-                          sentence.replace("nartusively", "exclusively"),
-                          sentence.replace("nartusively", "partly")]
+                out = Premise.get_list(premise_type, sentence, "does not", "does exclusively", "does partly")
             if case(settings.TYPE_COMPARISON):
-                theses = [sentence.replace("is eqmole", "is less").replace("thas", "than"),
-                          sentence.replace("is eqmole", "is more").replace("thas", "than"),
-                          sentence.replace("is eqmole", "is equally").replace("thas", "as")]
+                out = Premise.get_list(premise_type, sentence, "is less", "is more", "is equally")
             if case(settings.TYPE_RELATION):
-                theses = [sentence.replace("eqmole often than not comes",
-                                           "less often than not comes").replace("thas", "than"),
-                          sentence.replace("eqmole often than not comes",
-                                           "more often than not comes").replace("thas", "than"),
-                          sentence.replace("eqmole often than not comes",
-                                           "equally often as not comes").replace("thas", "as")]
-        return ["Undecided"] + theses
+                out = Premise.get_list(premise_type, sentence, "is less", "is more", "is no change in")
+            if case(settings.TYPE_QUANTITY):
+                out = Premise.get_list(premise_type, sentence, "is no", "is", "might be")
+            if case(settings.TYPE_ENCOURAGEMENT):
+                out = Premise.get_list(premise_type, sentence, "is discouraged", "is encouraged",
+                                          "is neither encouraged nor discouraged")
+        return ["Undecided"] + out
+
+    @staticmethod
+    def get_regexpr(premise_type):
+        with Switch(premise_type) as case:
+                if case(settings.TYPE_CATEGORIZATION):
+                    return "is ?"
+                if case(settings.TYPE_COLLECTION):
+                    return "does partly ?"
+                if case(settings.TYPE_COMPARISON):
+                    return "is equally ?"
+                if case(settings.TYPE_RELATION):
+                    return "is no change in ?"
+                if case(settings.TYPE_QUANTITY):
+                    return "is ?"
+                if case(settings.TYPE_ENCOURAGEMENT):
+                    return "is neither encouraged nor discouraged ?"
+
+    @staticmethod
+    def get_list(premise_type, sentence, *replace_strings):
+        regexpr = Premise.get_regexpr(premise_type)
+        sentence_list = []
+        for index, r_string in enumerate(replace_strings):
+            if index < 2:
+                s = sentence.replace(" as ", " than ")
+            else:
+                s = sentence
+            sentence_list.append(s.replace(regexpr, r_string))
+        return sentence_list
 
     def save(self, *args, **kwargs):
         with Switch(self.premise_type) as case:
                 if case(settings.TYPE_CATEGORIZATION):
-                    self.sentence = str(self.key_subject) + " is't a type of " + str(self.key_object)
+                    self.sentence = str(self.key_subject) + " is ? a type of " + str(self.key_object)
                 if case(settings.TYPE_COLLECTION):
-                    self.sentence = str(self.key_subject) + " does nartusively consist of " + str(self.key_object)
+                    self.sentence = str(self.key_subject) + " does partly ? consist of " \
+                                    + str(self.key_object)
                 if case(settings.TYPE_COMPARISON):
-                    self.sentence = str(self.key_subject) + ' is eqmole ' + str(self.key_complement) \
-                                    + ' thas ' + str(self.key_object) + ' for ' + str(self.key_indirect_object)
+                    self.sentence = str(self.key_subject) + ' is equally ? ' + str(self.key_complement) \
+                                    + ' as ' + str(self.key_object)
                 if case(settings.TYPE_RELATION):
-                    self.sentence = str(self.key_subject) + \
-                                    ' eqmole often than not comes with ' + str(self.key_object)
+                    self.sentence = 'When there is more ' + str(self.key_subject) + \
+                                    ', there is no change in ? ' + str(self.key_object)
+                if case(settings.TYPE_QUANTITY):
+                    self.sentence = 'There is ? ' + str(self.key_subject)
+                if case(settings.TYPE_ENCOURAGEMENT):
+                    self.sentence = 'The following is neither encouraged nor discouraged ?: ' + str(self.key_subject)
+        if self.key_indirect_object:
+            self.sentence = self.sentence + ' for (the) ' + str(self.key_indirect_object)
         super(Premise, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -161,6 +190,7 @@ class Vote(VoteBase):
 
 class PremiseVote(Vote):
     value = models.IntegerField()
+    value2 = models.IntegerField()
 
 #choice has a meta class with the ForeignKey and some API, and the base classes with their specific set of choices
 #premises and arguments also might share a meta class

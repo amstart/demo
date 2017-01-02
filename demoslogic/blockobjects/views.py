@@ -98,8 +98,11 @@ class DetailWithVoteView(DetailView):
         return context
 
     def plot(self, context, voteobject_user, voteobjects_all):
-        plot_data = voteobject_user.get_plot_data(voteobjects_all)
+        plot_data = voteobject_user.get_plot_data(voteobjects_all, 'value')
         context['plot_data'] = plot_data
+        if hasattr(self.voteform.Meta.model, 'value2'):
+            plot_data2 = voteobject_user.get_plot_data(voteobjects_all, 'value2')
+            context['plot_data2'] = plot_data2
         return context
 
     def render_to_response(self, context, **kwargs):
@@ -131,7 +134,7 @@ class DetailWithVoteView(DetailView):
             if voteobjects.count():
                 raise Exception('There is already a vote!!')
             vote = votemodel(object_id = pk, user = request.user)
-            vote.update(voteform.cleaned_data['value'])
+            vote.update(voteform.cleaned_data['value'], voteform.cleaned_data.get('value2', None))
             return HttpResponseRedirect(request.get_full_path())
         else:
             return render(request, self.template_name,
@@ -160,7 +163,7 @@ class UpdateVoteView(LoginRequiredMixin, DetailView):
             if voteobjects.count() > 1:
                 raise Exception('More than one vote object found!')
             vote = voteobjects[0]
-            vote.update(voteform.cleaned_data['value'])
+            vote.update(voteform.cleaned_data['value'], voteform.cleaned_data.get('value2', None))
             return HttpResponseRedirect(reverse('premises:detail', args = [pk]))
         else:
             return render(request, self.template_name,

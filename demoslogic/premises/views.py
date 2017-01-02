@@ -150,10 +150,10 @@ class PremiseCreateView(views.CreateObjectView):
                     return forms.ComparisonCreateForm
                 if case(settings.TYPE_RELATION):
                     return forms.RelationCreateForm
-                if case(settings.TYPE_DIAGNOSIS):
-                    return forms.DiagnosisCreateForm
-                if case(settings.TYPE_PROPOSAL):
-                    return forms.ProposalCreateForm
+                if case(settings.TYPE_QUANTITY):
+                    return forms.QuantityCreateForm
+                if case(settings.TYPE_ENCOURAGEMENT):
+                    return forms.EncouragmentCreateForm
         return forms.CategorizationCreateForm
 
 

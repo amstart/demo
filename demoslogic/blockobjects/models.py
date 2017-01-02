@@ -45,14 +45,17 @@ class VoteBase(BlockObject):
     class Meta:
         abstract = True
 
-    def get_plot_data(self, voteobjects_all):
+    def get_plot_data(self, voteobjects_all, fieldname):
         vote_number = []
-        choices = self._meta.get_field('value').choices
+        choices = self._meta.get_field(fieldname).choices
         if not choices:
-            choices = self.object.get_theses_choices()
+            if fieldname == 'value':
+                choices = self.object.get_theses_choices()
+            else:
+                choices = self.object.get_demands_choices()
         values = [x[0] for x in choices]
         for value in values:
-            vote_number.append(sum(vote.value == value for vote in voteobjects_all))
+            vote_number.append(sum(getattr(vote, fieldname) == value for vote in voteobjects_all))
             max_vote_number = max(vote_number)
         labels = [x[1] for x in choices]
         plot_data = []
@@ -61,14 +64,18 @@ class VoteBase(BlockObject):
                     'bar_width': max([15, vote_number[index]/max_vote_number*350]),
                     'bar_text': str(vote_number[index])}
             plot_data.append(item)
-        plot_data[self.value]['bar_text'] += " (you)"
+        plot_data[getattr(self, fieldname)]['bar_text'] += " (you)"
         return plot_data
 
-    def update(self, new_value):
+    def update(self, new_value, new_value2 = None):
         old_value = self.value
+        if not hasattr(self, 'value2'):
+            self.value2 = None
+        old_value2 = self.value2
         old_last_voted = self.last_voted
         try:
             self.value = new_value
+            self.value2 = new_value2
             self.last_voted = timezone.now()
             self.full_clean()
             return self.save()
@@ -76,6 +83,7 @@ class VoteBase(BlockObject):
             print('%s' % (type(e)))
             print(e)
             self.value = old_value
+            self.value2 = old_value2
             self.last_voted = old_last_voted
 # class Source(BlockObject):
 #     source = Charfield(max_length = 200)

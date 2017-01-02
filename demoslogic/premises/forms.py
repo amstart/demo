@@ -52,19 +52,17 @@ class PremiseVoteForm(VoteForm):
         if object:
             self.fields['value'].initial = None
             self.fields['value'].choices = object.get_theses_choices()
+            self.fields['value2'].initial = None
+            self.fields['value2'].choices = object.get_demands_choices()
             # self.max_choice = object.max_choice
 
     class Meta:
         model = models.PremiseVote
-        fields = ['value']
-        widgets = {'value': forms.RadioSelect}
-        labels = {'value': "With which version of that statement would you agree most?"}
+        fields = ['value', 'value2']
+        widgets = {'value': forms.RadioSelect, 'value2': forms.RadioSelect}
+        labels = {'value': "With which declaratory version of that statement would you agree most?",
+                  'value2': "With which demanding version of that statement would you agree most?"}
 
-    # def clean_value(self):
-    #     value = self.cleaned_data.get("value")
-    #     if value > self.max_choice or value < 0:
-    #         raise forms.ValidationError("Value not allowed.")
-    #     return cleaned_data
 
 class PremiseCreateForm(forms.ModelForm):
     class Meta:
@@ -96,11 +94,11 @@ class PremiseCreateForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.form_class = 'blueForms'
         self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Submit'))
         self.fields['premise_type'].initial = self.premise_type
         self.fields['premise_type'].label = 'Type of statement:'
         self.fields['premise_type'].widget.attrs['readonly'] = 'readonly'
         self.fields['premise_type'].widget.attrs['onChange'] = "window.location='" + reverse("premises:new") + "'"
-
 
 class CategorizationCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_CATEGORIZATION
@@ -115,16 +113,9 @@ class CategorizationCreateForm(PremiseCreateForm):
         }
         labels = {
             'key_subject': '',
-            'key_object': 'is (not) a type of',
+            'key_object': 'is/should (not) be a type of',
         }
 
-    def __init__(self, *args, **kwargs):
-        super(CategorizationCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Categorize'))
-
-    def clean(self):
-        cleaned_data = super(CategorizationCreateForm, self).clean()
-        return cleaned_data
 
 class CollectionCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_COLLECTION
@@ -139,16 +130,8 @@ class CollectionCreateForm(PremiseCreateForm):
         }
         labels = {
             'key_subject': '',
-            'key_object': 'does not/partly/exclusively comprise',
+            'key_object': 'does/should not/partly/exclusively comprise',
         }
-
-    def __init__(self, *args, **kwargs):
-        super(CollectionCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Collect'))
-
-    def clean(self):
-        cleaned_data = super(CollectionCreateForm, self).clean()
-        return cleaned_data
 
 
 class ComparisonCreateForm(PremiseCreateForm):
@@ -158,49 +141,66 @@ class ComparisonCreateForm(PremiseCreateForm):
         fields = ['premise_type', 'key_subject', 'key_complement', 'key_object', 'key_indirect_object']
         widgets = {
             'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
-                                                     forward = ['key_object', 'key_indirect_object']),
+                                                     forward = ['key_object']),
             'key_complement': autocomplete.ModelSelect2(url = 'premises:adjectives_autocomplete_create'),
             'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
-                                                    forward = ['key_subject', 'key_indirect_object']),
-            'key_indirect_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
-                                                    forward = ['key_subject', 'key_object']),
+                                                    forward = ['key_subject']),
+            'key_indirect_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create'),
         }
         labels = {
             'key_subject': '',
-            'key_complement': 'is equally/less/more...',
-            'key_object': 'as/than:',
-            'key_indirect_object': 'for'
+            'key_complement': 'is/should be equally/less/more',
+            'key_object': 'as/than',
+            'key_indirect_object': 'for (the) [optional]'
         }
-
-    def __init__(self, *args, **kwargs):
-        super(ComparisonCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Compare'))
-
-    def clean(self):
-        cleaned_data = super(ComparisonCreateForm, self).clean()
-        return cleaned_data
 
 
 class RelationCreateForm(PremiseCreateForm):
     premise_type = settings.TYPE_RELATION
 
     class Meta(PremiseCreateForm.Meta):
-        fields = ['premise_type', 'key_subject', 'key_object']
+        fields = ['premise_type', 'key_subject', 'key_object', 'key_indirect_object']
         widgets = {
             'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
                                                      forward = ['key_object']),
             'key_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
                                                     forward = ['key_subject']),
+            'key_indirect_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create'),
         }
         labels = {
-            'key_subject': '',
-            'key_object': 'is equally/more/less often thas not accompanied with the following:',
+            'key_subject': 'When there is more',
+            'key_object': ', there is/should be more/less/no change in',
+            'key_indirect_object': 'for (the) [optional]'
         }
 
-    def __init__(self, *args, **kwargs):
-        super(RelationCreateForm, self).__init__(*args, **kwargs)
-        self.helper.add_input(Submit('submit', 'Relate'))
+class QuantityCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_QUANTITY
 
-    def clean(self):
-        cleaned_data = super(RelationCreateForm, self).clean()
-        return cleaned_data
+    class Meta(PremiseCreateForm.Meta):
+        fields = ['premise_type', 'key_subject', 'key_indirect_object']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                     forward = ['key_indirect_object']),
+            'key_indirect_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                    forward = ['key_subject']),
+        }
+        labels = {
+            'key_subject': 'There is (no)/might be or should be more/less/an equal amount of',
+            'key_indirect_object': 'for (the) [optional]'
+        }
+
+class EncouragmentCreateForm(PremiseCreateForm):
+    premise_type = settings.TYPE_ENCOURAGEMENT
+
+    class Meta(PremiseCreateForm.Meta):
+        fields = ['premise_type', 'key_subject', 'key_indirect_object']
+        widgets = {
+            'key_subject': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                     forward = ['key_indirect_object']),
+            'key_indirect_object': autocomplete.ModelSelect2(url = 'premises:nouns_autocomplete_create',
+                                                    forward = ['key_subject']),
+        }
+        labels = {
+            'key_subject': 'The following is/should be encouraged/discouraged/left alone:',
+            'key_indirect_object': 'for (the) [optional]'
+        }
