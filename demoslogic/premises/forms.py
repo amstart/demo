@@ -23,7 +23,7 @@ class NewPremiseForm(forms.ModelForm):
 
 
 class SearchPremiseForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "Find Statement:", queryset =models.Premise.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find QStatement:", queryset =models.Premise.objects.all(),
                                             widget = autocomplete.ModelSelect2(
                                             url = 'premises:autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))

@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Help</h1>
-<p> On this page, users can map their arguments using QStatements as nodes and Aruments as links in between.
-  When adding an argument, users have to connect statements (which are versions of QStatements) by using them as
-  one of their premises or as conclusion.
+<p> On this page, users can map their Arguments using <em>QStatements</em> as nodes and <em>Arguments</em> as links
+  in between.  When adding an argument, users have to connect statements (which are versions of QStatements) by using
+  them as one of their premises or as conclusion.
   For example, a QStatement could say: <i> Quantum mechanics is right/wrong.</i> The statements contained
   here would be <i> Quantum mechanics is right</i> and <i> Quantum mechanics is wrong</i>. On this page, the convention
   is that the QStatements are represented with the help of question marks, in this case it could be
@@ -11,8 +11,11 @@
 <p> It is possible to voice one's opinion on the matter by voting on which
   statement is correct. Additionally, it is possible to express what one would view as ideal:
   <i> Quantum mechanics should be right</i> or <i> Quantum mechanics should be wrong</i>.</p>
-<p> The resulting network of linked QStatements can be <a class="nav-link" href="{% url 'network' %}">explored</a>
-  , whereas the QStatements are dark blue and the arguments light blue. The links in between are color-coded:
-  Green means the positive version of the QStatement, red the negative, grey the neutral. A dashed line represents
-  an ideal.</p>
+<p> The resulting network of linked QStatements can be <a href="{% url 'network' %}">explored</a>,
+  whereas the QStatements are dark blue and the Arguments light blue. The links in between are color-coded:
+  Green means the positive version of the respective QStatement has been used, red the negative, grey the neutral.
+  A dashed line represents an ideal version.</p>
+<p> Finally, each statement can be backed up by evidence.
+  To spare you some time:<a href="{% url 'evidences:detail' '3' %}">
+  There is only one evidence on the page so far.</a></p>
 {% endblock content %}
