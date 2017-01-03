@@ -17,7 +17,7 @@ class Argument(NetworkObject):
                                  blank = True, default = None)
     aim = models.IntegerField()
     conclusion = models.ForeignKey(Premise, on_delete = models.CASCADE, related_name='conclusion')
-    sentence = models.CharField(default = '', max_length = 750)
+    sentence = models.CharField(default = '', max_length = 2000)
 
     class Meta(NetworkObject.Meta):
         unique_together = ("premise1_if", "premise1", "premise2", "premise2_if",

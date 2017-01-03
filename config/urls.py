@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-from demoslogic.blockobjects.views import LoginSeleniumView, NetworkView
+from demoslogic.blockobjects import views
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
@@ -24,11 +24,12 @@ urlpatterns = [
     #DEBUG
     url(
         regex=r'^selenium/$',
-        view=LoginSeleniumView,
+        view=views.LoginSeleniumView,
         name='selenium'
     ),
     # Your stuff: custom urls includes go here
-    url(r'^visualize/', NetworkView.as_view(), name='network'),
+    url(r'^visualize/', views.NetworkView.as_view(), name='network'),
+    url(r'^clean', views.clean_view, name='clean'),
     url(r'^statements/', include('demoslogic.premises.urls')),
     url(r'^arguments/', include('demoslogic.arguments.urls')),
     url(r'^evidences/', include('demoslogic.evidences.urls')),

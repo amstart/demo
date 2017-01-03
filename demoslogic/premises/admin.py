@@ -9,7 +9,7 @@ from . import models
 class PremiseAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Core', {'fields': ['sentence','premise_type', 'key_subject',
-                             'key_object', 'key_predicate', 'key_indirect_object']}),
+                             'key_object', 'key_indirect_object']}),
         ('Meta', {'fields': ['staged', 'user', 'pub_date']}),
     ]
     # inlines = [ChoiceInline]

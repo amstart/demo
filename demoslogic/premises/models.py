@@ -4,7 +4,7 @@ from django.db import models
 from django import forms
 from django.core.validators import RegexValidator
 
-from demoslogic.blockobjects.models import NetworkObject, VoteBase
+from demoslogic.blockobjects.models import NetworkObject, BlockObject, VoteBase
 
 from . import settings
 
@@ -27,27 +27,30 @@ class TrimmedCharField(models.CharField):
     def formfield(self, **kwargs):
         return super(TrimmedCharField, self).formfield(form_class = TrimmedCharFormField, **kwargs)
 
-class Noun(models.Model):
-    name = TrimmedCharField(default = '', max_length = 50, unique = True)
-    def __str__(self):
-        return self.name
-
-class Verb(models.Model):
-    name = TrimmedCharField(default = '', max_length = 50, unique = True)
-    def __str__(self):
-        return self.name
-
-class Adjective(models.Model):
+class Element(models.Model):
     name = TrimmedCharField(default = '', max_length = 100, unique = True)
+
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.name
+
+class Noun(Element):
+    pass
+
+class Verb(Element):
+    pass
+
+class Adjective(Element):
+    pass
 
 class Premise(NetworkObject):
     objects = PremiseManager
     name_lower = 'statement'
     name_upper = 'Statement'
     namespace = 'premises'   #this is used for URL namespaces!
-    sentence = models.CharField(default = '', max_length = 250)
+    sentence = models.CharField(default = '', max_length = 500)
     key_subject = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_subject')
     key_predicate = models.ForeignKey(Verb, on_delete = models.CASCADE, null = True)
     key_object = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_object', null = True)

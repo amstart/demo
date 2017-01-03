@@ -14,8 +14,27 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse, reverse_lazy
 
 from demoslogic.users.models import User
-from demoslogic.premises.models import Premise
+from demoslogic.premises import models
 from demoslogic.arguments.models import Argument
+
+def clean_view(request):
+    qset = models.Noun.objects.all()
+    for obj in qset:
+        obj_set = obj.key_subject.all() | obj.key_object.all() | obj.key_indirect_object.all()
+        if not obj_set.count():
+            obj.delete()
+    qset = models.Adjective.objects.all()
+    for obj in qset:
+        obj_set = obj.premise_set.all()
+        if not obj_set.count():
+            obj.delete()
+    qset = models.Premise.objects.all()
+    for obj in qset:
+        obj_set = obj.premise1.all() | obj.premise2.all() | obj.premise3.all() | obj.conclusion.all()
+        if not obj_set.count():
+            obj.delete()
+        obj.save()
+    return HttpResponseRedirect(reverse('home'))
 
 class NetworkView(TemplateView):
     template_name = 'blockobjects/network.html'
@@ -28,7 +47,7 @@ class NetworkView(TemplateView):
         arguments_qs = Argument.objects.values('id', 'premise1', 'premise2', 'premise3', 'conclusion',
                                                'aim', 'premise1_if', 'premise2_if', 'premise3_if', 'sentence')
         arguments = [entry for entry in arguments_qs]
-        statements_qs = Premise.objects.values('id', 'premise_type', 'sentence')
+        statements_qs = models.Premise.objects.values('id', 'premise_type', 'sentence')
         nodes = [entry for entry in statements_qs]
         for node in nodes:
             node['group'] = 1
@@ -138,7 +157,7 @@ class DetailWithVoteView(DetailView):
             return HttpResponseRedirect(request.get_full_path())
         else:
             return render(request, self.template_name,
-                          {'premise': Premise.objects.get(pk = pk), 'voteform': voteform})
+                          {'premise': models.Premise.objects.get(pk = pk), 'voteform': voteform})
 
 
 class UpdateVoteView(LoginRequiredMixin, DetailView):

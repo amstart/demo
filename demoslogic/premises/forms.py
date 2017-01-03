@@ -29,7 +29,7 @@ class SearchPremiseForm(SearchForm):
                                             attrs = {'data-minimum-input-length': 0}))
 
 class SearchNounForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "Find Noun:", queryset=models.Noun.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find Entity:", queryset=models.Noun.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:nouns_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
@@ -40,7 +40,7 @@ class SearchVerbForm(SearchForm):
                                             attrs = {'data-minimum-input-length': 0}))
 
 class SearchAdjectiveForm(SearchForm):
-    search_id = forms.ModelChoiceField(label = "Find Adjective:", queryset=models.Adjective.objects.all(),
+    search_id = forms.ModelChoiceField(label = "Find Attribute:", queryset=models.Adjective.objects.all(),
                                             widget=autocomplete.ModelSelect2(
                                             url = 'premises:adjectives_autocomplete',
                                             attrs = {'data-minimum-input-length': 0}))
