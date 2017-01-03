@@ -40,7 +40,7 @@
                   <a href="{% url 'network' %}" class="nav-link">Substance</a>
                   <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{% url 'arguments:index' %}">Arguments</a></li>
-                    <li><a class="nav-link" href="{% url 'premises:index' %}">Statements</a></li>
+                    <li><a class="nav-link" href="{% url 'premises:index' %}">QStatements</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_nouns' %}">Entities</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search_adjectives' %}">Attributes</a></li>
                     <li><a class="nav-link" href="{% url 'premises:search' %}">Find</a></li>
@@ -52,6 +52,9 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'blogs' %}">Blogs</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'help' %}">Help</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'about' %}">About</a>

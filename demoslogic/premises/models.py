@@ -47,8 +47,8 @@ class Adjective(Element):
 
 class Premise(NetworkObject):
     objects = PremiseManager
-    name_lower = 'statement'
-    name_upper = 'Statement'
+    name_lower = 'qstatement'
+    name_upper = 'QStatement'
     namespace = 'premises'   #this is used for URL namespaces!
     sentence = models.CharField(default = '', max_length = 500)
     key_subject = models.ForeignKey(Noun, on_delete = models.CASCADE, related_name = 'key_subject')
@@ -188,7 +188,7 @@ class Premise(NetworkObject):
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
     obj_mdl = Premise
-    
+
     class Meta:
         abstract = True
 

@@ -60,8 +60,8 @@ class PremiseVoteForm(VoteForm):
         model = models.PremiseVote
         fields = ['value', 'value2']
         widgets = {'value': forms.RadioSelect, 'value2': forms.RadioSelect}
-        labels = {'value': "With which declaratory version of that statement would you agree most?",
-                  'value2': "With which demanding version of that statement would you agree most?"}
+        labels = {'value': "Which of these statements do you think gets closest to the truth?",
+                  'value2': "Which of these statements reflects your opinion most?"}
 
 
 class PremiseCreateForm(forms.ModelForm):

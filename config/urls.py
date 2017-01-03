@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name='about'),
     url(r'^blogs/$', TemplateView.as_view(template_name='pages/blogs.html'), name='blogs'),
+    url(r'^help/$', TemplateView.as_view(template_name='pages/help.html'), name='help'),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
@@ -30,7 +31,7 @@ urlpatterns = [
     # Your stuff: custom urls includes go here
     url(r'^visualize/', views.NetworkView.as_view(), name='network'),
     url(r'^clean', views.clean_view, name='clean'),
-    url(r'^statements/', include('demoslogic.premises.urls')),
+    url(r'^qstatements/', include('demoslogic.premises.urls')),
     url(r'^arguments/', include('demoslogic.arguments.urls')),
     url(r'^evidences/', include('demoslogic.evidences.urls')),
 
