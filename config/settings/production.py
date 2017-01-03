@@ -121,7 +121,7 @@ TEMPLATES[0]['OPTIONS']['loaders'] = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Jochen2$default',
+        'NAME': 'Jochen2$demo',
         'USER': 'Jochen2',
         'PASSWORD': 'b83cfghj',
         'HOST': 'Jochen2.mysql.pythonanywhere-services.com',
