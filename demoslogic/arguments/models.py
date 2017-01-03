@@ -47,6 +47,7 @@ class Argument(NetworkObject):
 
 class Vote(VoteBase):
     object = models.ForeignKey(Argument, on_delete = models.CASCADE)
+    obj_mdl = Argument
 
     class Meta:
         abstract = True

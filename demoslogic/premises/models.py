@@ -113,7 +113,7 @@ class Premise(NetworkObject):
             if case(settings.TYPE_ENCOURAGEMENT):
                 out = Premise.get_list(premise_type, sentence, "should be discouraged", "should be encouraged",
                                           "should neither be encouraged nor discouraged")
-        return ["Undecided"] + out
+        return ["Undecided/Do not care"] + out
 
     @staticmethod
     def get_theses(premise_type, sentence):
@@ -187,7 +187,8 @@ class Premise(NetworkObject):
 
 class Vote(VoteBase):
     object = models.ForeignKey(Premise, on_delete = models.CASCADE)
-
+    obj_mdl = Premise
+    
     class Meta:
         abstract = True
 

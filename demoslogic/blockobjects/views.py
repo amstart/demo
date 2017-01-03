@@ -157,7 +157,7 @@ class DetailWithVoteView(DetailView):
             return HttpResponseRedirect(request.get_full_path())
         else:
             return render(request, self.template_name,
-                          {'premise': models.Premise.objects.get(pk = pk), 'voteform': voteform})
+                          {'premise': votemodel.obj_mdl.objects.get(pk = pk), 'voteform': voteform})
 
 
 class UpdateVoteView(LoginRequiredMixin, DetailView):
@@ -183,7 +183,7 @@ class UpdateVoteView(LoginRequiredMixin, DetailView):
                 raise Exception('More than one vote object found!')
             vote = voteobjects[0]
             vote.update(voteform.cleaned_data['value'], voteform.cleaned_data.get('value2', None))
-            return HttpResponseRedirect(reverse('premises:detail', args = [pk]))
+            return HttpResponseRedirect(reverse(votemodel.obj_mdl.namespace + ':detail', args = [pk]))
         else:
             return render(request, self.template_name,
                           {self.model.__name__: self.model.objects.get(pk = pk),

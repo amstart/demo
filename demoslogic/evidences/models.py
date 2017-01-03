@@ -17,7 +17,8 @@ class Evidence(NetworkObject):
 
 class Vote(VoteBase):
     object = models.ForeignKey(Evidence, on_delete = models.CASCADE)
-
+    obj_mdl = Evidence
+    
     class Meta:
         abstract = True
 
