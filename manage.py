@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == '__main__':
-    if "Documents" not in os.path.dirname(os.path.abspath(__file__)):
+    if "Projects" not in os.path.dirname(os.path.abspath(__file__)):
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
     else:
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')

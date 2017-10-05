@@ -76,6 +76,6 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='postgres://localhost/demoslogic'),
+    'default': env.db('DATABASE_URL', default='postgres://postgres:6104@localhost:5432/[project_slug]'),
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True

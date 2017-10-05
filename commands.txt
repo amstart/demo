@@ -1,5 +1,5 @@
-cd C:\Tools\Anaconda\envs\demoslogic\Scripts
-& cmd /k condactivate demoslogic
+#https://github.com/conda/conda/issues/626
+cd D:\Projects\YinAndYang
 python manage.py shell_plus --notebook
 python manage.py createsuperuser
 python manage.py makemigrations
@@ -8,6 +8,4 @@ python manage.py dumpdata > fixtures/bla.json
 python manage.py test functional_tests
 python manage.py test
 python manage.py runserver
-condactivate demoslogic
 set DATABASE_URL=postgres://Jochen:6104@localhost:5432/[project_slug]
-cd C:\Users\Jochen\Documents\demoslogic

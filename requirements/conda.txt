@@ -6,10 +6,14 @@ wheel
 
 # Bleeding edge Django
 django
+psycopg2
 
 # Configuration
 django-environ
 
+#devtools
+django-debug-toolbar
+django-extensions
 
 # Forms
 django-crispy-forms
@@ -21,6 +25,6 @@ django-allauth
 
 # Your custom requirements go here
 
-switch
-django-bower
-django-autoselect-light
+#switch
+#django-bower
+#django-autoselect-light
