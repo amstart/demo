@@ -9,3 +9,4 @@ python manage.py test functional_tests
 python manage.py test
 python manage.py runserver
 set DATABASE_URL=postgres://Jochen:6104@localhost:5432/[project_slug]
+django manage.py createsuperuser
